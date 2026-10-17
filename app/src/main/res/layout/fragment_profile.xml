@@ -19,7 +19,7 @@
   Các khối cố định (thông tin, nâng cấp, cài đặt, nhãn nhóm) trở thành những "dòng" bình
   thường trong cùng danh sách đó, nên cả màn vẫn cuộn như một khối liền mạch.
 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.example.news.ui.common.SwipeBackLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -34,7 +34,7 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorSurface"
         app:title="@string/header_profile"
-        app:titleTextAppearance="?attr/textAppearanceTitleLarge" />
+        app:titleTextAppearance="@style/TextAppearance.News.ToolbarTitle" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listProfile"
@@ -48,4 +48,4 @@
         android:scrollbars="vertical"
         tools:listitem="@layout/item_profile_row" />
 
-</LinearLayout>
+</com.example.news.ui.common.SwipeBackLayout>

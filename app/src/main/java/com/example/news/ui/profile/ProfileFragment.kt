@@ -17,6 +17,7 @@ import com.example.news.data.model.Article
 import com.example.news.data.model.MarketSeries
 import com.example.news.databinding.FragmentProfileBinding
 import com.example.news.detail.DetailActivity
+import com.example.news.ui.common.returnToMain
 import com.example.news.ui.info.InfoPage
 import com.example.news.ui.info.InfoPageFragment
 import com.example.news.ui.market.MarketNavArgs
@@ -61,6 +62,10 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Vuốt từ trái sang phải để quay về Main. Không tiêu thụ sự kiện nên bấm dòng, bấm nút
+        // và cuộn danh sách vẫn hoạt động như cũ.
+        binding.root.onSwipeRight = { returnToMain() }
 
         binding.headerToolbar.setNavigationIcon(R.drawable.ic_arrow_back)
         binding.headerToolbar.setNavigationContentDescription(R.string.action_back)

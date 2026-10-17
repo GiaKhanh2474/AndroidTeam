@@ -31,7 +31,7 @@
             android:layout_marginStart="@dimen/spacing_md"
             android:gravity="center_vertical"
             android:text="@string/title_main"
-            android:textAppearance="?attr/textAppearanceHeadlineSmall" />
+            android:textAppearance="@style/TextAppearance.News.MainTitle" />
 
         <LinearLayout
             android:id="@+id/groupMainActions"

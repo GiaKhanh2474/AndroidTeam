@@ -15,6 +15,7 @@ import com.example.news.R
 import com.example.news.data.model.Article
 import com.example.news.databinding.FragmentCategoryTimelineBinding
 import com.example.news.detail.DetailActivity
+import com.example.news.ui.common.returnToMain
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 
@@ -24,8 +25,8 @@ import kotlinx.coroutines.launch
  * Header đặc tả: [←] TÊN CHUYÊN MỤC [📅 Chọn ngày].
  * Nhấn [←] quay về Main. Nhấn vào một bài báo sẽ mở trang Chi tiết.
  *
- * Thao tác vuốt từ trái sang phải để quay về Main là phần cử chỉ, sẽ làm ở bước riêng;
- * hiện tại đã có nút [←].
+ * Đặc tả cũng ghi: vuốt từ trái sang phải để quay về Main. Cử chỉ đó do lớp bọc ngoài cùng của
+ * màn ([com.example.news.ui.common.SwipeBackLayout]) nhận biết.
  */
 class CategoryTimelineFragment : Fragment() {
 
@@ -51,6 +52,10 @@ class CategoryTimelineFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Vuốt từ trái sang phải để quay về Main. Lớp bọc này chỉ nhận biết cử chỉ chứ không
+        // tiêu thụ sự kiện, nên bấm nút, bấm bài và cuộn danh sách vẫn hoạt động như cũ.
+        binding.root.onSwipeRight = { returnToMain() }
 
         binding.headerToolbar.setNavigationIcon(R.drawable.ic_arrow_back)
         binding.headerToolbar.setNavigationContentDescription(R.string.action_back)

@@ -13,7 +13,7 @@
   thật, nên ngay dưới tên biểu đồ có ghi rõ "Dữ liệu minh hoạ". Các con số không được
   trình bày như số liệu thật.
 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.example.news.ui.common.SwipeBackLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -28,7 +28,7 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorSurface"
         app:title="@string/header_market_drawer"
-        app:titleTextAppearance="?attr/textAppearanceTitleLarge" />
+        app:titleTextAppearance="@style/TextAppearance.News.ToolbarTitleCompact" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -168,4 +168,4 @@
         </LinearLayout>
     </ScrollView>
 
-</LinearLayout>
+</com.example.news.ui.common.SwipeBackLayout>

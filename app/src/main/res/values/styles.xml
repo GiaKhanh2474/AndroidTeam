@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      Kiểu chữ cho tiêu đề trên header của các màn.
+
+      In hoa bằng thuộc tính hiển thị (textAllCaps) chứ KHÔNG viết hoa sẵn trong strings.xml:
+      chữ trên header là chuyện trình bày, còn chuỗi gốc vẫn dùng lại được ở chỗ khác mà không
+      bị viết hoa theo. Nhờ vậy tiêu đề động của màn Chuyên mục (tên chuyên mục người dùng chọn)
+      cũng tự in hoa mà không phải xử lý riêng ở phần mã.
+    -->
+    <style name="TextAppearance.News.ToolbarTitle" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <!--
+      Màn Thị trường có tiêu đề dài ("BIỂU ĐỒ & DANH MỤC MỞ RỘNG"); ở cỡ chữ lớn thì tiêu đề bị
+      cắt thành "...", nên riêng màn này dùng cỡ nhỏ hơn.
+    -->
+    <style name="TextAppearance.News.ToolbarTitleCompact" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <!-- Tiêu đề màn Main, giữ cỡ chữ lớn như bản vẽ nhưng vẫn in hoa. -->
+    <style name="TextAppearance.News.MainTitle" parent="TextAppearance.Material3.HeadlineSmall">
+        <item name="android:textAllCaps">true</item>
+    </style>
+</resources>

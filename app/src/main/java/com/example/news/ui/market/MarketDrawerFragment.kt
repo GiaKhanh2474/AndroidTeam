@@ -18,6 +18,7 @@ import com.example.news.databinding.FragmentMarketDrawerBinding
 import com.example.news.databinding.ItemMarketChartRowBinding
 import com.example.news.databinding.ItemMarketSideArticleBinding
 import com.example.news.ui.common.MarketFormat
+import com.example.news.ui.common.returnToMain
 import kotlinx.coroutines.launch
 
 /**
@@ -33,8 +34,8 @@ import kotlinx.coroutines.launch
  * Các con số là DỮ LIỆU MINH HOẠ (xem [com.example.news.data.mock.MockMarket]); ngay dưới
  * tên biểu đồ có nhãn ghi rõ điều đó nên không có chỗ nào ngụ ý đây là số liệu thật.
  *
- * Thao tác vuốt từ trái sang phải để đóng là phần cử chỉ, sẽ làm ở bước riêng; hiện tại
- * đóng bằng [☰], [✕] hoặc nút Back hệ thống.
+ * Thao tác vuốt từ trái sang phải để đóng cũng có: cử chỉ đó do lớp bọc ngoài cùng của màn
+ * ([com.example.news.ui.common.SwipeBackLayout]) nhận biết và đưa thẳng về Main.
  */
 class MarketDrawerFragment : Fragment() {
 
@@ -58,6 +59,10 @@ class MarketDrawerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Vuốt từ trái sang phải để quay về Main, giống đặc tả của các màn khác. Không tiêu thụ
+        // sự kiện nên bấm ngôi sao, bấm [✕] và cuộn trang vẫn hoạt động như cũ.
+        binding.root.onSwipeRight = { returnToMain() }
 
         // Đặc tả: biểu tượng bên trái của màn này là 3 gạch, không phải mũi tên quay lại.
         binding.headerToolbar.setNavigationIcon(R.drawable.ic_menu)

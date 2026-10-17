@@ -8,7 +8,7 @@
   Thân trang: danh sách bài báo chia theo mốc ngày đăng. Mỗi bài là một khung chữ nhật
   nằm ngang, KHÔNG dùng ảnh nhỏ: chữ to là tiêu đề, chữ nhỏ là tóm tắt.
 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.example.news.ui.common.SwipeBackLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -23,7 +23,7 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorSurface"
         app:title="@string/title_category_timeline"
-        app:titleTextAppearance="?attr/textAppearanceTitleLarge" />
+        app:titleTextAppearance="@style/TextAppearance.News.ToolbarTitle" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvTimeline"
@@ -34,4 +34,4 @@
         android:paddingBottom="@dimen/spacing_lg"
         tools:listitem="@layout/item_timeline_day" />
 
-</LinearLayout>
+</com.example.news.ui.common.SwipeBackLayout>

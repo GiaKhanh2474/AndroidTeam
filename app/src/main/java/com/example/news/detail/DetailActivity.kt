@@ -8,6 +8,7 @@ import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -29,9 +30,11 @@ import java.util.Locale
  * Theo đặc tả, header chỉ có [←], không có chỗ hiển thị trạng thái lưu, nên việc lưu chỉ được
  * báo lại bằng một thông báo ngắn ngay lúc nhấn đúp. Bài đã lưu xem được ở trang Tài khoản.
  *
- * Còn lại của đặc tả sẽ làm ở bước xử lý cử chỉ vì cùng một chỗ:
- *  - mũi tên ↑ mờ chỉ hiện khi đã cuộn dài rồi vuốt nhẹ lên;
- *  - vuốt từ trái sang phải để thoát.
+ * Mũi tên ↑ mờ trong bản vẽ được làm thành nút "lên đầu bài": bài báo dài nên sau khi cuộn
+ * xuống phải có đường quay lại nhanh. Nút chỉ hiện khi đã cuộn xuống quá một quãng.
+ *
+ * Thao tác vuốt từ trái sang phải để thoát KHÔNG làm ở màn này: đã thống nhất cử chỉ vuốt chỉ
+ * áp dụng cho ba màn nằm trong NavHost (Chuyên mục, Thị trường, Tài khoản).
  */
 class DetailActivity : AppCompatActivity() {
 
@@ -47,6 +50,11 @@ class DetailActivity : AppCompatActivity() {
         SimpleDateFormat(getString(R.string.pattern_day_month), Locale.getDefault())
     }
 
+    /** Cuộn quá quãng này thì nút "lên đầu bài" mới hiện ra. */
+    private val scrollToTopThresholdPx: Int by lazy(LazyThreadSafetyMode.NONE) {
+        resources.getDimensionPixelSize(R.dimen.detail_scroll_to_top_threshold)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
@@ -59,7 +67,15 @@ class DetailActivity : AppCompatActivity() {
         binding.btnBack.setOnClickListener { finish() }
 
         // Đặc tả: nhấn đúp 2 cái ở màn chi tiết để lưu bài.
-        binding.root.onDoubleTap = { toggleSaved() }
+        binding.rootContainer.onDoubleTap = { toggleSaved() }
+
+        // Nút "lên đầu bài" chỉ hiện khi đã cuộn xuống, để lúc mới mở bài không có nút thừa.
+        binding.scrollDetail.setOnScrollChangeListener { _, _, scrollY, _, _ ->
+            binding.btnScrollToTop.isVisible = scrollY >= scrollToTopThresholdPx
+        }
+        binding.btnScrollToTop.setOnClickListener {
+            binding.scrollDetail.smoothScrollTo(0, 0)
+        }
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {

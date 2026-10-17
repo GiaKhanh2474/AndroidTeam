@@ -17,8 +17,6 @@ class RoomSavedArticleRepository(
     override fun observeSavedArticles(): Flow<List<Article>> =
         dao.observeAll().map { rows -> rows.map { it.toArticle() } }
 
-    override fun observeIsSaved(articleId: String): Flow<Boolean> = dao.observeIsSaved(articleId)
-
     override fun observeSavedCount(): Flow<Int> = dao.observeCount()
 
     /**

@@ -47,8 +47,6 @@
     <string name="detail_image_placeholder_note">Ảnh minh hoạ — chỗ giữ chỗ cho ảnh thật của bài báo</string>
     <string name="detail_link_no_app">Không mở được liên kết</string>
     <string name="detail_article_not_found">Không tìm thấy bài báo</string>
-    <string name="detail_save_hint">Nhấn đúp vào màn hình để lưu bài báo này.</string>
-    <string name="detail_saved_state">🔖 Đã lưu bài báo — nhấn đúp để bỏ lưu.</string>
     <string name="detail_save_done">Đã lưu bài báo</string>
     <string name="detail_save_removed">Đã bỏ lưu bài báo</string>
 

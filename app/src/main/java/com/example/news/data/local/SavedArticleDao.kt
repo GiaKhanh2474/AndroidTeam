@@ -18,9 +18,6 @@ interface SavedArticleDao {
     @Query("SELECT * FROM saved_article ORDER BY savedAt DESC")
     fun observeAll(): Flow<List<SavedArticleEntity>>
 
-    @Query("SELECT EXISTS(SELECT 1 FROM saved_article WHERE id = :articleId)")
-    fun observeIsSaved(articleId: String): Flow<Boolean>
-
     @Query("SELECT COUNT(*) FROM saved_article")
     fun observeCount(): Flow<Int>
 

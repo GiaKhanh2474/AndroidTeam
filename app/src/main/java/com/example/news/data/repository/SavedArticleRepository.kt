@@ -14,9 +14,6 @@ interface SavedArticleRepository {
     /** Bài đã lưu, mới lưu trước. */
     fun observeSavedArticles(): Flow<List<Article>>
 
-    /** Bài này đã được lưu chưa. */
-    fun observeIsSaved(articleId: String): Flow<Boolean>
-
     /** Số bài đã lưu, dùng cho phần tóm tắt ở trang Tài khoản. */
     fun observeSavedCount(): Flow<Int>
 

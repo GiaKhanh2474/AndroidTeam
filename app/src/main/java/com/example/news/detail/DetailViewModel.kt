@@ -12,20 +12,18 @@ import com.example.news.data.repository.NewsRepository
 import com.example.news.data.repository.SavedArticleRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
 /**
  * Trạng thái màn Chi tiết.
  *
  * @param article null khi không tìm thấy bài báo theo id (ví dụ id sai).
- * @param isSaved bài này có đang nằm trong danh sách đã lưu hay không.
  */
 data class DetailUiState(
     val isLoading: Boolean = true,
     val article: Article? = null,
-    val isSaved: Boolean = false,
 )
 
 class DetailViewModel(
@@ -34,16 +32,13 @@ class DetailViewModel(
     private val articleId: String,
 ) : ViewModel() {
 
-    val uiState: StateFlow<DetailUiState> = combine(
-        flow { emit(repository.getArticle(articleId)) },
-        savedArticleRepository.observeIsSaved(articleId),
-    ) { article, isSaved ->
-        DetailUiState(isLoading = false, article = article, isSaved = isSaved)
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(STOP_TIMEOUT_MS),
-        initialValue = DetailUiState(),
-    )
+    val uiState: StateFlow<DetailUiState> = flow { emit(repository.getArticle(articleId)) }
+        .map { article -> DetailUiState(isLoading = false, article = article) }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(STOP_TIMEOUT_MS),
+            initialValue = DetailUiState(),
+        )
 
     /**
      * Nhấn đúp: lưu nếu chưa lưu, bỏ lưu nếu đã lưu.

@@ -8,14 +8,12 @@ import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.R as AppCompatR
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.news.R
 import com.example.news.databinding.ActivityDetailBinding
 import com.example.news.ui.common.applySystemBarInsets
-import com.google.android.material.color.MaterialColors
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -27,6 +25,9 @@ import java.util.Locale
  *
  * Đã có: phần nội dung (tiêu đề, nguồn báo + ngày đăng, link trang báo gốc, khung ảnh giữ chỗ,
  * nội dung bài) và nhấn đúp để lưu bài — lưu thật vào cơ sở dữ liệu nên mở lại vẫn còn.
+ *
+ * Theo đặc tả, header chỉ có [←], không có chỗ hiển thị trạng thái lưu, nên việc lưu chỉ được
+ * báo lại bằng một thông báo ngắn ngay lúc nhấn đúp. Bài đã lưu xem được ở trang Tài khoản.
  *
  * Còn lại của đặc tả sẽ làm ở bước xử lý cử chỉ vì cùng một chỗ:
  *  - mũi tên ↑ mờ chỉ hiện khi đã cuộn dài rồi vuốt nhẹ lên;
@@ -86,29 +87,8 @@ class DetailActivity : AppCompatActivity() {
         binding.tvDetailLink.setOnClickListener { openSourceUrl(article.sourceUrl) }
         binding.tvDetailContent.text = article.content
 
-        renderSavedState(state.isSaved)
-
         // Ảnh vẫn là khung giữ chỗ vì chưa có nguồn ảnh thật.
         // Khi nối được API, thay chỗ này bằng việc nạp article.imageUrl (ví dụ qua Coil).
-    }
-
-    /** Trạng thái lưu phải nhìn thấy được, không chỉ hiện thông báo vài giây rồi mất. */
-    private fun renderSavedState(isSaved: Boolean) {
-        binding.tvSavedState.setText(
-            if (isSaved) R.string.detail_saved_state else R.string.detail_save_hint,
-        )
-        binding.tvSavedState.setTextColor(
-            MaterialColors.getColor(
-                binding.tvSavedState,
-                // colorPrimary thuộc AppCompat, colorOnSurfaceVariant thuộc Material — hai
-                // thư viện khác nhau nên phải tham chiếu đúng lớp R của từng bên.
-                if (isSaved) {
-                    AppCompatR.attr.colorPrimary
-                } else {
-                    com.google.android.material.R.attr.colorOnSurfaceVariant
-                },
-            ),
-        )
     }
 
     /** Nhấn đúp: lưu nếu chưa lưu, bỏ lưu nếu đã lưu, và báo lại cho người dùng. */

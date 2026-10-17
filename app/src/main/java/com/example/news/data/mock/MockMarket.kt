@@ -20,9 +20,6 @@ import java.util.Locale
  */
 object MockMarket {
 
-    /** Biểu đồ mặc định hiện ở đầu trang khi người dùng chưa đánh dấu ưu tiên biểu đồ nào. */
-    const val DEFAULT_FOLLOWED_ID = "usd-vnd"
-
     private const val POINT_COUNT = 12
 
     /**
@@ -55,6 +52,13 @@ object MockMarket {
         }
     }
 
+    /**
+     * Danh mục biểu đồ.
+     *
+     * PHẦN TỬ ĐẦU TIÊN là biểu đồ hiện ở đầu trang khi người dùng chưa đánh dấu ưu tiên biểu
+     * đồ nào (bảng ưu tiên còn trống). Không cần một hằng "biểu đồ mặc định" riêng vì quy tắc
+     * sắp xếp đã tự cho ra kết quả đó.
+     */
     val series: List<MarketSeries> = listOf(
         series(
             id = "usd-vnd",

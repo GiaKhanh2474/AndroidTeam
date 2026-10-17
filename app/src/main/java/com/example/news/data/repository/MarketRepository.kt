@@ -9,6 +9,10 @@ import kotlinx.coroutines.flow.Flow
  *
  * Giống [NewsRepository], UI và ViewModel chỉ biết interface này; bước này dùng bản minh
  * hoạ ([MockMarketRepository]) và sẽ thay bằng bản Retrofit khi chốt được nguồn dữ liệu.
+ *
+ * Danh sách biểu đồ người dùng đánh dấu ưu tiên KHÔNG nằm ở đây mà ở
+ * [FavouriteChartRepository], vì đó là dữ liệu người dùng tạo ra và lưu trên máy, có vòng
+ * đời khác hẳn dữ liệu thị trường lấy từ bên ngoài.
  */
 interface MarketRepository {
 
@@ -17,15 +21,4 @@ interface MarketRepository {
 
     /** Bài báo bên lề ở cuối trang. */
     fun observeSideArticles(): Flow<List<SideArticle>>
-
-    /**
-     * Id các biểu đồ người dùng đã đánh dấu ưu tiên, theo thứ tự ưu tiên.
-     *
-     * Phần tử ĐẦU TIÊN là biểu đồ đang hiện ở đầu trang. Trả về [Flow] vì sau này danh
-     * sách này sẽ được lưu trong cơ sở dữ liệu và có thể thay đổi từ nơi khác.
-     */
-    fun observeFavouriteIds(): Flow<List<String>>
-
-    /** Đưa một biểu đồ lên vị trí đầu tiên (nhấn ngôi sao theo đặc tả). */
-    fun promoteToFollowed(seriesId: String)
 }

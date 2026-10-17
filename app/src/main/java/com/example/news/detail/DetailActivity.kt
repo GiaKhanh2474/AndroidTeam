@@ -8,12 +8,14 @@ import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.R as AppCompatR
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.news.R
 import com.example.news.databinding.ActivityDetailBinding
 import com.example.news.ui.common.applySystemBarInsets
+import com.google.android.material.color.MaterialColors
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -23,13 +25,12 @@ import java.util.Locale
 /**
  * Màn 3 — chi tiết bài báo, tách riêng khỏi NavHost theo đặc tả.
  *
- * Bước này dựng phần nội dung: tiêu đề, nguồn báo + ngày đăng, link trang báo gốc, khung
- * ảnh giữ chỗ và nội dung bài.
+ * Đã có: phần nội dung (tiêu đề, nguồn báo + ngày đăng, link trang báo gốc, khung ảnh giữ chỗ,
+ * nội dung bài) và nhấn đúp để lưu bài — lưu thật vào cơ sở dữ liệu nên mở lại vẫn còn.
  *
- * Các phần còn lại của đặc tả sẽ làm ở bước riêng vì phụ thuộc vào thứ khác:
- *  - nhấn đúp 2 cái để tự lưu bài: cần tầng lưu trữ (Room) thì lưu mới thật sự tồn tại;
- *  - mũi tên ↑ mờ chỉ hiện khi đã cuộn dài rồi vuốt nhẹ lên: là xử lý cử chỉ;
- *  - vuốt từ trái sang phải để thoát: là xử lý cử chỉ.
+ * Còn lại của đặc tả sẽ làm ở bước xử lý cử chỉ vì cùng một chỗ:
+ *  - mũi tên ↑ mờ chỉ hiện khi đã cuộn dài rồi vuốt nhẹ lên;
+ *  - vuốt từ trái sang phải để thoát.
  */
 class DetailActivity : AppCompatActivity() {
 
@@ -55,6 +56,9 @@ class DetailActivity : AppCompatActivity() {
         binding.root.applySystemBarInsets()
 
         binding.btnBack.setOnClickListener { finish() }
+
+        // Đặc tả: nhấn đúp 2 cái ở màn chi tiết để lưu bài.
+        binding.root.onDoubleTap = { toggleSaved() }
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -82,8 +86,41 @@ class DetailActivity : AppCompatActivity() {
         binding.tvDetailLink.setOnClickListener { openSourceUrl(article.sourceUrl) }
         binding.tvDetailContent.text = article.content
 
+        renderSavedState(state.isSaved)
+
         // Ảnh vẫn là khung giữ chỗ vì chưa có nguồn ảnh thật.
         // Khi nối được API, thay chỗ này bằng việc nạp article.imageUrl (ví dụ qua Coil).
+    }
+
+    /** Trạng thái lưu phải nhìn thấy được, không chỉ hiện thông báo vài giây rồi mất. */
+    private fun renderSavedState(isSaved: Boolean) {
+        binding.tvSavedState.setText(
+            if (isSaved) R.string.detail_saved_state else R.string.detail_save_hint,
+        )
+        binding.tvSavedState.setTextColor(
+            MaterialColors.getColor(
+                binding.tvSavedState,
+                // colorPrimary thuộc AppCompat, colorOnSurfaceVariant thuộc Material — hai
+                // thư viện khác nhau nên phải tham chiếu đúng lớp R của từng bên.
+                if (isSaved) {
+                    AppCompatR.attr.colorPrimary
+                } else {
+                    com.google.android.material.R.attr.colorOnSurfaceVariant
+                },
+            ),
+        )
+    }
+
+    /** Nhấn đúp: lưu nếu chưa lưu, bỏ lưu nếu đã lưu, và báo lại cho người dùng. */
+    private fun toggleSaved() {
+        lifecycleScope.launch {
+            val nowSaved = viewModel.toggleSaved() ?: return@launch
+            Snackbar.make(
+                binding.root,
+                if (nowSaved) R.string.detail_save_done else R.string.detail_save_removed,
+                Snackbar.LENGTH_SHORT,
+            ).show()
+        }
     }
 
     /** Mở trang báo gốc. Liên kết hiện là minh hoạ (example.com) nhưng dùng đúng luồng thật. */

@@ -11,10 +11,14 @@
     [ HÌNH ẢNH BÀI BÁO ]
     Nội dung chi tiết
 
+  Gốc màn hình dùng DoubleTapLayout để bắt được thao tác nhấn đúp ở bất kỳ đâu (đặc tả:
+  "nhấn đúp 2 cái để tự lưu bài báo"). View này không tiêu thụ sự kiện chạm nên cuộn, bấm nút
+  và bấm liên kết vẫn hoạt động bình thường.
+
   Ảnh hiện là KHUNG GIỮ CHỖ: chưa có nguồn ảnh thật nên không lấy ảnh từ Internet rồi
   gán cho bài báo bịa. Khi nối được API chỉ cần nạp article.imageUrl vào ImageView này.
 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.example.news.ui.common.DoubleTapLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootContainer"
@@ -90,6 +94,25 @@
                 android:textAppearance="?attr/textAppearanceLabelSmall"
                 android:textColor="?attr/colorOnSurfaceVariant" />
 
+            <!--
+              Trạng thái lưu bài. Đặc tả chỉ ghi header là [←], không có chỗ cho biểu tượng
+              trạng thái, nhưng nếu không hiện gì thì người dùng không có cách nào biết bài đã
+              được lưu hay chưa (nhấn đúp chỉ hiện thông báo trong vài giây rồi mất). Dòng này
+              vừa báo trạng thái vừa nhắc cách dùng.
+            -->
+            <TextView
+                android:id="@+id/tvSavedState"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_sm"
+                android:background="?attr/selectableItemBackground"
+                android:paddingTop="@dimen/spacing_xs"
+                android:paddingBottom="@dimen/spacing_xs"
+                android:text="@string/detail_save_hint"
+                android:textAppearance="?attr/textAppearanceLabelLarge"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                tools:text="🔖 Đã lưu bài báo — nhấn đúp để bỏ lưu." />
+
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardDetailImage"
                 android:layout_width="match_parent"
@@ -135,4 +158,4 @@
         </LinearLayout>
     </ScrollView>
 
-</LinearLayout>
+</com.example.news.ui.common.DoubleTapLayout>

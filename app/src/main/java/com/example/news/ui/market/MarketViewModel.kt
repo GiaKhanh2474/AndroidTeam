@@ -9,11 +9,13 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.news.NewsApplication
 import com.example.news.data.model.MarketSeries
 import com.example.news.data.model.SideArticle
+import com.example.news.data.repository.FavouriteChartRepository
 import com.example.news.data.repository.MarketRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 /**
  * Trạng thái trang Thị trường.
@@ -36,15 +38,20 @@ data class MarketUiState(
  * Việc xếp thứ tự biểu đồ nằm ở đây chứ không ở Fragment: đặc tả nói nhấn ngôi sao thì
  * biểu đồ "nhảy thẳng lên vị trí đầu tiên", tức là một phép sắp xếp trên dữ liệu, không
  * phải thao tác trên view.
+ *
+ * Danh mục biểu đồ lấy từ [MarketRepository] (sau này là nguồn dữ liệu thị trường thật), còn
+ * danh sách ưu tiên lấy từ [FavouriteChartRepository] (đã lưu trong Room). Hai nguồn được ghép
+ * lại ở đây.
  */
 class MarketViewModel(
-    private val repository: MarketRepository,
+    private val marketRepository: MarketRepository,
+    private val favouriteChartRepository: FavouriteChartRepository,
 ) : ViewModel() {
 
     val uiState: StateFlow<MarketUiState> = combine(
-        repository.observeSeries(),
-        repository.observeSideArticles(),
-        repository.observeFavouriteIds(),
+        marketRepository.observeSeries(),
+        marketRepository.observeSideArticles(),
+        favouriteChartRepository.observeFavouriteIds(),
     ) { series, sideArticles, favouriteIds ->
         // Biểu đồ ưu tiên lên trước theo đúng thứ tự đã đánh dấu, phần còn lại giữ nguyên
         // thứ tự gốc. Id không còn tồn tại trong danh sách thì bị bỏ qua.
@@ -65,9 +72,11 @@ class MarketViewModel(
         initialValue = MarketUiState(),
     )
 
-    /** Nhấn ngôi sao: đưa biểu đồ lên vị trí đầu tiên. */
+    /** Nhấn ngôi sao: đưa biểu đồ lên vị trí đầu tiên và ghi lại vào cơ sở dữ liệu. */
     fun markAsFollowed(seriesId: String) {
-        repository.promoteToFollowed(seriesId)
+        viewModelScope.launch {
+            favouriteChartRepository.promote(seriesId)
+        }
     }
 
     companion object {
@@ -76,7 +85,10 @@ class MarketViewModel(
         fun factory(): ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val application = this[APPLICATION_KEY] as NewsApplication
-                MarketViewModel(application.container.marketRepository)
+                MarketViewModel(
+                    marketRepository = application.container.marketRepository,
+                    favouriteChartRepository = application.container.favouriteChartRepository,
+                )
             }
         }
     }

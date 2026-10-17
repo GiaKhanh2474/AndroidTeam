@@ -1,6 +1,9 @@
 plugins {
     // Kotlin được AGP 9.3.3 hỗ trợ tích hợp sẵn, không cần plugin Kotlin riêng.
     alias(libs.plugins.android.application)
+    // KSP sinh mã cho Room. Không dùng kapt vì AGP 9 dùng Kotlin tích hợp sẵn, không áp
+    // dụng được plugin kotlin-kapt.
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -35,6 +38,12 @@ android {
     }
 }
 
+// Xuất lược đồ cơ sở dữ liệu ra tệp. Bắt buộc phải có nếu muốn viết migration đúng về sau:
+// không có lược đồ gốc thì không kiểm chứng được migration nào là hợp lệ.
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+}
+
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -54,6 +63,11 @@ dependencies {
     // Danh sach + the bai bao
     implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.cardview)
+
+    // Tang luu tru cuc bo (Room). Ma duoc sinh boi KSP.
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

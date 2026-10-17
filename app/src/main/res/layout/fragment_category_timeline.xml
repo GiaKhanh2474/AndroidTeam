@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Header đặc tả: [←]  TÊN CHUYÊN MỤC  ...........  [📅 Chọn ngày] -->
+<!--
+  Màn 2 — Chuyên mục theo ngày.
+
+  Header đặc tả: [←]  TÊN CHUYÊN MỤC  ...........  [📅 Chọn ngày]
+  Tên chuyên mục do Fragment đổ vào sau khi có dữ liệu; trước đó tạm hiện "Chuyên mục".
+
+  Thân trang: danh sách bài báo chia theo mốc ngày đăng. Mỗi bài là một khung chữ nhật
+  nằm ngang, KHÔNG dùng ảnh nhỏ: chữ to là tiêu đề, chữ nhỏ là tóm tắt.
+-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -17,28 +25,13 @@
         app:title="@string/title_category_timeline"
         app:titleTextAppearance="?attr/textAppearanceTitleLarge" />
 
-    <LinearLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvTimeline"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="@dimen/spacing_lg">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/note_category_timeline"
-            android:textAppearance="?attr/textAppearanceBodyLarge"
-            android:textColor="?attr/colorOnSurfaceVariant" />
-
-        <Button
-            android:id="@+id/btnBackToMain"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_lg"
-            android:text="@string/nav_back_to_main" />
-    </LinearLayout>
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/spacing_lg"
+        tools:listitem="@layout/item_timeline_day" />
 
 </LinearLayout>

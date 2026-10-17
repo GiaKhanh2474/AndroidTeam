@@ -29,11 +29,14 @@
     <string name="action_logout">Đăng xuất</string>
 
     <!-- Nội dung tạm của các màn chưa dựng xong -->
-    <string name="note_category_timeline">Danh sách bài báo nhóm theo ngày đăng,\nthẻ nằm ngang không dùng ảnh nhỏ.</string>
     <string name="note_market_drawer">Biểu đồ đang theo dõi ở đầu trang,\ndanh sách biểu đồ khác và bài báo bên lề.</string>
     <string name="note_profile">Avatar, thông tin tài khoản,\nbiểu đồ đã lưu và bài báo đã lưu.</string>
 
     <string name="nav_back_to_main">← Về Main</string>
     <string name="note_detail">Nội dung chi tiết bài báo sẽ được dựng ở bước tiếp theo.</string>
     <string name="feature_unavailable">Chức năng này chưa có dữ liệu</string>
+
+    <!-- Màn Chuyên mục: mốc ngày ở đầu mỗi nhóm bài báo -->
+    <string name="timeline_day_label">Ngày %1$s</string>
+    <string name="timeline_day_pattern">dd/MM</string>
 </resources>

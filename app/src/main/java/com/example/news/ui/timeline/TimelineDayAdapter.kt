@@ -32,7 +32,7 @@ class TimelineDayAdapter(
                 false,
             ),
             dayLabelTemplate = parent.context.getString(R.string.timeline_day_label),
-            dayLabelPattern = parent.context.getString(R.string.timeline_day_pattern),
+            dayLabelPattern = parent.context.getString(R.string.pattern_day_month),
             onArticleClick = onArticleClick,
         )
 

@@ -1,40 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--
+  Màn 3 — Chi tiết bài báo.
+
+  Thứ tự theo đúng đặc tả:
+    [←]
+    TIÊU ĐỀ BÀI BÁO (trên cùng bên trái, chữ to)
+    Nguồn báo • Ngày đăng
+    🔗 Trang web gốc (nằm ngay dưới nguồn báo)
+    (đường phân cách)
+    [ HÌNH ẢNH BÀI BÁO ]
+    Nội dung chi tiết
+
+  Ảnh hiện là KHUNG GIỮ CHỖ: chưa có nguồn ảnh thật nên không lấy ảnh từ Internet rồi
+  gán cho bài báo bịa. Khi nối được API chỉ cần nạp article.imageUrl vào ImageView này.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/spacing_lg"
+    android:background="?attr/colorSurface"
+    android:orientation="vertical"
     tools:context=".detail.DetailActivity">
 
-    <TextView
-        android:id="@+id/tvScreenTitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/title_detail"
-        android:textAppearance="?attr/textAppearanceHeadlineMedium"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tvPhaseNote"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_sm"
-        android:text="@string/note_detail"
-        android:textAppearance="?attr/textAppearanceBodyMedium"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvScreenTitle" />
-
-    <Button
+    <ImageButton
         android:id="@+id/btnBack"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/nav_back_to_main"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="@dimen/spacing_sm"
+        android:layout_marginTop="@dimen/spacing_sm"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/action_back"
+        android:src="@drawable/ic_arrow_back" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:scrollbars="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/spacing_md"
+            android:paddingEnd="@dimen/spacing_md"
+            android:paddingBottom="@dimen/spacing_xl">
+
+            <TextView
+                android:id="@+id/tvDetailTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceHeadlineSmall"
+                android:textStyle="bold"
+                tools:text="Tăng trưởng quý này vượt dự báo" />
+
+            <TextView
+                android:id="@+id/tvDetailSource"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_sm"
+                android:textAppearance="?attr/textAppearanceLabelLarge"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                tools:text="Bản tin minh hoạ • Ngày 17/10" />
+
+            <!-- Link mở trang báo gốc, nằm ngay dưới nguồn báo theo đặc tả. -->
+            <TextView
+                android:id="@+id/tvDetailLink"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_xs"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingTop="@dimen/spacing_xs"
+                android:paddingBottom="@dimen/spacing_xs"
+                android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:textColor="?attr/colorPrimary"
+                tools:text="🔗 Trang web gốc: https://example.com/bai-viet/kt-01" />
+
+            <TextView
+                android:id="@+id/tvDetailMockNotice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_xs"
+                android:text="@string/mock_data_notice"
+                android:textAppearance="?attr/textAppearanceLabelSmall"
+                android:textColor="?attr/colorOnSurfaceVariant" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardDetailImage"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="@dimen/spacing_md"
+                app:cardBackgroundColor="?attr/colorSurfaceVariant"
+                app:cardCornerRadius="@dimen/card_corner_radius"
+                app:cardElevation="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_md">
+
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_image_placeholder" />
+
+                    <TextView
+                        android:id="@+id/tvImageNote"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_sm"
+                        android:gravity="center"
+                        android:text="@string/detail_image_placeholder_note"
+                        android:textAppearance="?attr/textAppearanceLabelSmall"
+                        android:textColor="?attr/colorOnSurfaceVariant" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/tvDetailContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_md"
+                android:lineSpacingExtra="4dp"
+                android:textAppearance="?attr/textAppearanceBodyLarge"
+                tools:text="Đây là nội dung minh hoạ cho bài báo…" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

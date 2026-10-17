@@ -66,8 +66,10 @@
     <!-- Màn Tài khoản (màn 5) -->
     <string name="profile_avatar_content_desc">Ảnh đại diện</string>
     <string name="profile_avatar_content_desc_of">Ảnh đại diện của %1$s</string>
-    <string name="profile_mock_notice">Hồ sơ minh hoạ — chưa có đăng nhập thật</string>
-    <string name="profile_not_signed_in">Chưa đăng nhập. Ứng dụng chưa có chức năng đăng nhập.</string>
+    <!-- Màn đăng nhập/đăng ký nay đã có, nhưng chỉ là giao diện minh hoạ: chưa nối nguồn tài khoản
+         thật nên hai câu dưới đây phải nói đúng như vậy, không nói là "chưa có chức năng đăng nhập". -->
+    <string name="profile_mock_notice">Hồ sơ minh hoạ — màn đăng nhập chưa nối nguồn tài khoản thật</string>
+    <string name="profile_not_signed_in">Chưa đăng nhập. Màn đăng nhập hiện chỉ là giao diện minh hoạ, chưa có tài khoản thật.</string>
     <string name="profile_section_settings">Cài đặt</string>
     <string name="profile_upgrade_title">Nâng cấp tài khoản</string>
     <string name="profile_upgrade_summary">Mở khoá toàn bộ biểu đồ và bỏ giới hạn số bài lưu</string>
@@ -96,4 +98,30 @@
     <string name="info_page_language_body">Ứng dụng hiện chỉ có tiếng Việt, và toàn bộ chữ đang được viết trực tiếp trong mã nguồn. Khi có bản dịch, màn này sẽ cho chọn ngôn ngữ hiển thị.</string>
     <string name="info_page_unknown_title">Không rõ mục</string>
     <string name="info_page_unknown_body">Màn hình nhận được một khoá không có trong danh sách, nên không có gì để hiển thị.</string>
+
+    <!--
+      Hai màn xác thực (màn ngoài 5 màn của đặc tả).
+
+      Cả hai đều là GIAO DIỆN MINH HOẠ: chưa nối nguồn tài khoản thật, không gọi mạng, không kiểm
+      tra email hay mật khẩu. Dòng ghi chú ở cuối mỗi màn phải giữ đúng nghĩa đó.
+    -->
+    <string name="login_title">Đăng nhập</string>
+    <string name="register_title">Đăng ký</string>
+    <string name="login_subtitle">Đọc tin và theo dõi biểu đồ thị trường</string>
+    <string name="register_subtitle">Tạo tài khoản để lưu bài báo và biểu đồ</string>
+    <string name="auth_name_hint">Họ và tên</string>
+    <string name="auth_email_hint">Email</string>
+    <string name="auth_password_hint">Mật khẩu</string>
+    <string name="auth_confirm_password_hint">Nhập lại mật khẩu</string>
+    <string name="auth_name_required">Nhập họ và tên</string>
+    <string name="auth_email_required">Nhập email</string>
+    <string name="auth_password_required">Nhập mật khẩu</string>
+    <string name="auth_confirm_password_required">Nhập lại mật khẩu</string>
+    <string name="auth_password_mismatch">Mật khẩu nhập lại không khớp</string>
+    <string name="login_action">Đăng nhập</string>
+    <string name="login_forgot_password">Quên mật khẩu?</string>
+    <string name="login_no_account">Chưa có tài khoản?</string>
+    <string name="register_action">Đăng ký</string>
+    <string name="register_has_account">Đã có tài khoản?</string>
+    <string name="auth_mock_notice">Màn minh hoạ: ứng dụng chưa nối nguồn tài khoản thật, không kiểm tra email hay mật khẩu.</string>
 </resources>

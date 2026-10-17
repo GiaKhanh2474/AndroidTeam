@@ -2,8 +2,10 @@ package com.example.news.di
 
 import android.content.Context
 import com.example.news.data.local.NewsDatabase
+import com.example.news.data.repository.AuthRepository
 import com.example.news.data.repository.FavouriteChartRepository
 import com.example.news.data.repository.MarketRepository
+import com.example.news.data.repository.MockAuthRepository
 import com.example.news.data.repository.MockMarketRepository
 import com.example.news.data.repository.MockNewsRepository
 import com.example.news.data.repository.MockUserRepository
@@ -37,6 +39,14 @@ class AppContainer(context: Context) {
     val marketRepository: MarketRepository by lazy { MockMarketRepository() }
 
     val userRepository: UserRepository by lazy { MockUserRepository() }
+
+    /**
+     * Xác thực người dùng.
+     *
+     * Hiện là bản minh hoạ: KHÔNG kiểm tra mật khẩu, KHÔNG gọi mạng, KHÔNG lưu phiên. Đổi đúng
+     * dòng này sang bản dùng Retrofit khi có API tài khoản thật.
+     */
+    val authRepository: AuthRepository by lazy { MockAuthRepository() }
 
     val favouriteChartRepository: FavouriteChartRepository by lazy {
         RoomFavouriteChartRepository(database)

@@ -3,7 +3,52 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/mainFragment">
+    app:startDestination="@id/loginFragment">
+
+    <!--
+      Man dang nhap: man vao ung dung, nam ngoai 5 man cua dac ta.
+
+      Vi la start destination nen mo ung dung la thay ngay man nay. Sau khi dang nhap, chinh no bi
+      day khoi back stack (popUpTo kem chinh no) de nut Back o trang chinh thoat ung dung chu khong
+      quay lai man dang nhap.
+
+      Day la man GIAO DIEN MINH HOA: khong co nguon tai khoan that, xem AuthRepository.
+    -->
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.news.ui.auth.LoginFragment"
+        android:label="@string/login_title"
+        tools:layout="@layout/fragment_login">
+
+        <action
+            android:id="@+id/action_loginFragment_to_registerFragment"
+            app:destination="@id/registerFragment" />
+
+        <action
+            android:id="@+id/action_loginFragment_to_mainFragment"
+            app:destination="@id/mainFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <!--
+      Man dang ky: mo tu man dang nhap.
+
+      Cung la man giao dien minh hoa. Vao trang chinh thi day ca man dang nhap lan man dang ky khoi
+      back stack, vi sau khi dang ky xong thi khong con ly do gi quay lai hai man nay.
+    -->
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.example.news.ui.auth.RegisterFragment"
+        android:label="@string/register_title"
+        tools:layout="@layout/fragment_register">
+
+        <action
+            android:id="@+id/action_registerFragment_to_mainFragment"
+            app:destination="@id/mainFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 
     <!-- Man 1: Main. La start destination nen KHONG hien mui ten Up tren toolbar. -->
     <fragment
@@ -73,6 +118,19 @@
         <action
             android:id="@+id/action_profileFragment_to_marketDrawerFragment"
             app:destination="@id/marketDrawerFragment" />
+
+        <!--
+          "Dang xuat" o header man Tai khoan.
+
+          Chua co phien dang nhap that de huy, nen viec dang xuat lam duoc dung mot viec that su: dua
+          nguoi dung ve man dang nhap. Day luon ca trang chinh khoi back stack de nut Back khong mo
+          lai duoc trang Tai khoan vua roi.
+        -->
+        <action
+            android:id="@+id/action_profileFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/mainFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <!--

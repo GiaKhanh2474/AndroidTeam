@@ -38,3 +38,37 @@ fun View.applySystemBarInsets() {
         WindowInsetsCompat.CONSUMED
     }
 }
+
+/**
+ * Như [applySystemBarInsets] nhưng cộng thêm phần bàn phím (IME) vào padding dưới.
+ *
+ * Vì sao cần hàm riêng: khai báo `android:windowSoftInputMode="adjustResize"` trong manifest KHÔNG
+ * còn tự thu nhỏ cửa sổ khi bàn phím hiện ra (chế độ edge-to-edge bắt buộc từ `targetSdk 35`, và
+ * ứng dụng phải tự xử lý insets). Trên máy ảo, bàn phím che mất nút "Đăng nhập" của màn đăng nhập.
+ *
+ * Lấy phần LỚN HƠN giữa thanh điều hướng và bàn phím chứ không cộng cả hai: khi bàn phím hiện ra
+ * thì thanh điều hướng đã nằm trong vùng bàn phím, cộng cả hai sẽ thừa một khoảng trống.
+ *
+ * Hiện chỉ màn đăng nhập và đăng ký có ô nhập chữ, nên trên thực tế hàm này chỉ khác hàm thường ở
+ * hai màn đó.
+ */
+fun View.applySystemBarAndImeInsets() {
+    val basePaddingLeft = paddingLeft
+    val basePaddingTop = paddingTop
+    val basePaddingRight = paddingRight
+    val basePaddingBottom = paddingBottom
+
+    ViewCompat.setOnApplyWindowInsetsListener(this) { view, windowInsets ->
+        val insets = windowInsets.getInsets(
+            WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout(),
+        )
+        val ime = windowInsets.getInsets(WindowInsetsCompat.Type.ime())
+        view.updatePadding(
+            left = basePaddingLeft + insets.left,
+            top = basePaddingTop + insets.top,
+            right = basePaddingRight + insets.right,
+            bottom = basePaddingBottom + maxOf(insets.bottom, ime.bottom),
+        )
+        WindowInsetsCompat.CONSUMED
+    }
+}

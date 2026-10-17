@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.news.databinding.ActivityMainBinding
-import com.example.news.ui.common.applySystemBarInsets
+import com.example.news.ui.common.applySystemBarAndImeInsets
 
 /**
  * Single Activity của ứng dụng.
@@ -30,6 +30,10 @@ class MainActivity : AppCompatActivity() {
         // Đẩy toàn bộ nội dung xuống dưới thanh trạng thái / tai thỏ.
         // Không có bước này thì header của mọi màn sẽ chìm dưới vùng tai thỏ 142px
         // (vừa bị đồng hồ pin đè lên, vừa không chạm được).
-        binding.root.applySystemBarInsets()
+        //
+        // Dùng bản có xử lý luôn bàn phím vì màn đăng nhập/đăng ký có ô nhập chữ: từ targetSdk 35,
+        // `adjustResize` trong manifest không còn tự thu nhỏ cửa sổ, không xử lý thì bàn phím che
+        // mất nút "Đăng nhập". Các màn còn lại không có ô nhập chữ nên không bị ảnh hưởng.
+        binding.root.applySystemBarAndImeInsets()
     }
 }

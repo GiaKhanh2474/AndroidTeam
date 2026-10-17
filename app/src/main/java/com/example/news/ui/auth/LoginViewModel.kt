@@ -10,6 +10,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.news.NewsApplication
 import com.example.news.R
 import com.example.news.data.repository.AuthRepository
+import com.example.news.data.repository.SessionRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,6 +41,7 @@ data class LoginUiState(
  */
 class LoginViewModel(
     private val authRepository: AuthRepository,
+    private val sessionRepository: SessionRepository,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(LoginUiState())
@@ -69,6 +71,10 @@ class LoginViewModel(
             // Bản minh hoạ luôn trả về true khi hai ô đã có chữ, nên nhánh dưới không chạy. Khi
             // nối API thật, đây chính là chỗ báo "sai email hoặc mật khẩu".
             if (authRepository.signIn(email.trim(), password)) {
+                // Nhớ phiên để lần mở sau vào thẳng trang chính. Bản minh hoạ ghi cờ ngay; khi nối
+                // API thật thì chỉ được ghi sau khi máy chủ xác nhận, và phải lưu mã truy cập chứ
+                // không phải một cờ đúng/sai.
+                sessionRepository.setSignedIn(true)
                 _signedIn.send(Unit)
             }
         }
@@ -85,7 +91,10 @@ class LoginViewModel(
         fun factory(): ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val application = this[APPLICATION_KEY] as NewsApplication
-                LoginViewModel(authRepository = application.container.authRepository)
+                LoginViewModel(
+                    authRepository = application.container.authRepository,
+                    sessionRepository = application.container.sessionRepository,
+                )
             }
         }
     }

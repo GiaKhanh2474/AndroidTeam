@@ -13,6 +13,7 @@ import com.example.news.data.model.UserProfile
 import com.example.news.data.repository.FavouriteChartRepository
 import com.example.news.data.repository.MarketRepository
 import com.example.news.data.repository.SavedArticleRepository
+import com.example.news.data.repository.SessionRepository
 import com.example.news.data.repository.UserRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -50,6 +51,7 @@ class ProfileViewModel(
     userRepository: UserRepository,
     private val savedArticleRepository: SavedArticleRepository,
     private val favouriteChartRepository: FavouriteChartRepository,
+    private val sessionRepository: SessionRepository,
     marketRepository: MarketRepository,
 ) : ViewModel() {
 
@@ -84,6 +86,20 @@ class ProfileViewModel(
         favouriteChartRepository.clear()
     }
 
+    /**
+     * Đăng xuất.
+     *
+     * Chỉ xoá cờ phiên trên máy, để lần mở sau hiện lại màn đăng nhập. KHÔNG xoá dữ liệu đã lưu:
+     * bài báo và biểu đồ ưu tiên nằm trên máy này, không thuộc về tài khoản nào (và cũng chưa có
+     * tài khoản thật), nên đăng xuất mà xoá chúng là mất dữ liệu của người dùng.
+     *
+     * suspend vì việc ghi xuống đĩa được đẩy sang luồng nền; gọi xong mới nên rời màn, để nhỡ người
+     * dùng tắt ứng dụng ngay sau khi bấm thì lần mở sau vẫn chắc chắn hiện lại màn đăng nhập.
+     */
+    suspend fun signOut() {
+        sessionRepository.setSignedIn(false)
+    }
+
     companion object {
         private const val STOP_TIMEOUT_MS = 5_000L
 
@@ -94,6 +110,7 @@ class ProfileViewModel(
                     userRepository = application.container.userRepository,
                     savedArticleRepository = application.container.savedArticleRepository,
                     favouriteChartRepository = application.container.favouriteChartRepository,
+                    sessionRepository = application.container.sessionRepository,
                     marketRepository = application.container.marketRepository,
                 )
             }

@@ -169,16 +169,20 @@ class ProfileFragment : Fragment() {
     /**
      * Đăng xuất.
      *
-     * Chưa có phiên đăng nhập thật để huỷ, nên việc đăng xuất làm được một việc thật sự: quay về
-     * màn đăng nhập.
+     * Chưa có phiên đăng nhập thật để huỷ, nên việc đăng xuất làm hai việc thật sự:
+     * xoá cờ phiên trên máy (lần mở sau sẽ hiện lại màn đăng nhập) rồi quay về màn đăng nhập.
      *
      * Dữ liệu đã lưu KHÔNG bị xoá. Bài báo và biểu đồ ưu tiên nằm trên máy này, không thuộc về tài
      * khoản nào (cũng chưa có tài khoản thật), nên đăng xuất mà xoá chúng là mất dữ liệu của người
      * dùng. Muốn xoá thì đã có mục "Xoá dữ liệu đã lưu" kèm hộp thoại hỏi lại.
      */
     private fun logout() {
-        Navigation.findNavController(requireView())
-            .navigate(R.id.action_profileFragment_to_loginFragment)
+        viewLifecycleOwner.lifecycleScope.launch {
+            // Ghi xong cờ phiên rồi mới rời màn.
+            viewModel.signOut()
+            Navigation.findNavController(requireView())
+                .navigate(R.id.action_profileFragment_to_loginFragment)
+        }
     }
 
     private fun onRowClicked(row: ProfileRow) {

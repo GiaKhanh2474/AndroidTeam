@@ -10,9 +10,11 @@ import com.example.news.data.repository.MockMarketRepository
 import com.example.news.data.repository.MockNewsRepository
 import com.example.news.data.repository.MockUserRepository
 import com.example.news.data.repository.NewsRepository
+import com.example.news.data.repository.PreferencesSessionRepository
 import com.example.news.data.repository.RoomFavouriteChartRepository
 import com.example.news.data.repository.RoomSavedArticleRepository
 import com.example.news.data.repository.SavedArticleRepository
+import com.example.news.data.repository.SessionRepository
 import com.example.news.data.repository.UserRepository
 
 /**
@@ -47,6 +49,12 @@ class AppContainer(context: Context) {
      * dòng này sang bản dùng Retrofit khi có API tài khoản thật.
      */
     val authRepository: AuthRepository by lazy { MockAuthRepository() }
+
+    /**
+     * Phiên "đăng nhập" giữ trên máy — chỉ là một cờ đúng/sai, không phải phiên thật (xem
+     * [SessionRepository]). Dùng để lần mở sau vào thẳng trang chính thay vì hiện lại màn đăng nhập.
+     */
+    val sessionRepository: SessionRepository by lazy { PreferencesSessionRepository(context) }
 
     val favouriteChartRepository: FavouriteChartRepository by lazy {
         RoomFavouriteChartRepository(database)

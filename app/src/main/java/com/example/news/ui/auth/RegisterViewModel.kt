@@ -10,6 +10,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.news.NewsApplication
 import com.example.news.R
 import com.example.news.data.repository.AuthRepository
+import com.example.news.data.repository.SessionRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -44,6 +45,7 @@ data class RegisterUiState(
  */
 class RegisterViewModel(
     private val authRepository: AuthRepository,
+    private val sessionRepository: SessionRepository,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(RegisterUiState())
@@ -74,6 +76,7 @@ class RegisterViewModel(
         viewModelScope.launch {
             // Như màn đăng nhập: bản minh hoạ luôn cho qua khi các ô đã có chữ.
             if (authRepository.signUp(displayName.trim(), email.trim(), password)) {
+                sessionRepository.setSignedIn(true)
                 _signedUp.send(Unit)
             }
         }
@@ -89,7 +92,10 @@ class RegisterViewModel(
         fun factory(): ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val application = this[APPLICATION_KEY] as NewsApplication
-                RegisterViewModel(authRepository = application.container.authRepository)
+                RegisterViewModel(
+                    authRepository = application.container.authRepository,
+                    sessionRepository = application.container.sessionRepository,
+                )
             }
         }
     }

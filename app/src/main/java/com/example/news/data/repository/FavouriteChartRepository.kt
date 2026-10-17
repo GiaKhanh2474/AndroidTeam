@@ -24,4 +24,11 @@ interface FavouriteChartRepository {
 
     /** Bỏ đánh dấu một biểu đồ. */
     suspend fun remove(seriesId: String)
+
+    /**
+     * Bỏ đánh dấu toàn bộ biểu đồ.
+     *
+     * Dùng cho mục "Xoá dữ liệu đã lưu" ở trang Tài khoản, không dùng cho thao tác thường ngày.
+     */
+    suspend fun clear()
 }

@@ -43,4 +43,8 @@ class RoomFavouriteChartRepository(
     override suspend fun remove(seriesId: String) {
         dao.deleteById(seriesId)
     }
+
+    override suspend fun clear() {
+        dao.deleteAll()
+    }
 }

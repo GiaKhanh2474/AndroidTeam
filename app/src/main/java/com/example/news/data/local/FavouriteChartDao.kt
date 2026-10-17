@@ -28,4 +28,7 @@ interface FavouriteChartDao {
 
     @Query("DELETE FROM favourite_chart WHERE seriesId = :seriesId")
     suspend fun deleteById(seriesId: String)
+
+    @Query("DELETE FROM favourite_chart")
+    suspend fun deleteAll()
 }

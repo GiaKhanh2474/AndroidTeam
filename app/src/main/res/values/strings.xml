@@ -29,10 +29,6 @@
     <string name="action_logout">Đăng xuất</string>
 
     <!-- Nội dung tạm của các màn chưa dựng xong -->
-    <string name="note_profile">Avatar, thông tin tài khoản,\nbiểu đồ đã lưu và bài báo đã lưu.</string>
-
-    <string name="nav_back_to_main">← Về Main</string>
-    <string name="note_detail">Nội dung chi tiết bài báo sẽ được dựng ở bước tiếp theo.</string>
     <string name="feature_unavailable">Chức năng này chưa có dữ liệu</string>
 
     <!-- Màn Chuyên mục: mốc ngày ở đầu mỗi nhóm bài báo -->
@@ -42,7 +38,7 @@
     <string name="pattern_day_month">dd/MM</string>
 
     <!-- Màn Chi tiết bài báo -->
-    <string name="detail_source_date">%1$s • Ngày %2$s</string>
+    <string name="article_source_date">%1$s • Ngày %2$s</string>
     <string name="detail_source_link">🔗 Trang web gốc: %1$s</string>
     <string name="detail_image_placeholder_note">Ảnh minh hoạ — chỗ giữ chỗ cho ảnh thật của bài báo</string>
     <string name="detail_link_no_app">Không mở được liên kết</string>
@@ -65,4 +61,38 @@
     <string name="market_mark_favourite">Đưa %1$s lên đầu trang</string>
     <string name="market_mark_favourite_generic">Đánh dấu ưu tiên</string>
     <string name="market_chart_content_desc">Biểu đồ %1$s, giá trị mới nhất %2$s %3$s</string>
+
+    <!-- Màn Tài khoản (màn 5) -->
+    <string name="profile_avatar_content_desc">Ảnh đại diện</string>
+    <string name="profile_avatar_content_desc_of">Ảnh đại diện của %1$s</string>
+    <string name="profile_mock_notice">Hồ sơ minh hoạ — chưa có đăng nhập thật</string>
+    <string name="profile_not_signed_in">Chưa đăng nhập. Ứng dụng chưa có chức năng đăng nhập.</string>
+    <string name="profile_section_settings">Cài đặt</string>
+    <string name="profile_upgrade_title">Nâng cấp tài khoản</string>
+    <string name="profile_upgrade_summary">Mở khoá toàn bộ biểu đồ và bỏ giới hạn số bài lưu</string>
+    <string name="profile_settings_clear_title">Xoá dữ liệu đã lưu</string>
+    <string name="profile_settings_clear_summary">Xoá toàn bộ bài báo và biểu đồ đã lưu trên máy</string>
+    <string name="profile_settings_language_title">Ngôn ngữ</string>
+    <string name="profile_settings_language_summary">Chọn ngôn ngữ hiển thị</string>
+    <string name="profile_clear_confirm_title">Xoá dữ liệu đã lưu?</string>
+    <string name="profile_clear_confirm_message">Toàn bộ bài báo đã lưu và biểu đồ đã lưu sẽ bị xoá khỏi máy. Không khôi phục lại được.</string>
+    <string name="profile_clear_confirm_ok">Xoá</string>
+    <string name="profile_clear_confirm_cancel">Huỷ</string>
+    <string name="profile_clear_done">Đã xoá toàn bộ dữ liệu đã lưu</string>
+    <string name="profile_section_saved_charts">Biểu đồ đã lưu</string>
+    <string name="profile_section_saved_articles">Bài báo đã lưu</string>
+    <string name="profile_saved_charts_empty">Chưa lưu biểu đồ nào. Vào màn Thị trường rồi nhấn ngôi sao để lưu.</string>
+    <string name="profile_saved_articles_empty">Chưa lưu bài báo nào. Mở một bài rồi nhấn đúp vào màn hình để lưu.</string>
+    <string name="profile_open_saved_chart">Mở biểu đồ %1$s ở màn Thị trường</string>
+    <string name="profile_open_saved_article">Mở bài %1$s</string>
+
+    <!-- Màn dùng chung cho các dòng mở màn khác ở trang Tài khoản -->
+    <string name="title_info_page">Thông tin</string>
+    <string name="info_page_pending">Phần nội dung này chưa có dữ liệu thật; màn hình đang chờ được nối vào nguồn thật.</string>
+    <string name="info_page_upgrade_title">Nâng cấp tài khoản</string>
+    <string name="info_page_upgrade_body">Ứng dụng chưa có hệ thống tài khoản và thanh toán, nên chưa thể nâng cấp được. Khi nối được nguồn tài khoản thật, màn này sẽ hiện các gói và quyền lợi của từng gói.</string>
+    <string name="info_page_language_title">Ngôn ngữ</string>
+    <string name="info_page_language_body">Ứng dụng hiện chỉ có tiếng Việt, và toàn bộ chữ đang được viết trực tiếp trong mã nguồn. Khi có bản dịch, màn này sẽ cho chọn ngôn ngữ hiển thị.</string>
+    <string name="info_page_unknown_title">Không rõ mục</string>
+    <string name="info_page_unknown_body">Màn hình nhận được một khoá không có trong danh sách, nên không có gì để hiển thị.</string>
 </resources>

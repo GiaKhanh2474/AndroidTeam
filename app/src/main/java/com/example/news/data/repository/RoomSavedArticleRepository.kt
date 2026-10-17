@@ -39,4 +39,8 @@ class RoomSavedArticleRepository(
     override suspend fun remove(articleId: String) {
         dao.deleteById(articleId)
     }
+
+    override suspend fun clear() {
+        dao.deleteAll()
+    }
 }

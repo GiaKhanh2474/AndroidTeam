@@ -17,10 +17,8 @@ import com.example.news.data.model.SideArticleKind
 import com.example.news.databinding.FragmentMarketDrawerBinding
 import com.example.news.databinding.ItemMarketChartRowBinding
 import com.example.news.databinding.ItemMarketSideArticleBinding
-import com.example.news.ui.common.APP_LOCALE
+import com.example.news.ui.common.MarketFormat
 import kotlinx.coroutines.launch
-import java.text.NumberFormat
-import kotlin.math.abs
 
 /**
  * Màn 4 — Thị trường (mở từ nút [☰] ở trang Main).
@@ -43,13 +41,11 @@ class MarketDrawerFragment : Fragment() {
     private var _binding: FragmentMarketDrawerBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: MarketViewModel by viewModels { MarketViewModel.factory() }
-
-    private val percentFormat: NumberFormat =
-        NumberFormat.getNumberInstance(APP_LOCALE).apply {
-            minimumFractionDigits = 1
-            maximumFractionDigits = 1
-        }
+    private val viewModel: MarketViewModel by viewModels {
+        MarketViewModel.factory(
+            focusedSeriesId = arguments?.getString(MarketNavArgs.FOCUSED_SERIES_ID),
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -104,7 +100,7 @@ class MarketDrawerFragment : Fragment() {
 
         binding.chartFollowed.submitSeries(series)
         binding.tvFollowedChartName.text = series.name
-        binding.tvFollowedChartChange.text = changeText(series)
+        binding.tvFollowedChartChange.text = MarketFormat.change(requireContext(), series)
         binding.tvFollowedChartRange.text = getString(
             R.string.market_range_label,
             series.points.first().label,
@@ -113,7 +109,7 @@ class MarketDrawerFragment : Fragment() {
         binding.chartFollowed.contentDescription = getString(
             R.string.market_chart_content_desc,
             series.name,
-            formatValue(series, series.latest),
+            MarketFormat.value(series, series.latest),
             series.unit,
         )
     }
@@ -134,12 +130,7 @@ class MarketDrawerFragment : Fragment() {
                 false,
             )
             row.tvSeriesName.text = series.name
-            row.tvSeriesMeta.text = getString(
-                R.string.market_series_meta,
-                formatValue(series, series.latest),
-                series.unit,
-                changeText(series),
-            )
+            row.tvSeriesMeta.text = MarketFormat.meta(requireContext(), series)
 
             val isMarked = series.id in state.favouriteIds
             row.btnStar.setImageResource(
@@ -174,31 +165,5 @@ class MarketDrawerFragment : Fragment() {
         SideArticleKind.NEWS_TICKER -> R.drawable.ic_public
         SideArticleKind.TOP_READ -> R.drawable.ic_emoji_events
         SideArticleKind.ANALYSIS -> R.drawable.ic_trending_up
-    }
-
-    /** Ví dụ: "▲ 2,4% trong 12 ngày". Mũi tên cho biết tăng hay giảm trong khoảng đang vẽ. */
-    private fun changeText(series: MarketSeries): String {
-        val percent = percentFormat.format(abs(series.changePercent))
-        val days = (series.points.size - 1).toString()
-        return when {
-            series.changePercent > FLAT_THRESHOLD ->
-                getString(R.string.market_change_up, percent, days)
-
-            series.changePercent < -FLAT_THRESHOLD ->
-                getString(R.string.market_change_down, percent, days)
-
-            else -> getString(R.string.market_change_flat, days)
-        }
-    }
-
-    private fun formatValue(series: MarketSeries, value: Float): String =
-        NumberFormat.getNumberInstance(APP_LOCALE).apply {
-            minimumFractionDigits = series.decimals
-            maximumFractionDigits = series.decimals
-        }.format(value)
-
-    private companion object {
-        /** Dưới mức này coi như không thay đổi, tránh hiện "▲ 0,0%". */
-        const val FLAT_THRESHOLD = 0.05f
     }
 }

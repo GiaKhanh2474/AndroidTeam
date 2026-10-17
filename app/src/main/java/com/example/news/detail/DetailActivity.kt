@@ -79,7 +79,7 @@ class DetailActivity : AppCompatActivity() {
 
         binding.tvDetailTitle.text = article.title
         binding.tvDetailSource.text = getString(
-            R.string.detail_source_date,
+            R.string.article_source_date,
             article.source,
             dayFormatter.format(Date(article.publishedAt)),
         )

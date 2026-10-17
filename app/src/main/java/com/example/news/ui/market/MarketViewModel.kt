@@ -46,6 +46,7 @@ data class MarketUiState(
 class MarketViewModel(
     private val marketRepository: MarketRepository,
     private val favouriteChartRepository: FavouriteChartRepository,
+    private val focusedSeriesId: String? = null,
 ) : ViewModel() {
 
     val uiState: StateFlow<MarketUiState> = combine(
@@ -53,11 +54,7 @@ class MarketViewModel(
         marketRepository.observeSideArticles(),
         favouriteChartRepository.observeFavouriteIds(),
     ) { series, sideArticles, favouriteIds ->
-        // Biểu đồ ưu tiên lên trước theo đúng thứ tự đã đánh dấu, phần còn lại giữ nguyên
-        // thứ tự gốc. Id không còn tồn tại trong danh sách thì bị bỏ qua.
-        val ordered = favouriteIds.mapNotNull { favouriteId ->
-            series.firstOrNull { it.id == favouriteId }
-        } + series.filter { it.id !in favouriteIds }
+        val ordered = orderedSeries(series, favouriteIds)
 
         MarketUiState(
             isLoading = false,
@@ -72,6 +69,29 @@ class MarketViewModel(
         initialValue = MarketUiState(),
     )
 
+    /**
+     * Xếp thứ tự biểu đồ: ưu tiên đã lưu lên trước theo đúng thứ tự đánh dấu, phần còn lại giữ
+     * nguyên thứ tự gốc. Id không còn tồn tại trong danh mục thì bị bỏ qua.
+     *
+     * Sau đó, nếu màn này được mở từ danh sách "biểu đồ đã lưu" ở trang Tài khoản, biểu đồ được
+     * chọn đưa lên đầu. Đây chỉ là CÁCH XEM cho lần mở này: không ghi gì vào cơ sở dữ liệu, nên
+     * thứ tự ưu tiên của người dùng không bị đổi chỉ vì họ bấm xem một biểu đồ.
+     */
+    private fun orderedSeries(
+        series: List<MarketSeries>,
+        favouriteIds: List<String>,
+    ): List<MarketSeries> {
+        val prioritised = favouriteIds.mapNotNull { favouriteId ->
+            series.firstOrNull { it.id == favouriteId }
+        }
+        val inPriorityOrder = prioritised + series.filter { it.id !in favouriteIds }
+
+        val focused = focusedSeriesId?.let { id -> inPriorityOrder.firstOrNull { it.id == id } }
+            ?: return inPriorityOrder
+
+        return listOf(focused) + inPriorityOrder.filter { it.id != focused.id }
+    }
+
     /** Nhấn ngôi sao: đưa biểu đồ lên vị trí đầu tiên và ghi lại vào cơ sở dữ liệu. */
     fun markAsFollowed(seriesId: String) {
         viewModelScope.launch {
@@ -82,12 +102,17 @@ class MarketViewModel(
     companion object {
         private const val STOP_TIMEOUT_MS = 5_000L
 
-        fun factory(): ViewModelProvider.Factory = viewModelFactory {
+        /**
+         * @param focusedSeriesId biểu đồ cần đưa lên đầu trang, hoặc null nếu mở màn theo cách
+         *   thường (khi đó dùng đúng thứ tự ưu tiên đã lưu).
+         */
+        fun factory(focusedSeriesId: String? = null): ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val application = this[APPLICATION_KEY] as NewsApplication
                 MarketViewModel(
                     marketRepository = application.container.marketRepository,
                     favouriteChartRepository = application.container.favouriteChartRepository,
+                    focusedSeriesId = focusedSeriesId,
                 )
             }
         }

@@ -26,4 +26,11 @@ interface SavedArticleRepository {
     suspend fun toggle(article: Article): Boolean
 
     suspend fun remove(articleId: String): Unit
+
+    /**
+     * Xoá toàn bộ bài đã lưu.
+     *
+     * Dùng cho mục "Xoá dữ liệu đã lưu" ở trang Tài khoản, không dùng cho thao tác thường ngày.
+     */
+    suspend fun clear(): Unit
 }

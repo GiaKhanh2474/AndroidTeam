@@ -29,4 +29,7 @@ interface SavedArticleDao {
 
     @Query("SELECT * FROM saved_article WHERE id = :articleId")
     suspend fun findById(articleId: String): SavedArticleEntity?
+
+    @Query("DELETE FROM saved_article")
+    suspend fun deleteAll()
 }

@@ -1,5 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Header đặc tả: [←]  TÀI KHOẢN CÁ NHÂN  ...........  [Đăng xuất] -->
+<!--
+  Màn 5 — Tài khoản.
+
+  Header đặc tả: [←]  TÀI KHOẢN CÁ NHÂN  ...........  [Đăng xuất]
+
+  Bố cục cuộn dọc, thứ tự các khối:
+    1. Thông tin cá nhân   (ảnh đại diện, tên, email, số điện thoại)
+    2. Nâng cấp tài khoản
+    3. Cài đặt             (xoá dữ liệu đã lưu, ngôn ngữ)
+    4. Đã lưu              (biểu đồ đã lưu, bài báo đã lưu)
+
+  Vì sao dùng RecyclerView cho CẢ màn hình thay vì ScrollView chứa sẵn các khối:
+  hai danh sách "đã lưu" dài ra theo số thứ người dùng lưu, không có giới hạn. Nếu để chúng
+  trong một ScrollView thì phải lồng một danh sách cuộn được vào trong một vùng cuộn được —
+  cử chỉ cuộn sẽ chồng lên nhau và số dòng nhiều sẽ dựng hết view một lúc. Một RecyclerView
+  duy nhất vừa cuộn mượt vừa chỉ dựng những dòng đang nhìn thấy.
+
+  Các khối cố định (thông tin, nâng cấp, cài đặt, nhãn nhóm) trở thành những "dòng" bình
+  thường trong cùng danh sách đó, nên cả màn vẫn cuộn như một khối liền mạch.
+-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -17,28 +36,16 @@
         app:title="@string/header_profile"
         app:titleTextAppearance="?attr/textAppearanceTitleLarge" />
 
-    <LinearLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/listProfile"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="@dimen/spacing_lg">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/note_profile"
-            android:textAppearance="?attr/textAppearanceBodyLarge"
-            android:textColor="?attr/colorOnSurfaceVariant" />
-
-        <Button
-            android:id="@+id/btnBackToMain"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_lg"
-            android:text="@string/nav_back_to_main" />
-    </LinearLayout>
+        android:clipToPadding="false"
+        android:paddingStart="@dimen/spacing_md"
+        android:paddingEnd="@dimen/spacing_md"
+        android:paddingBottom="@dimen/spacing_xl"
+        android:scrollbars="vertical"
+        tools:listitem="@layout/item_profile_row" />
 
 </LinearLayout>

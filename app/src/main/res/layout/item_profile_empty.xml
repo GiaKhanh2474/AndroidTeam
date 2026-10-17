@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Dòng thông báo khi một nhóm ở trang Tài khoản chưa có gì.
+
+  Luôn nói rõ CÁCH tạo ra dữ liệu (nhấn đúp ở trang Chi tiết, nhấn ngôi sao ở màn Thị trường),
+  vì người dùng mới mở màn lần đầu không có cách nào tự đoán ra hai thao tác đó.
+-->
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tvEmptyMessage"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/spacing_sm"
+    android:textAppearance="?attr/textAppearanceBodyMedium"
+    android:textColor="?attr/colorOnSurfaceVariant"
+    tools:text="Chưa lưu bài báo nào. Mở một bài rồi nhấn đúp vào màn hình để lưu." />

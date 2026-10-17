@@ -45,13 +45,52 @@
         android:id="@+id/marketDrawerFragment"
         android:name="com.example.news.ui.market.MarketDrawerFragment"
         android:label="@string/title_market_drawer"
-        tools:layout="@layout/fragment_market_drawer" />
+        tools:layout="@layout/fragment_market_drawer">
+
+        <!--
+          Biểu đồ cần đưa lên đầu trang, truyền từ danh sách "biểu đồ đã lưu" ở màn Tài khoản.
+          Để trống khi vào màn Thị trường theo cách thường; khi đó trang dùng danh sách ưu tiên
+          đã lưu. Đây chỉ là lựa chọn CÁCH XEM cho lần mở này, không ghi gì vào cơ sở dữ liệu.
+        -->
+        <argument
+            android:name="focusedSeriesId"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
 
     <!-- Man 5: tai khoan + bai da luu + bieu do da luu. -->
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.news.ui.profile.ProfileFragment"
         android:label="@string/title_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile">
+
+        <action
+            android:id="@+id/action_profileFragment_to_infoPageFragment"
+            app:destination="@id/infoPageFragment" />
+
+        <action
+            android:id="@+id/action_profileFragment_to_marketDrawerFragment"
+            app:destination="@id/marketDrawerFragment" />
+    </fragment>
+
+    <!--
+      Man dung chung cho cac dong "mo man khac" o trang Tai khoan.
+
+      Vi sao dung chung mot man thay vi moi dong mot man: cac dong nay hien chi la cho dang cho
+      noi dung that, nen mot man chung giu nguyen so luong man hinh cua ung dung va khong bia ra
+      noi dung cho tung man rieng le. Man nay nhan khoa trang, tu tra ra tieu de va noi dung.
+    -->
+    <fragment
+        android:id="@+id/infoPageFragment"
+        android:name="com.example.news.ui.info.InfoPageFragment"
+        android:label="@string/title_info_page"
+        tools:layout="@layout/fragment_info_page">
+
+        <argument
+            android:name="page"
+            app:argType="string" />
+    </fragment>
 
 </navigation>

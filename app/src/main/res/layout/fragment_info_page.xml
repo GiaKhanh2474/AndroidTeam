@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Màn dùng chung cho các dòng "mở màn khác" ở trang Tài khoản.
+
+  Header: [←]  TIÊU ĐỀ CỦA MỤC.
+
+  Màn này nhận một khoá (khoá "page") rồi tự tra ra tiêu đề và nội dung. Nhận khoá thay vì
+  nhận thẳng chữ để toàn bộ chữ vẫn nằm trong strings.xml, không bị truyền qua đối số điều
+  hướng.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorSurface"
+    android:orientation="vertical"
+    tools:context=".ui.info.InfoPageFragment">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/headerToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorSurface"
+        app:title="@string/title_info_page"
+        app:titleTextAppearance="?attr/textAppearanceTitleLarge" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:scrollbars="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/spacing_md"
+            android:paddingEnd="@dimen/spacing_md"
+            android:paddingBottom="@dimen/spacing_xl">
+
+            <TextView
+                android:id="@+id/tvInfoBody"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_md"
+                android:lineSpacingMultiplier="1.3"
+                android:textAppearance="?attr/textAppearanceBodyLarge"
+                tools:text="Ứng dụng chưa có hệ thống tài khoản và thanh toán…" />
+
+            <TextView
+                android:id="@+id/tvInfoPendingNotice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_md"
+                android:text="@string/info_page_pending"
+                android:textAppearance="?attr/textAppearanceLabelMedium"
+                android:textColor="?attr/colorOnSurfaceVariant" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

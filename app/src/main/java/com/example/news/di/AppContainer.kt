@@ -6,10 +6,12 @@ import com.example.news.data.repository.FavouriteChartRepository
 import com.example.news.data.repository.MarketRepository
 import com.example.news.data.repository.MockMarketRepository
 import com.example.news.data.repository.MockNewsRepository
+import com.example.news.data.repository.MockUserRepository
 import com.example.news.data.repository.NewsRepository
 import com.example.news.data.repository.RoomFavouriteChartRepository
 import com.example.news.data.repository.RoomSavedArticleRepository
 import com.example.news.data.repository.SavedArticleRepository
+import com.example.news.data.repository.UserRepository
 
 /**
  * Service Locator thủ công.
@@ -33,6 +35,8 @@ class AppContainer(context: Context) {
     val newsRepository: NewsRepository by lazy { MockNewsRepository() }
 
     val marketRepository: MarketRepository by lazy { MockMarketRepository() }
+
+    val userRepository: UserRepository by lazy { MockUserRepository() }
 
     val favouriteChartRepository: FavouriteChartRepository by lazy {
         RoomFavouriteChartRepository(database)

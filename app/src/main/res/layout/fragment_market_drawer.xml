@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Header đặc tả: [☰]  BIỂU ĐỒ & DANH MỤC MỞ RỘNG  ...........  [✕] -->
+<!--
+  Màn 4 — Thị trường (mở từ nút [☰] ở trang Main).
+
+  Header đặc tả: [☰]  BIỂU ĐỒ & DANH MỤC MỞ RỘNG  ...........  [✕]
+
+  Trang chia 3 phần đúng theo bản vẽ:
+    PHẦN ĐẦU   — biểu đồ đang được theo dõi, hiện đầy đủ.
+    PHẦN GIỮA  — danh sách các biểu đồ khác, mỗi dòng có một ngôi sao để đưa lên đầu trang.
+    PHẦN DƯỚI  — bài báo bên lề: tin vắn toàn cầu, bảng xếp hạng, góc phân tích.
+
+  Đặc tả ghi biểu đồ "cập nhật liên tục", nhưng dự án CHƯA có nguồn dữ liệu thị trường
+  thật, nên ngay dưới tên biểu đồ có ghi rõ "Dữ liệu minh hoạ". Các con số không được
+  trình bày như số liệu thật.
+-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -17,28 +30,142 @@
         app:title="@string/header_market_drawer"
         app:titleTextAppearance="?attr/textAppearanceTitleLarge" />
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="@dimen/spacing_lg">
+        android:clipToPadding="false"
+        android:scrollbars="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/note_market_drawer"
-            android:textAppearance="?attr/textAppearanceBodyLarge"
-            android:textColor="?attr/colorOnSurfaceVariant" />
+            android:orientation="vertical"
+            android:paddingStart="@dimen/spacing_md"
+            android:paddingEnd="@dimen/spacing_md"
+            android:paddingBottom="@dimen/spacing_xl">
 
-        <Button
-            android:id="@+id/btnBackToMain"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_lg"
-            android:text="@string/nav_back_to_main" />
-    </LinearLayout>
+            <!-- ===== PHẦN ĐẦU: biểu đồ đang theo dõi ===== -->
+
+            <TextView
+                android:id="@+id/tvFollowedHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_sm"
+                android:text="@string/market_followed_header"
+                android:textAllCaps="true"
+                android:textAppearance="?attr/textAppearanceLabelLarge"
+                android:textColor="?attr/colorPrimary" />
+
+            <TextView
+                android:id="@+id/tvFollowedChartName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_sm"
+                android:textAppearance="?attr/textAppearanceHeadlineSmall"
+                android:textStyle="bold"
+                tools:text="Tỷ giá USD/VND" />
+
+            <TextView
+                android:id="@+id/tvFollowedChartChange"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_xs"
+                android:textAppearance="?attr/textAppearanceLabelLarge"
+                tools:text="▲ 2,4% trong 12 ngày" />
+
+            <TextView
+                android:id="@+id/tvFollowedChartNotice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_xs"
+                android:text="@string/mock_data_notice"
+                android:textAppearance="?attr/textAppearanceLabelSmall"
+                android:textColor="?attr/colorOnSurfaceVariant" />
+
+            <com.example.news.ui.market.LineChartView
+                android:id="@+id/chartFollowed"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/chart_height"
+                android:layout_marginTop="@dimen/spacing_sm"
+                android:paddingStart="@dimen/spacing_xs"
+                android:paddingEnd="@dimen/spacing_xs" />
+
+            <TextView
+                android:id="@+id/tvFollowedChartRange"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="end"
+                android:textAppearance="?attr/textAppearanceLabelSmall"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                tools:text="Từ 06/10 đến 17/10" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/spacing_lg"
+                android:background="?attr/colorOutlineVariant" />
+
+            <!-- ===== PHẦN GIỮA: các biểu đồ khác + ngôi sao ===== -->
+
+            <TextView
+                android:id="@+id/tvOtherChartsHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_lg"
+                android:text="@string/market_other_charts_header"
+                android:textAllCaps="true"
+                android:textAppearance="?attr/textAppearanceLabelLarge"
+                android:textColor="?attr/colorPrimary" />
+
+            <TextView
+                android:id="@+id/tvOtherChartsHint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_xs"
+                android:text="@string/market_other_charts_hint"
+                android:textAppearance="?attr/textAppearanceBodySmall"
+                android:textColor="?attr/colorOnSurfaceVariant" />
+
+            <LinearLayout
+                android:id="@+id/containerOtherCharts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/spacing_lg"
+                android:background="?attr/colorOutlineVariant" />
+
+            <!-- ===== PHẦN DƯỚI: bài báo bên lề ===== -->
+
+            <TextView
+                android:id="@+id/tvSideArticlesHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_lg"
+                android:text="@string/market_side_articles_header"
+                android:textAllCaps="true"
+                android:textAppearance="?attr/textAppearanceLabelLarge"
+                android:textColor="?attr/colorPrimary" />
+
+            <TextView
+                android:id="@+id/tvSideArticlesHint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_xs"
+                android:text="@string/market_side_articles_hint"
+                android:textAppearance="?attr/textAppearanceBodySmall"
+                android:textColor="?attr/colorOnSurfaceVariant" />
+
+            <LinearLayout
+                android:id="@+id/containerSideArticles"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

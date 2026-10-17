@@ -29,7 +29,6 @@
     <string name="action_logout">Đăng xuất</string>
 
     <!-- Nội dung tạm của các màn chưa dựng xong -->
-    <string name="note_market_drawer">Biểu đồ đang theo dõi ở đầu trang,\ndanh sách biểu đồ khác và bài báo bên lề.</string>
     <string name="note_profile">Avatar, thông tin tài khoản,\nbiểu đồ đã lưu và bài báo đã lưu.</string>
 
     <string name="nav_back_to_main">← Về Main</string>
@@ -48,4 +47,20 @@
     <string name="detail_image_placeholder_note">Ảnh minh hoạ — chỗ giữ chỗ cho ảnh thật của bài báo</string>
     <string name="detail_link_no_app">Không mở được liên kết</string>
     <string name="detail_article_not_found">Không tìm thấy bài báo</string>
+
+    <!-- Màn Thị trường (menu 3 gạch) -->
+    <string name="market_followed_header">Biểu đồ đang theo dõi</string>
+    <string name="market_other_charts_header">Các biểu đồ khác</string>
+    <string name="market_other_charts_hint">Nhấn ngôi sao để đưa biểu đồ đó lên đầu trang.</string>
+    <string name="market_side_articles_header">Bài báo bên lề &amp; khám phá</string>
+    <string name="market_side_articles_hint">Bài ngoài luồng chính: không lưu và không hiện trên trang Main.</string>
+    <!-- Ví dụ: "21.816 đồng/lít • ▼ 2,5% trong 12 ngày" -->
+    <string name="market_series_meta">%1$s %2$s • %3$s</string>
+    <string name="market_change_up">▲ %1$s%% trong %2$s ngày</string>
+    <string name="market_change_down">▼ %1$s%% trong %2$s ngày</string>
+    <string name="market_change_flat">Không thay đổi trong %1$s ngày</string>
+    <string name="market_range_label">Từ %1$s đến %2$s</string>
+    <string name="market_mark_favourite">Đưa %1$s lên đầu trang</string>
+    <string name="market_mark_favourite_generic">Đánh dấu ưu tiên</string>
+    <string name="market_chart_content_desc">Biểu đồ %1$s, giá trị mới nhất %2$s %3$s</string>
 </resources>

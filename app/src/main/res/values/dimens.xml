@@ -21,4 +21,8 @@
 
     <!-- Màn Main: khi thu gọn, các Grid xích xuống một chút cho khớp mô tả. -->
     <dimen name="main_grid_collapsed_shift">8dp</dimen>
+
+    <!-- Màn Thị trường: vùng vẽ biểu đồ và cỡ chữ nhãn trên biểu đồ. -->
+    <dimen name="chart_height">180dp</dimen>
+    <dimen name="chart_label_text_size">10sp</dimen>
 </resources>

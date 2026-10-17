@@ -1,6 +1,20 @@
 <resources>
     <string name="app_name">News</string>
 
-    <!-- Phase 0: nhãn kiểm tra build -->
-    <string name="phase0_label">News — Phase 0</string>
+    <!-- Tieu de tung man hinh -->
+    <string name="title_main">Main</string>
+    <string name="title_category_timeline">Chuyên mục</string>
+    <string name="title_market_drawer">Thị trường</string>
+    <string name="title_profile">Tài khoản</string>
+    <string name="title_detail">Chi tiết bài báo</string>
+
+    <!-- Nut dieu huong tam thoi cho Phase 1 (se thay bang UI that o Phase 2) -->
+    <string name="nav_open_category_timeline">Mở chuyên mục (Timeline)</string>
+    <string name="nav_open_market_drawer">Mở biểu đồ thị trường</string>
+    <string name="nav_open_profile">Mở tài khoản</string>
+    <string name="nav_open_detail">Mở chi tiết bài báo</string>
+    <string name="nav_back_to_main">\u2190 Về Main</string>
+
+    <string name="phase1_note">Phase 1 — khung điều hướng, chưa có dữ liệu</string>
+    <string name="content_description_back">Quay lại</string>
 </resources>

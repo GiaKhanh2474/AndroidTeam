@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mainFragment">
+
+    <!-- Man 1: Main. La start destination nen KHONG hien mui ten Up tren toolbar. -->
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.example.news.ui.main.MainFragment"
+        android:label="@string/title_main"
+        tools:layout="@layout/fragment_main">
+
+        <action
+            android:id="@+id/action_mainFragment_to_categoryTimelineFragment"
+            app:destination="@id/categoryTimelineFragment" />
+
+        <action
+            android:id="@+id/action_mainFragment_to_marketDrawerFragment"
+            app:destination="@id/marketDrawerFragment" />
+
+        <action
+            android:id="@+id/action_mainFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
+
+    <!-- Man 2: danh sach bai bao theo chuyen muc, nhom theo ngay dang. -->
+    <fragment
+        android:id="@+id/categoryTimelineFragment"
+        android:name="com.example.news.ui.timeline.CategoryTimelineFragment"
+        android:label="@string/title_category_timeline"
+        tools:layout="@layout/fragment_category_timeline" />
+
+    <!-- Man 4: bang thi truong (bieu do, tin van, bang xep hang). -->
+    <fragment
+        android:id="@+id/marketDrawerFragment"
+        android:name="com.example.news.ui.market.MarketDrawerFragment"
+        android:label="@string/title_market_drawer"
+        tools:layout="@layout/fragment_market_drawer" />
+
+    <!-- Man 5: tai khoan + bai da luu + bieu do da luu. -->
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.news.ui.profile.ProfileFragment"
+        android:label="@string/title_profile"
+        tools:layout="@layout/fragment_profile" />
+
+</navigation>

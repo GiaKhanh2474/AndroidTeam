@@ -24,6 +24,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Man 3: chi tiet bai bao, tach rieng khoi NavHost. -->
+        <activity
+            android:name=".detail.DetailActivity"
+            android:exported="false"
+            android:theme="@style/Theme.News"
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>

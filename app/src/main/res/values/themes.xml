@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base theme dùng chung cho cả light và dark. -->
+    <style name="Base.Theme.News" parent="Theme.Material3.DayNight.NoActionBar">
+    </style>
+
+    <!-- Theme thực tế của ứng dụng. -->
+    <style name="Theme.News" parent="Base.Theme.News" />
+</resources>

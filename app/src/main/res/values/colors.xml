@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Bảng màu khởi điểm cho ứng dụng News. -->
+    <color name="news_primary">#FF1A1A1A</color>
+    <color name="news_on_primary">#FFFFFFFF</color>
+    <color name="news_secondary">#FF8E8E93</color>
+    <color name="news_surface">#FFFFFFFF</color>
+    <color name="news_on_surface">#FF1A1A1A</color>
+    <color name="news_surface_variant">#FFF2F2F7</color>
+    <color name="news_outline">#FFE0E0E5</color>
+
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+</resources>

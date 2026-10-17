@@ -6,15 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
+import com.example.news.R
 import com.example.news.databinding.FragmentMarketDrawerBinding
 
 /**
- * Màn 4 — MarketDrawerFragment.
+ * Màn 4 — bảng thị trường (biểu đồ, tin vắn, bảng xếp hạng).
  *
- * Phase 1: khung rỗng + nút quay về Main.
- * Phase 2: biểu đồ ưu tiên ở đầu trang + bài báo bên lề, tin vắn, bảng xếp hạng.
- * Phase 7: nút ✕ và vuốt phải để quay về Main.
- * Phase 8: biểu đồ thật + nút ⭐ ưu tiên (lưu bằng Room).
+ * Bước này mới dựng header đúng đặc tả ([☰] BIỂU ĐỒ & DANH MỤC MỞ RỘNG [✕]) và nút
+ * đóng. Biểu đồ và danh sách biểu đồ sẽ dựng ở các bước sau.
  */
 class MarketDrawerFragment : Fragment() {
 
@@ -32,6 +31,23 @@ class MarketDrawerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Đặc tả: biểu tượng bên trái của màn này là 3 gạch, không phải mũi tên quay lại.
+        binding.headerToolbar.setNavigationIcon(R.drawable.ic_menu)
+        binding.headerToolbar.setNavigationContentDescription(R.string.action_open_market)
+        binding.headerToolbar.setNavigationOnClickListener {
+            Navigation.findNavController(view).navigateUp()
+        }
+
+        binding.headerToolbar.inflateMenu(R.menu.menu_market_drawer)
+        binding.headerToolbar.setOnMenuItemClickListener { item ->
+            if (item.itemId == R.id.action_close) {
+                Navigation.findNavController(view).navigateUp()
+                true
+            } else {
+                false
+            }
+        }
 
         binding.btnBackToMain.setOnClickListener {
             Navigation.findNavController(view).navigateUp()

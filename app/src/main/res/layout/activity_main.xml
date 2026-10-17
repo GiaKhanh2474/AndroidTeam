@@ -1,29 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--
+  Single Activity: chỉ giữ NavHost.
+  Mỗi màn tự quản header riêng vì đặc tả yêu cầu header rất khác nhau:
+    Main      : chữ "Main"  ->  lướt xuống thì đổi thành [☰][🔍 Tìm kiếm][👤]
+    Chuyên mục: [←] TÊN CHUYÊN MỤC ............ [📅 Chọn ngày]
+    Thị trường: [☰] BIỂU ĐỒ & DANH MỤC ......... [✕]
+    Tài khoản : [←] TÀI KHOẢN CÁ NHÂN .......... [Đăng xuất]
+  KHÔNG dùng Bottom Navigation theo đặc tả.
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:background="?attr/colorSurface"
     tools:context=".MainActivity">
-
-    <!-- Single Activity: toolbar duy nhat, khong Bottom Navigation.
-         Hanh vi an/hien theo scroll duoc lam o Phase 3. -->
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorSurface"
-        app:title="@string/title_main"
-        app:titleTextAppearance="?attr/textAppearanceTitleLarge" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/navHostFragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="match_parent"
         app:defaultNavHost="true"
         app:navGraph="@navigation/nav_graph" />
 
-</LinearLayout>
+</FrameLayout>

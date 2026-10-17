@@ -9,4 +9,16 @@
 
     <dimen name="card_corner_radius">12dp</dimen>
     <dimen name="card_elevation">1dp</dimen>
+
+    <!-- Màn Main: chiều cao cố định cho hàng 3 "Grid Con" để 3 ô luôn cao bằng nhau,
+         chữ dài sẽ bị cắt bằng ellipsize thay vì làm lệch hàng.
+         146dp để chừa đủ chỗ cho tiêu đề 3 dòng + tóm tắt 2 dòng, kể cả khi người dùng
+         tăng cỡ chữ trong cài đặt hệ thống. -->
+    <dimen name="main_grid_card_height">146dp</dimen>
+
+    <!-- Màn Main: quãng kéo tối thiểu để chữ "Main" mờ đi và cụm [☰][🔍][👤] hiện ra. -->
+    <dimen name="main_header_scroll_threshold">24dp</dimen>
+
+    <!-- Màn Main: khi thu gọn, các Grid xích xuống một chút cho khớp mô tả. -->
+    <dimen name="main_grid_collapsed_shift">8dp</dimen>
 </resources>

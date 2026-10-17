@@ -1,20 +1,39 @@
 <resources>
     <string name="app_name">News</string>
 
-    <!-- Tieu de tung man hinh -->
+    <!-- Tiêu đề từng màn hình -->
     <string name="title_main">Main</string>
     <string name="title_category_timeline">Chuyên mục</string>
     <string name="title_market_drawer">Thị trường</string>
     <string name="title_profile">Tài khoản</string>
     <string name="title_detail">Chi tiết bài báo</string>
 
-    <!-- Nut dieu huong tam thoi cho Phase 1 (se thay bang UI that o Phase 2) -->
-    <string name="nav_open_category_timeline">Mở chuyên mục (Timeline)</string>
-    <string name="nav_open_market_drawer">Mở biểu đồ thị trường</string>
-    <string name="nav_open_profile">Mở tài khoản</string>
-    <string name="nav_open_detail">Mở chi tiết bài báo</string>
-    <string name="nav_back_to_main">\u2190 Về Main</string>
+    <!-- Tiêu đề đầy đủ hiển thị trên header, đúng như bản vẽ đặc tả -->
+    <string name="header_market_drawer">Biểu đồ &amp; danh mục mở rộng</string>
+    <string name="header_profile">Tài khoản cá nhân</string>
 
-    <string name="phase1_note">Phase 1 — khung điều hướng, chưa có dữ liệu</string>
-    <string name="content_description_back">Quay lại</string>
+    <!-- Màn Main -->
+    <string name="main_view_by_date">[Xem theo ngày]</string>
+    <string name="search_hint">Tìm kiếm các trang báo ngoài…</string>
+    <string name="search_unavailable">Chưa có nguồn dữ liệu để tìm kiếm</string>
+
+    <!-- Nhãn bắt buộc: toàn bộ nội dung hiện tại là dữ liệu minh hoạ -->
+    <string name="mock_data_notice">Dữ liệu minh hoạ — chưa kết nối nguồn tin thật</string>
+
+    <!-- Hành động trên header -->
+    <string name="action_open_market">Mở biểu đồ và danh mục mở rộng</string>
+    <string name="action_open_profile">Mở tài khoản</string>
+    <string name="action_back">Quay lại</string>
+    <string name="action_close">Đóng</string>
+    <string name="action_pick_date">Chọn ngày</string>
+    <string name="action_logout">Đăng xuất</string>
+
+    <!-- Nội dung tạm của các màn chưa dựng xong -->
+    <string name="note_category_timeline">Danh sách bài báo nhóm theo ngày đăng,\nthẻ nằm ngang không dùng ảnh nhỏ.</string>
+    <string name="note_market_drawer">Biểu đồ đang theo dõi ở đầu trang,\ndanh sách biểu đồ khác và bài báo bên lề.</string>
+    <string name="note_profile">Avatar, thông tin tài khoản,\nbiểu đồ đã lưu và bài báo đã lưu.</string>
+
+    <string name="nav_back_to_main">← Về Main</string>
+    <string name="note_detail">Nội dung chi tiết bài báo sẽ được dựng ở bước tiếp theo.</string>
+    <string name="feature_unavailable">Chức năng này chưa có dữ liệu</string>
 </resources>

@@ -30,7 +30,15 @@
         android:id="@+id/categoryTimelineFragment"
         android:name="com.example.news.ui.timeline.CategoryTimelineFragment"
         android:label="@string/title_category_timeline"
-        tools:layout="@layout/fragment_category_timeline" />
+        tools:layout="@layout/fragment_category_timeline">
+
+        <!-- id chuyên mục được truyền từ màn Main sang. -->
+        <argument
+            android:name="categoryId"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
 
     <!-- Man 4: bang thi truong (bieu do, tin van, bang xep hang). -->
     <fragment

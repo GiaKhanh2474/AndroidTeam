@@ -21,6 +21,7 @@ router.get("/news/sideline", wrap(news.getSidelineArticles)); // API 6
 router.get("/market/charts", wrap(market.getMarketCharts)); // API 5
 
 // ----- Người dùng & quản trị -----
+router.post("/users/check", wrap(user.checkUser)); // kiểm tra email / số điện thoại đã dùng chưa
 router.post("/users/sync", wrap(user.syncUser)); // API 7a
 router.post("/admin/trigger-crawl", wrap(admin.triggerCrawl)); // API 7b
 

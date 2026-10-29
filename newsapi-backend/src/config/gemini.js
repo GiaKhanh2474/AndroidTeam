@@ -18,7 +18,7 @@ function isGeminiConfigured() {
 }
 
 function getModelName() {
-  return (process.env.GEMINI_MODEL || "gemini-2.5-flash").trim();
+  return (process.env.GEMINI_MODEL || "gemini-3.8-flash").trim();
 }
 
 /** @returns {GoogleGenAI|null} null nếu chưa có API key hợp lệ (service sẽ tự chạy chế độ fallback) */

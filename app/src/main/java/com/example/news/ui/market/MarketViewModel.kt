@@ -13,6 +13,7 @@ import com.example.news.data.repository.FavouriteChartRepository
 import com.example.news.data.repository.MarketRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -46,15 +47,18 @@ data class MarketUiState(
 class MarketViewModel(
     private val marketRepository: MarketRepository,
     private val favouriteChartRepository: FavouriteChartRepository,
-    private val focusedSeriesId: String? = null,
+    focusedSeriesId: String? = null,
 ) : ViewModel() {
+
+    private val focusedSeries = MutableStateFlow(focusedSeriesId)
 
     val uiState: StateFlow<MarketUiState> = combine(
         marketRepository.observeSeries(),
         marketRepository.observeSideArticles(),
         favouriteChartRepository.observeFavouriteIds(),
-    ) { series, sideArticles, favouriteIds ->
-        val ordered = orderedSeries(series, favouriteIds)
+        focusedSeries,
+    ) { series, sideArticles, favouriteIds, focusedId ->
+        val ordered = orderedSeries(series, favouriteIds, focusedId)
 
         MarketUiState(
             isLoading = false,
@@ -80,13 +84,14 @@ class MarketViewModel(
     private fun orderedSeries(
         series: List<MarketSeries>,
         favouriteIds: List<String>,
+        focusedId: String?,
     ): List<MarketSeries> {
         val prioritised = favouriteIds.mapNotNull { favouriteId ->
             series.firstOrNull { it.id == favouriteId }
         }
         val inPriorityOrder = prioritised + series.filter { it.id !in favouriteIds }
 
-        val focused = focusedSeriesId?.let { id -> inPriorityOrder.firstOrNull { it.id == id } }
+        val focused = focusedId?.let { id -> inPriorityOrder.firstOrNull { it.id == id } }
             ?: return inPriorityOrder
 
         return listOf(focused) + inPriorityOrder.filter { it.id != focused.id }
@@ -96,6 +101,7 @@ class MarketViewModel(
     fun markAsFollowed(seriesId: String) {
         viewModelScope.launch {
             favouriteChartRepository.promote(seriesId)
+            focusedSeries.value = null
         }
     }
 

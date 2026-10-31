@@ -7,7 +7,8 @@
     "start": "node server.js",
     "dev": "node --watch server.js",
     "seed": "node seed/seedData.js",
-    "crawl": "node src/jobs/cronJob.js"
+    "crawl": "node src/jobs/cronJob.js",
+    "test": "node --test"
   },
   "engines": {
     "node": ">=20.18.1"
@@ -19,6 +20,7 @@
     "cors": "^2.8.6",
     "dotenv": "^16.6.1",
     "express": "^4.22.3",
+    "firebase-admin": "^14.5.0",
     "mongoose": "^8.24.7",
     "morgan": "^1.12.1",
     "node-cron": "^3.0.3",

@@ -4,7 +4,9 @@ const { isCrawling } = require("../services/rssCrawler.service");
 
 function isAuthorized(req) {
   const expected = (process.env.ADMIN_KEY || "").trim();
-  if (!expected) return true; // chưa đặt ADMIN_KEY → cho phép (tiện demo đồ án)
+  if (!expected) {
+    return process.env.NODE_ENV === "development" && process.env.ADMIN_ALLOW_UNAUTHENTICATED === "true";
+  }
 
   const provided = String(req.get("x-admin-key") || "");
   const a = Buffer.from(provided);

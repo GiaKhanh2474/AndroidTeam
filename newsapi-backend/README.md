@@ -49,7 +49,7 @@ newsapi-backend/
 | 4 | GET | `/news/search?q=...` | `ArticleDto[]` (tối đa 20) |
 | 5 | GET | `/market/charts` | `MarketAssetChartDto[]` kèm `history_points` |
 | 6 | GET | `/news/sideline` | `ArticleDto[]` BEN_LE (tối đa 15) |
-| 7a | POST | `/users/sync` | body `{ firebase_uid, email, display_name, avatar_url }` → thông tin user |
+| 7a | POST | `/users/sync` | Firebase Bearer token + body `{ email, display_name, avatar_url }` → thông tin user |
 | 7b | POST | `/admin/trigger-crawl[?wait=true]` | 202 chạy nền; `wait=true` chờ và trả kết quả |
 
 `ArticleDto` (13 trường, giữ nguyên snake_case): `article_id, title, main_grid_summary, card_summary, full_content, image_url,
@@ -61,8 +61,9 @@ Lỗi 4xx/5xx trả `{ "status": "error", "message": "..." }`; các API thành c
 curl http://localhost:5000/api/v1/news/by-date?category=KINH_TE
 curl "http://localhost:5000/api/v1/news/search?q=lãi%20suất"
 curl -X POST http://localhost:5000/api/v1/users/sync -H "Content-Type: application/json" \
-     -d '{"firebase_uid":"abc123","email":"a@b.com","display_name":"Khanh"}'
-curl -X POST "http://localhost:5000/api/v1/admin/trigger-crawl?wait=true"      # thêm -H "x-admin-key: ..." nếu đặt ADMIN_KEY
+     -H "Authorization: Bearer <FIREBASE_ID_TOKEN>" \
+     -d '{"email":"a@b.com","display_name":"Khanh"}'
+curl -X POST "http://localhost:5000/api/v1/admin/trigger-crawl?wait=true"      # bắt buộc thêm -H "x-admin-key: <ADMIN_KEY>"
 ```
 
 ## 4. Nối với app Android
@@ -79,6 +80,10 @@ curl -X POST "http://localhost:5000/api/v1/admin/trigger-crawl?wait=true"      #
   (tắt bằng `MARKET_SIMULATE_FALLBACK=false`).
 - **Gemini free tier có giới hạn request/phút**: crawler nghỉ `GEMINI_DELAY_MS` (mặc định 6,5 giây) giữa 2 bài và chỉ lấy
   tối đa `MAX_ITEMS_PER_FEED` (mặc định 3) bài mới mỗi nguồn mỗi lượt. Dính lỗi 429 thì dùng fallback 10 phút rồi thử lại.
-- `POST /users/sync` hiện **chưa xác thực Firebase ID token** (đặc tả không yêu cầu). Trước khi triển khai thật nên thêm
-  `firebase-admin` để verify token. `trigger-crawl` nên đặt `ADMIN_KEY` khi deploy công khai.
+- `POST /users/sync` yêu cầu `Authorization: Bearer <FIREBASE_ID_TOKEN>`. UID được lấy từ token đã xác minh; UID khác trong body bị từ chối (403). Cấu hình Firebase Admin bằng Application Default Credentials: đặt `GOOGLE_APPLICATION_CREDENTIALS` tới tệp service account nằm ngoài repository và `GOOGLE_CLOUD_PROJECT` theo dự án Firebase. Token không hợp lệ/hết hạn/bị thu hồi trả 401. Xem https://firebase.google.com/docs/auth/admin/verify-id-tokens.
+- `trigger-crawl` yêu cầu `ADMIN_KEY`; không đặt key thì từ chối. Chỉ demo trên máy: đặt cả `NODE_ENV=development` và `ADMIN_ALLOW_UNAUTHENTICATED=true` để bỏ qua key. Không dùng chế độ này khi triển khai công khai.
 - Phân trang API 2 tính theo **số bài** (`limit`), nên một mốc ngày có thể tách sang trang kế — app nên gộp các nhóm cùng `date_group`.
+
+## 6. Kiểm thử
+
+Chạy `npm ci` rồi `npm test`. Các regression test kiểm tra quyền truy cập mà không cần MongoDB hoặc Firebase credentials thật. App Android vẫn dùng mock auth; khi nối API thật phải gửi Firebase ID token.

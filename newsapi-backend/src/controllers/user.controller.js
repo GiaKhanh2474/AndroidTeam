@@ -94,7 +94,7 @@ function upsertUser(firebaseUid, update) {
 // ---------------------------------------------------------------------------
 // POST /api/v1/users/check — kiểm tra email / số điện thoại đã được dùng chưa
 // Gọi TRƯỚC khi tạo tài khoản Firebase để không sinh ra tài khoản Firebase "mồ côi".
-// Body: { email?, phone?, firebase_uid? }  (cần ít nhất email hoặc phone)
+// Body: { email?, phone? }  (cần ít nhất email hoặc phone)
 // 200: { available, email_in_use, phone_in_use, message }   (message = null nếu dùng được)
 // ---------------------------------------------------------------------------
 async function checkUser(req, res) {
@@ -103,7 +103,8 @@ async function checkUser(req, res) {
   if (error) return badRequest(res, error);
   if (!email && !phone) return badRequest(res, "Cần gửi ít nhất email hoặc số điện thoại");
 
-  const fields = await findConflictFields(optionalString(body.firebase_uid), { email, phone });
+  // Public pre-registration checks must not exclude an identity supplied by the caller.
+  const fields = await findConflictFields(null, { email, phone });
   const inUse = new Set(fields);
 
   res.json({
@@ -116,14 +117,17 @@ async function checkUser(req, res) {
 
 // ---------------------------------------------------------------------------
 // POST /api/v1/users/sync — đồng bộ tài khoản Firebase sau khi đăng ký / đăng nhập
-// Body: { firebase_uid, email?, phone?, display_name?, avatar_url? }
+// Authorization: Bearer <Firebase ID token>; body: { email?, phone?, display_name?, avatar_url? }
 //  - Tài khoản MỚI phải có email hoặc phone.
 //  - Email / phone đã thuộc tài khoản khác → 409 (EMAIL_ALREADY_IN_USE, PHONE_ALREADY_IN_USE, ...).
 // ---------------------------------------------------------------------------
 async function syncUser(req, res) {
   const body = req.body || {};
-  const firebaseUid = optionalString(body.firebase_uid);
-  if (!firebaseUid) return badRequest(res, "Thiếu firebase_uid");
+  const firebaseUid = req.auth?.uid;
+  if (!firebaseUid) return res.status(401).json({ status: "error", message: "Cần Firebase ID token" });
+  if (body.firebase_uid !== undefined && body.firebase_uid !== firebaseUid) {
+    return res.status(403).json({ status: "error", message: "firebase_uid không khớp tài khoản đăng nhập" });
+  }
 
   const { email, phone, error } = parseIdentity(body);
   if (error) return badRequest(res, error);

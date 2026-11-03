@@ -19,7 +19,7 @@
   Các khối cố định (thông tin, nâng cấp, cài đặt, nhãn nhóm) trở thành những "dòng" bình
   thường trong cùng danh sách đó, nên cả màn vẫn cuộn như một khối liền mạch.
 -->
-<com.example.news.ui.common.SwipeBackLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.vlu.newsapi.ui.common.SwipeBackLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -48,4 +48,4 @@
         android:scrollbars="vertical"
         tools:listitem="@layout/item_profile_row" />
 
-</com.example.news.ui.common.SwipeBackLayout>
+</com.vlu.newsapi.ui.common.SwipeBackLayout>

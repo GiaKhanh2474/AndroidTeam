@@ -1,37 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Màn 2 — Chuyên mục theo ngày.
+  Màn 2 — Chuyên mục theo ngày (Mục 2.1 của đặc tả).
 
-  Header đặc tả: [←]  TÊN CHUYÊN MỤC  ...........  [📅 Chọn ngày]
-  Tên chuyên mục do Fragment đổ vào sau khi có dữ liệu; trước đó tạm hiện "Chuyên mục".
+  Header: [←]  TÊN CHUYÊN MỤC.
+    - btn_back_category: nút [←] thoát về trang Main.
+    - tv_category_title: tên chuyên mục, ví dụ "Chuyên mục: Kinh tế".
+  Thân trang: rv_category_timeline, danh sách dọc gồm mốc NGÀY và các thẻ nằm ngang bên dưới.
 
-  Thân trang: danh sách bài báo chia theo mốc ngày đăng. Mỗi bài là một khung chữ nhật
-  nằm ngang, KHÔNG dùng ảnh nhỏ: chữ to là tiêu đề, chữ nhỏ là tóm tắt.
+  Vẫn bọc trong SwipeBackLayout: lướt từ trái sang phải cũng thoát về Main, song song với nút
+  [←] đúng yêu cầu "thoát trang kép" của đặc tả.
 -->
-<com.example.news.ui.common.SwipeBackLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<com.vlu.newsapi.ui.common.SwipeBackLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorSurface"
     android:orientation="vertical"
-    tools:context=".ui.timeline.CategoryTimelineFragment">
+    tools:context=".ui.category.CategoryTimelineFragment">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/headerToolbar"
+    <LinearLayout
+        android:id="@+id/header_category"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorSurface"
-        app:title="@string/title_category_timeline"
-        app:titleTextAppearance="@style/TextAppearance.News.ToolbarTitle" />
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/spacing_sm"
+        android:paddingEnd="@dimen/spacing_md">
+
+        <ImageButton
+            android:id="@+id/btn_back_category"
+            android:layout_width="@dimen/icon_button_size"
+            android:layout_height="@dimen/icon_button_size"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/action_back"
+            android:src="@drawable/ic_arrow_back" />
+
+        <TextView
+            android:id="@+id/tv_category_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_sm"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textAppearance="?attr/textAppearanceTitleLarge"
+            android:textStyle="bold"
+            tools:text="Chuyên mục: Kinh tế" />
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvTimeline"
+        android:id="@+id/rv_category_timeline"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:clipToPadding="false"
         android:paddingBottom="@dimen/spacing_lg"
-        tools:listitem="@layout/item_timeline_day" />
+        tools:listitem="@layout/item_article_horizontal_card" />
 
-</com.example.news.ui.common.SwipeBackLayout>
+</com.vlu.newsapi.ui.common.SwipeBackLayout>

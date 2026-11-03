@@ -7,13 +7,13 @@ plugins {
 }
 
 android {
-    namespace = "com.example.news"
+    namespace = "com.vlu.newsapi"
     compileSdk {
         version = release(37)
     }
 
     defaultConfig {
-        applicationId = "com.example.news"
+        applicationId = "com.vlu.newsapi"
         minSdk = 24
         targetSdk = 37
         versionCode = 1
@@ -68,6 +68,9 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
+
+    // Tai anh bai bao tu URL o trang Chi tiet (Muc 3.1 cua dac ta).
+    implementation(libs.glide)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

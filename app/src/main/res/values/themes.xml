@@ -6,4 +6,48 @@
 
     <!-- Theme thực tế của ứng dụng. -->
     <style name="Theme.News" parent="Base.Theme.News" />
+
+    <!--
+      ============================================================
+      KIỂU CHỮ CHUẨN CỦA 3 MÀN CỐT LÕI — style="@style/NewsText..."
+      ============================================================
+
+      Đặc tả (Mục I.2) yêu cầu mọi cỡ chữ trong layout phải gọi từ đây, không gõ cứng
+      android:textSize. Vì vậy 5 kiểu dưới đây đặt đúng trong themes.xml như tài liệu.
+
+      Chữ trên header vẫn in hoa bằng thuộc tính hiển thị (textAllCaps) chứ KHÔNG viết hoa sẵn
+      trong strings.xml: chữ trên header là chuyện trình bày, còn chuỗi gốc vẫn dùng lại được ở
+      chỗ khác mà không bị viết hoa theo.
+    -->
+
+    <!-- Chữ "Main" ở góc trên trái trang Chính (Trạng thái 1 của thanh công cụ thông minh). -->
+    <style name="NewsText.MainLogo" parent="TextAppearance.Material3.HeadlineMedium">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <!-- Tóm tắt ngắn trong từng ô của ma trận 3×3 (tối đa 4 dòng, cắt bằng ellipsize). -->
+    <style name="NewsText.GridSubSummary" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:textColor">?attr/colorOnSurface</item>
+        <item name="android:lineSpacingMultiplier">1.25</item>
+    </style>
+
+    <!-- Mốc ngày ở trang Chuyên mục, ví dụ "NGÀY 22/10/2026". In hoa, đậm. -->
+    <style name="NewsText.SectionHeader" parent="TextAppearance.Material3.TitleSmall">
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <!-- Chữ TO phía trên của thẻ nằm ngang (tiêu đề bài báo), tối đa 2 dòng. -->
+    <style name="NewsText.CardBigTitle" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <!-- Chữ NHỎ phía dưới của thẻ nằm ngang (tóm tắt), tối đa 3 dòng. Xám đậm dễ đọc. -->
+    <style name="NewsText.CardSmallSummary" parent="TextAppearance.Material3.BodySmall">
+        <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
+        <item name="android:lineSpacingMultiplier">1.3</item>
+    </style>
 </resources>

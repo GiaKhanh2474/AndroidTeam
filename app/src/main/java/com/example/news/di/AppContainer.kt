@@ -2,6 +2,8 @@ package com.example.news.di
 
 import android.content.Context
 import com.example.news.data.local.NewsDatabase
+import com.example.news.data.local.toArticle
+import com.example.news.data.repository.OfflineNewsRepository
 import com.example.news.data.repository.AuthRepository
 import com.example.news.data.repository.FavouriteChartRepository
 import com.example.news.data.repository.MarketRepository
@@ -36,7 +38,11 @@ class AppContainer(context: Context) {
 
     private val database: NewsDatabase by lazy { NewsDatabase.create(context) }
 
-    val newsRepository: NewsRepository by lazy { MockNewsRepository() }
+    val newsRepository: NewsRepository by lazy {
+        OfflineNewsRepository(MockNewsRepository()) { articleId ->
+            database.savedArticleDao().findById(articleId)?.toArticle()
+        }
+    }
 
     val marketRepository: MarketRepository by lazy { MockMarketRepository() }
 

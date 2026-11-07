@@ -97,8 +97,13 @@ class MarketViewModel(
         return listOf(focused) + inPriorityOrder.filter { it.id != focused.id }
     }
 
-    /** Nhấn ngôi sao: đưa biểu đồ lên vị trí đầu tiên và ghi lại vào cơ sở dữ liệu. */
-    fun markAsFollowed(seriesId: String) {
+    /**
+     * Nhấn ngôi sao (⭐): đưa biểu đồ lên vị trí đầu tiên và ghi lại vào Room.
+     *
+     * Chỉ chạm vào cơ sở dữ liệu cục bộ, không gọi mạng; vì thế biểu đồ đổi chỗ ngay cả khi
+     * thiết bị đang tắt mạng. Giao diện tự cập nhật nhờ [uiState] quan sát Flow từ Room.
+     */
+    fun promoteChartToTop(seriesId: String) {
         viewModelScope.launch {
             favouriteChartRepository.promote(seriesId)
             focusedSeries.value = null

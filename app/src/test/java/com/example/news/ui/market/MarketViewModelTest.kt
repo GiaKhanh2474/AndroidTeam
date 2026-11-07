@@ -47,7 +47,7 @@ class MarketViewModelTest {
             runCurrent()
             assertEquals("a", model.uiState.value.followed?.id)
             // B is already first in persisted priority, so promote need not emit a new list.
-            model.markAsFollowed("b")
+            model.promoteChartToTop("b")
             runCurrent()
             assertEquals("b", model.uiState.value.followed?.id)
             assertEquals(listOf("b", "a"), favourites.ids.value)

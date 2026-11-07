@@ -31,4 +31,24 @@ class RoomSavedArticleRepositoryTest {
             database.close()
         }
     }
+
+    @Test
+    fun removeDeletesOnlyTheGivenArticle() = runBlocking {
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        val database = Room.inMemoryDatabaseBuilder(context, NewsDatabase::class.java).build()
+        try {
+            val repository = RoomSavedArticleRepository(database)
+            val first = Article("1", "category", "title", "summary", "source", 0L, "https://example.com/1")
+            val second = first.copy(id = "2", sourceUrl = "https://example.com/2")
+            repository.toggle(first)
+            repository.toggle(second)
+
+            repository.remove("1")
+
+            assertEquals(listOf(second), repository.observeSavedArticles().first())
+            assertEquals(1, repository.observeSavedCount().first())
+        } finally {
+            database.close()
+        }
+    }
 }

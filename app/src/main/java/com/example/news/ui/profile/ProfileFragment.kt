@@ -48,6 +48,7 @@ class ProfileFragment : Fragment() {
             onRowClick = ::onRowClicked,
             onSavedChartClick = ::openSavedChart,
             onSavedArticleClick = ::openSavedArticle,
+            onSavedArticleDelete = { article -> viewModel.deleteSavedArticleById(article.id) },
         )
     }
 

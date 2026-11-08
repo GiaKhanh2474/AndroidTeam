@@ -97,6 +97,7 @@
     <string name="profile_saved_articles_empty">Chưa lưu bài báo nào. Mở một bài rồi nhấn đúp vào màn hình để lưu.</string>
     <string name="profile_open_saved_chart">Mở biểu đồ %1$s ở màn Thị trường</string>
     <string name="profile_open_saved_article">Mở bài %1$s</string>
+    <string name="profile_delete_saved_article">Xoá bài đã lưu: %1$s</string>
 
     <!-- Màn dùng chung cho các dòng mở màn khác ở trang Tài khoản -->
     <string name="title_info_page">Thông tin</string>

@@ -142,7 +142,7 @@ class MarketDrawerFragment : Fragment() {
                 if (isMarked) R.drawable.ic_star else R.drawable.ic_star_border,
             )
             row.btnStar.contentDescription = getString(R.string.market_mark_favourite, series.name)
-            row.btnStar.setOnClickListener { viewModel.markAsFollowed(series.id) }
+            row.btnStar.setOnClickListener { viewModel.promoteChartToTop(series.id) }
 
             binding.containerOtherCharts.addView(row.root)
         }

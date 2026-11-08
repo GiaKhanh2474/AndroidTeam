@@ -6,7 +6,8 @@
   "Ngôn ngữ", biểu đồ đã lưu và bài báo đã lưu. Bốn loại chỉ khác nhau ở chữ, ở biểu tượng đầu
   dòng và ở việc có mũi tên cuối dòng hay không, nên gộp vào một layout.
 
-  Biểu tượng và mũi tên đều có thể ẩn đi (visibility) tuỳ từng dòng.
+  Biểu tượng, mũi tên và nút thùng rác đều có thể ẩn đi (visibility) tuỳ từng dòng. Nút thùng
+  rác (btnRowDelete) chỉ hiện ở dòng bài báo đã lưu.
 -->
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -74,6 +75,15 @@
             android:layout_height="24dp"
             android:importantForAccessibility="no"
             android:src="@drawable/ic_chevron_right" />
+
+        <ImageButton
+            android:id="@+id/btnRowDelete"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_delete_forever"
+            android:visibility="gone"
+            tools:visibility="visible" />
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

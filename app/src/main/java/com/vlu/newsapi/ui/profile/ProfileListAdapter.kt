@@ -28,6 +28,7 @@ class ProfileListAdapter(
     private val onRowClick: (ProfileRow) -> Unit,
     private val onSavedChartClick: (MarketSeries) -> Unit,
     private val onSavedArticleClick: (Article) -> Unit,
+    private val onSavedArticleDelete: (Article) -> Unit,
 ) : ListAdapter<ProfileListItem, RecyclerView.ViewHolder>(DiffCallback) {
 
     override fun getItemViewType(position: Int): Int = when (getItem(position)) {
@@ -95,6 +96,7 @@ class ProfileListAdapter(
             binding.ivRowIcon.isVisible = item.iconRes != null
             item.iconRes?.let(binding.ivRowIcon::setImageResource)
             binding.ivRowChevron.isVisible = item.showChevron
+            binding.btnRowDelete.isVisible = false
 
             binding.tvRowTitle.setText(item.titleRes)
             binding.tvRowSummary.setText(item.summaryRes)
@@ -112,6 +114,8 @@ class ProfileListAdapter(
                 ),
             )
             binding.rowCard.setOnClickListener { onSavedChartClick(series) }
+            // Dòng biểu đồ không có thùng rác; xem bindRow về việc đặt lại ở mọi lần gắn.
+            binding.btnRowDelete.isVisible = false
         }
 
         fun bindArticle(article: Article) {
@@ -129,6 +133,16 @@ class ProfileListAdapter(
                 ),
             )
             binding.rowCard.setOnClickListener { onSavedArticleClick(article) }
+
+            // Thùng rác thay cho mũi tên ở cuối dòng: hai thứ cùng chỗ sẽ chật và dễ bấm nhầm.
+            // Bấm cả dòng vẫn là mở bài, chỉ bấm đúng nút này mới xoá.
+            binding.ivRowChevron.isVisible = false
+            binding.btnRowDelete.isVisible = true
+            binding.btnRowDelete.contentDescription = binding.root.context.getString(
+                R.string.profile_delete_saved_article,
+                article.title,
+            )
+            binding.btnRowDelete.setOnClickListener { onSavedArticleDelete(article) }
         }
 
         /**

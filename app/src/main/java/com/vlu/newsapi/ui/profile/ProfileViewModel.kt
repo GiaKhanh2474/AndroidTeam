@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 /**
  * Trạng thái trang Tài khoản.
@@ -74,6 +75,18 @@ class ProfileViewModel(
         started = SharingStarted.WhileSubscribed(STOP_TIMEOUT_MS),
         initialValue = ProfileUiState(),
     )
+
+    /**
+     * Nút thùng rác (🗑️): xoá MỘT bài đã lưu khỏi Room.
+     *
+     * Không cần tự cập nhật danh sách: [uiState] đang quan sát Flow của bảng `saved_article`,
+     * nên ngay khi dòng bị xoá Room phát danh sách mới và RecyclerView bỏ dòng đó đi.
+     */
+    fun deleteSavedArticleById(articleId: String) {
+        viewModelScope.launch {
+            savedArticleRepository.remove(articleId)
+        }
+    }
 
     /**
      * Xoá dữ liệu người dùng đã lưu trên máy.

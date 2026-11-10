@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Một ô Grid con của ma trận 3×3 ở trang Chính (Mục 1.2 của đặc tả).
+
+  Quy tắc bắt buộc: ô này CHỈ có chữ tóm tắt — không có ảnh, không có tiêu đề riêng. Nhờ vậy
+  ba ô trên cùng một hàng luôn cao bằng nhau và mắt đọc lướt được cả lưới.
+
+  Màu nền, bo góc, chiều cao tối thiểu và kiểu chữ đều lấy từ Base UI.
+-->
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/spacing_xs"
+    android:clickable="true"
+    android:focusable="true"
+    android:minHeight="@dimen/grid_sub_item_min_height"
+    app:cardBackgroundColor="@color/bg_grid_card"
+    app:cardCornerRadius="@dimen/card_corner_radius"
+    app:cardElevation="@dimen/card_elevation_flat">
+
+    <TextView
+        android:id="@+id/tv_sub_grid_summary"
+        style="@style/NewsText.GridSubSummary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="4"
+        android:padding="@dimen/spacing_sm"
+        tools:text="Mức tăng cao hơn kỳ vọng nhờ sản xuất công nghiệp và xuất khẩu phục hồi rõ nét." />
+
+</com.google.android.material.card.MaterialCardView>

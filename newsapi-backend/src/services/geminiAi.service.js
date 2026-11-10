@@ -1,6 +1,6 @@
 /**
  * geminiAi.service.js
- * Gửi bài báo thô qua Gemini (model gemini-2.5-flash) để:
+ * Gửi bài báo thô qua Gemini (model configured by GEMINI_MODEL (default gemini-3.8-flash)) để:
  *   - phân loại chuyên mục (KINH_TE | CHINH_TRI | CONG_NGHE | BEN_LE)
  *   - viết main_grid_summary (15–20 từ) và card_summary (35–50 từ)
  *   - chấm ai_score (1–100) và đặt is_main_featured (ai_score >= 80)
@@ -132,7 +132,7 @@ function normalizeAiResult(raw, ctx) {
 
   const main = stripHtml(String(raw.main_grid_summary || ""));
   const card = stripHtml(String(raw.card_summary || ""));
-  if (countWords(main) < 5 || countWords(card) < 10) return null;
+  if (countWords(main) < 15 || countWords(card) < 35) return null;
 
   const fallbackCategory = CATEGORIES.includes(ctx.category_hint)
     ? ctx.category_hint

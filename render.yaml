@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: androidteam-news-api
+    runtime: node
+    rootDir: newsapi-backend
+    buildCommand: npm ci
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-3.8-flash
+      - key: ADMIN_KEY
+        sync: false
+      - key: MARKET_SIMULATE_FALLBACK
+        value: "false"

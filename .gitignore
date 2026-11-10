@@ -9,3 +9,8 @@ local.properties
 
 # Cấu hình IDE (Android Studio / IntelliJ) - không phải mã nguồn, không commit.
 .idea/
+
+# Release signing material stays outside source control.
+*.jks
+*.keystore
+keystore.properties

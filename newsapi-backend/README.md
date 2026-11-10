@@ -1,6 +1,6 @@
 # AndroidTeamNews — Backend & AI Pipeline
 
-Package Android: `com.vlu.newsapi` · Node.js (>= 20.18.1) + Express + MongoDB (Mongoose) + Gemini 2.5 Flash + RSS crawler
+Package Android: `com.vlu.newsapi` · Node.js (>= 20.18.1) + Express + MongoDB (Mongoose) + Gemini 3.8 Flash + RSS crawler
 
 ## 1. Chạy nhanh
 
@@ -77,7 +77,7 @@ curl -X POST "http://localhost:5000/api/v1/admin/trigger-crawl?wait=true"      #
   (trừ bài đầu), giá trong `market_charts` không phải giá thị trường thật. Bài do crawler lấy mới là bài thật từ RSS.
 - **Biểu đồ thị trường**: `USD_VND` (open.er-api.com) và `OIL_BRENT` (Yahoo Finance) lấy giá thật mỗi 30 phút;
   `RON95`, `E5_RON92`, `GOLD_SJC` không có API công khai ổn định nên được **mô phỏng** dao động nhẹ mỗi ngày
-  (tắt bằng `MARKET_SIMULATE_FALLBACK=false`).
+  (chỉ bật demo bằng `MARKET_SIMULATE_FALLBACK=true`; mặc định tắt).
 - **Gemini free tier có giới hạn request/phút**: crawler nghỉ `GEMINI_DELAY_MS` (mặc định 6,5 giây) giữa 2 bài và chỉ lấy
   tối đa `MAX_ITEMS_PER_FEED` (mặc định 3) bài mới mỗi nguồn mỗi lượt. Dính lỗi 429 thì dùng fallback 10 phút rồi thử lại.
 - `POST /users/sync` yêu cầu `Authorization: Bearer <FIREBASE_ID_TOKEN>`. UID được lấy từ token đã xác minh; UID khác trong body bị từ chối (403). Cấu hình Firebase Admin bằng Application Default Credentials: đặt `GOOGLE_APPLICATION_CREDENTIALS` tới tệp service account nằm ngoài repository và `GOOGLE_CLOUD_PROJECT` theo dự án Firebase. Token không hợp lệ/hết hạn/bị thu hồi trả 401. Xem https://firebase.google.com/docs/auth/admin/verify-id-tokens.
@@ -87,3 +87,12 @@ curl -X POST "http://localhost:5000/api/v1/admin/trigger-crawl?wait=true"      #
 ## 6. Kiểm thử
 
 Chạy `npm ci` rồi `npm test`. Các regression test kiểm tra quyền truy cập mà không cần MongoDB hoặc Firebase credentials thật. App Android vẫn dùng mock auth; khi nối API thật phải gửi Firebase ID token.
+
+
+## Core update (2026-11-10)
+
+- Default model: `gemini-3.8-flash`, verified against https://aistudio.google.com/docs/models/gemini-3.8-flash. Override with `GEMINI_MODEL` in the deployment environment. Restart the service after changing it. No API key is committed.
+- Main grids now return up to three featured articles per category, ordered by AI score then publication time. If fewer are eligible, the API returns fewer; it does not label fallback/unfeatured content as featured.
+- RSS includes VnExpress, Tuoi Tre, CafeF and Thanh Nien. Individual feed/network failures remain isolated by the crawler.
+- Market simulation is OFF by default. Only `MARKET_SIMULATE_FALLBACK=true` enables demo values; real RON95/E5/SJC providers remain an integration prerequisite. Existing seeded demo prices are not converted into live prices by this switch.
+- Render blueprint: repository-root `render.yaml`, rootDir `newsapi-backend`. Supply MongoDB/Gemini/admin credentials in Render and Firebase Admin credentials through a Render secret file. This commit does not deploy the service.

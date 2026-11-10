@@ -112,14 +112,22 @@
       cuộn được) thì vẫn báo quãng kéo của ngón tay, để thao tác "lướt xuống" có tác dụng.
       `fillViewport` để nội dung ngắn vẫn phủ kín màn hình.
     -->
-    <com.vlu.newsapi.ui.common.HeaderAwareNestedScrollView
-        android:id="@+id/nested_scroll_main"
+    <!--
+      Vùng nội dung. Bọc thêm FrameLayout để đặt 3 trạng thái chồng lên nhau:
+      progress_main (đang gọi API 1), nội dung 3 lưới, và error_main (lỗi mạng + nút Thử lại).
+    -->
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:clipToPadding="false"
-        android:fillViewport="true"
-        android:scrollbars="vertical">
+        android:layout_weight="1">
+
+        <com.vlu.newsapi.ui.common.HeaderAwareNestedScrollView
+            android:id="@+id/nested_scroll_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:fillViewport="true"
+            android:scrollbars="vertical">
 
         <!-- Khối bọc 3 Grid: mã chạy hiệu ứng thu nhỏ + dịch xuống trên chính view này. -->
         <LinearLayout
@@ -197,6 +205,45 @@
                 tools:itemCount="3"
                 tools:listitem="@layout/item_main_sub_grid" />
         </LinearLayout>
-    </com.vlu.newsapi.ui.common.HeaderAwareNestedScrollView>
+        </com.vlu.newsapi.ui.common.HeaderAwareNestedScrollView>
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/progress_main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            app:indicatorColor="?attr/colorPrimary" />
+
+        <LinearLayout
+            android:id="@+id/error_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/spacing_lg"
+            android:paddingEnd="@dimen/spacing_lg"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <TextView
+                android:id="@+id/tv_main_error"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/error_load_news"
+                android:textAppearance="?attr/textAppearanceBodyLarge"
+                android:textColor="?attr/colorOnSurfaceVariant" />
+
+            <Button
+                android:id="@+id/btn_main_retry"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_md"
+                android:text="@string/action_retry" />
+        </LinearLayout>
+    </FrameLayout>
 
 </LinearLayout>

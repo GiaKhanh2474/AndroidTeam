@@ -13,16 +13,25 @@
     <string name="header_profile">Tài khoản cá nhân</string>
 
     <!-- Màn Main -->
-    <string name="search_hint">Tìm kiếm các trang báo ngoài…</string>
-    <string name="search_unavailable">Chưa có nguồn dữ liệu để tìm kiếm</string>
+    <string name="search_hint">Tìm kiếm bài báo…</string>
+    <string name="search_title">Tìm kiếm</string>
+    <string name="search_empty_query">Nhập từ khoá để tìm kiếm</string>
+    <string name="search_result_title">Kết quả cho “%1$s”</string>
+    <string name="search_empty">Không tìm thấy bài báo phù hợp</string>
+
+    <!-- Trạng thái tải dữ liệu dùng chung cho cả 3 màn hình chính -->
+    <string name="error_load_news">Không tải được tin tức. Kiểm tra kết nối mạng.</string>
+    <string name="error_load_article">Không tải được bài báo. Kiểm tra kết nối mạng.</string>
+    <string name="empty_articles">Chưa có bài báo nào trong chuyên mục này.</string>
+    <string name="action_retry">Thử lại</string>
 
     <!-- Tên ba chuyên mục của ma trận 3×3 trên trang Chính. -->
     <string name="category_economy">Kinh tế</string>
     <string name="category_politics">Chính trị</string>
     <string name="category_technology">Công nghệ</string>
 
-    <!-- Nhãn bắt buộc: toàn bộ nội dung hiện tại là dữ liệu minh hoạ -->
-    <string name="mock_data_notice">Dữ liệu minh hoạ — chưa kết nối nguồn tin thật</string>
+    <!-- Nhãn nguồn dữ liệu: nội dung lấy từ backend AndroidTeamNews (seed/crawler RSS). -->
+    <string name="mock_data_notice">Nguồn tin: AndroidTeamNews API</string>
 
     <!-- Hành động trên header -->
     <string name="action_open_market">Mở biểu đồ và danh mục mở rộng</string>

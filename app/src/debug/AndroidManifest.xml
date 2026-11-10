@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Chỉ bản debug mới cho phép gọi backend bằng HTTP (http://10.0.2.2:5000 khi chạy emulator).
+
+  Bản release không bật cờ này: khi backend đã deploy qua HTTPS, đặt base URL bằng
+  -PnewsApiBaseUrl=https://.../api/v1/ và không cần cleartext.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application android:usesCleartextTraffic="true" />
+
+</manifest>

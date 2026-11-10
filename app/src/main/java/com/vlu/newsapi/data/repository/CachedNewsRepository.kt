@@ -54,6 +54,8 @@ class CachedNewsRepository(
 
     override suspend fun getArticle(articleId: String): Article? = remote.getArticle(articleId)
 
+    override fun searchArticles(query: String): Flow<List<Article>> = remote.searchArticles(query)
+
     private suspend fun feedFromCache(): List<CategoryWithArticles> =
         mainFeedDao.getAll().toMainFeed()
 

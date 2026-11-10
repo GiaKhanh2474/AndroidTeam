@@ -116,6 +116,52 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
+    <!-- Trạng thái đang tải API 3. -->
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progress_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        app:indicatorColor="?attr/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Trạng thái lỗi mạng, hoặc không tìm thấy bài (khi đó ẩn nút Thử lại). -->
+    <LinearLayout
+        android:id="@+id/error_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/spacing_lg"
+        android:paddingEnd="@dimen/spacing_lg"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible">
+
+        <TextView
+            android:id="@+id/tv_detail_error"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textAppearance="?attr/textAppearanceBodyLarge"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            tools:text="Không tải được bài báo. Kiểm tra kết nối mạng." />
+
+        <Button
+            android:id="@+id/btn_detail_retry"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_md"
+            android:text="@string/action_retry" />
+    </LinearLayout>
+
     <!-- Mũi tên mờ ↑: mặc định ẩn, mã tự hiện khi đọc sâu rồi lướt ngược lên. -->
     <ImageButton
         android:id="@+id/btn_faded_up_arrow"

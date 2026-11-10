@@ -22,4 +22,18 @@ class MockNewsRepository : NewsRepository {
         flowOf(MockNews.articlesOf(categoryId))
 
     override suspend fun getArticle(articleId: String): Article? = MockNews.articleById(articleId)
+
+    override fun searchArticles(query: String): Flow<List<Article>> {
+        val keyword = query.trim()
+        if (keyword.isEmpty()) return flowOf(emptyList())
+
+        // Bản minh hoạ tìm trong tiêu đề, tóm tắt và tên nguồn, giống phạm vi tìm kiếm của backend.
+        return flowOf(
+            MockNews.allArticles().filter { article ->
+                article.title.contains(keyword, ignoreCase = true) ||
+                    article.summary.contains(keyword, ignoreCase = true) ||
+                    article.source.contains(keyword, ignoreCase = true)
+            },
+        )
+    }
 }

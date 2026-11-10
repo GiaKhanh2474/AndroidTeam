@@ -68,6 +68,23 @@
         <action
             android:id="@+id/action_main_to_profile"
             app:destination="@id/profileFragment" />
+
+        <!-- Thanh tìm kiếm ở trạng thái 2 mở màn kết quả và gọi API 4. -->
+        <action
+            android:id="@+id/action_main_to_search"
+            app:destination="@id/searchFragment" />
+    </fragment>
+
+    <!-- Màn kết quả tìm kiếm (API 4). Mở từ thanh tìm kiếm của màn Main. -->
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.vlu.newsapi.ui.search.SearchFragment"
+        android:label="@string/search_title"
+        tools:layout="@layout/fragment_search">
+
+        <argument
+            android:name="query"
+            app:argType="string" />
     </fragment>
 
     <!--

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -60,6 +61,8 @@ class CategoryTimelineFragment : Fragment() {
             Navigation.findNavController(view).navigateUp()
         }
 
+        binding.btnCategoryRetry.setOnClickListener { viewModel.retry() }
+
         binding.rvCategoryTimeline.layoutManager = LinearLayoutManager(requireContext())
         binding.rvCategoryTimeline.adapter = adapter
 
@@ -76,6 +79,17 @@ class CategoryTimelineFragment : Fragment() {
     }
 
     private fun render(state: TimelineUiState) {
+        binding.progressCategory.isVisible = state.isLoading
+
+        val showMessage = !state.isLoading && (state.hasError || state.days.isEmpty())
+        binding.errorCategory.isVisible = showMessage
+        binding.tvCategoryError.setText(
+            if (state.hasError) R.string.error_load_news else R.string.empty_articles,
+        )
+        binding.btnCategoryRetry.isVisible = state.hasError
+        binding.rvCategoryTimeline.isVisible =
+            !state.isLoading && !state.hasError && state.days.isNotEmpty()
+
         if (state.categoryName.isNotEmpty()) {
             binding.tvCategoryTitle.text =
                 getString(R.string.category_title_format, state.categoryName)

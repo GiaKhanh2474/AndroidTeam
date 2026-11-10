@@ -8,15 +8,16 @@ import com.vlu.newsapi.data.repository.FavouriteChartRepository
 import com.vlu.newsapi.data.repository.MarketRepository
 import com.vlu.newsapi.data.repository.MockAuthRepository
 import com.vlu.newsapi.data.repository.MockMarketRepository
-import com.vlu.newsapi.data.repository.MockNewsRepository
 import com.vlu.newsapi.data.repository.MockUserRepository
 import com.vlu.newsapi.data.repository.NewsRepository
 import com.vlu.newsapi.data.repository.PreferencesSessionRepository
+import com.vlu.newsapi.data.repository.RemoteNewsRepository
 import com.vlu.newsapi.data.repository.RoomFavouriteChartRepository
 import com.vlu.newsapi.data.repository.RoomSavedArticleRepository
 import com.vlu.newsapi.data.repository.SavedArticleRepository
 import com.vlu.newsapi.data.repository.SessionRepository
 import com.vlu.newsapi.data.repository.UserRepository
+import com.vlu.newsapi.data.remote.RetrofitClient
 
 /**
  * Service Locator thủ công.
@@ -38,12 +39,12 @@ class AppContainer(context: Context) {
     private val database: NewsDatabase by lazy { NewsDatabase.create(context) }
 
     /**
-     * Nguồn tin tức. Bản minh hoạ [MockNewsRepository] được bọc thêm [CachedNewsRepository] để
-     * 9 bài của trang Chính vẫn đọc được khi mất mạng; đổi đúng dòng `remote` khi có API thật.
+     * Nguồn tin tức. 4 API thật của backend được bọc bởi [CachedNewsRepository] để 9 bài của
+     * trang Chính vẫn đọc được khi mất mạng. Base URL lấy từ `BuildConfig.NEWS_API_BASE_URL`.
      */
     val newsRepository: NewsRepository by lazy {
         CachedNewsRepository(
-            remote = MockNewsRepository(),
+            remote = RemoteNewsRepository(RetrofitClient.create()),
             mainFeedDao = database.mainFeedDao(),
         )
     }

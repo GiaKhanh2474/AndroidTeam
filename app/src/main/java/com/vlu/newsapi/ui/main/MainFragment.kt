@@ -1,10 +1,13 @@
 package com.vlu.newsapi.ui.main
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -21,7 +24,7 @@ import com.vlu.newsapi.data.model.CategoryWithArticles
 import com.vlu.newsapi.databinding.FragmentMainBinding
 import com.vlu.newsapi.ui.category.CategoryTimelineFragment
 import com.vlu.newsapi.ui.detail.ArticleDetailFragment
-import com.google.android.material.snackbar.Snackbar
+import com.vlu.newsapi.ui.search.SearchFragment
 import kotlinx.coroutines.launch
 
 /**
@@ -86,16 +89,18 @@ class MainFragment : Fragment() {
             Navigation.findNavController(view).navigate(R.id.action_main_to_profile)
         }
 
-        // Chưa có nguồn tìm kiếm nên chỉ báo cho người dùng biết, KHÔNG bịa kết quả.
+        // Chưa có nguồn tìm kiếm nên trước đây chỉ báo cho người dùng biết. Nay mở màn kết quả
+        // và gọi API 4 với từ khoá vừa nhập.
         binding.etSearchBar.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                Snackbar.make(binding.root, R.string.search_unavailable, Snackbar.LENGTH_SHORT)
-                    .show()
+                openSearchResults()
                 true
             } else {
                 false
             }
         }
+
+        binding.btnMainRetry.setOnClickListener { viewModel.retry() }
 
         // Đường chính của đặc tả: đổi trạng thái theo vị trí cuộn của nested_scroll_main.
         binding.nestedScrollMain.setOnScrollChangeListener { _, _, scrollY, _, _ ->
@@ -130,6 +135,11 @@ class MainFragment : Fragment() {
      * dữ liệu trả về thứ tự khác thì màn hình vẫn ghép đúng.
      */
     private fun renderFeed(state: MainUiState) {
+        // Ba trạng thái: đang tải API 1, lỗi (kèm nút Thử lại), hoặc có dữ liệu.
+        binding.progressMain.isVisible = state.isLoading
+        binding.errorMain.isVisible = !state.isLoading && state.hasError
+        binding.nestedScrollMain.isVisible = !state.isLoading && !state.hasError
+
         val blocks: List<CategoryWithArticles> = state.blocks
         economyAdapter.submitList(blockOf(blocks, CategoryIds.ECONOMY))
         politicsAdapter.submitList(blockOf(blocks, CategoryIds.POLITICS))
@@ -158,6 +168,28 @@ class MainFragment : Fragment() {
             .translationY(if (collapsed) GRID_COLLAPSED_SHIFT_PX else 0f)
             .setDuration(HEADER_ANIM_MS)
             .start()
+    }
+
+    /** Mở màn kết quả tìm kiếm (API 4) với từ khoá đang nhập. */
+    private fun openSearchResults() {
+        val query = binding.etSearchBar.text.toString().trim()
+        if (query.isEmpty()) {
+            binding.etSearchBar.error = getString(R.string.search_empty_query)
+            return
+        }
+
+        binding.etSearchBar.error = null
+        hideSoftwareKeyboard()
+        Navigation.findNavController(requireView()).navigate(
+            R.id.action_main_to_search,
+            Bundle().apply { putString(SearchFragment.ARG_QUERY, query) },
+        )
+    }
+
+    private fun hideSoftwareKeyboard() {
+        val manager = requireContext()
+            .getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        manager?.hideSoftInputFromWindow(binding.etSearchBar.windowToken, 0)
     }
 
     private fun openCategory(categoryId: String) {

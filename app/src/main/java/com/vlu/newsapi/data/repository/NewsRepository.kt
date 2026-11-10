@@ -28,4 +28,7 @@ interface NewsRepository {
 
     /** Một bài báo theo id (dùng cho trang Chi tiết). */
     suspend fun getArticle(articleId: String): Article?
+
+    /** Tìm kiếm bài báo theo từ khoá (API 4 của backend). */
+    fun searchArticles(query: String): Flow<List<Article>>
 }

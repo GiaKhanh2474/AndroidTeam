@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -69,6 +70,8 @@ class ArticleDetailFragment : Fragment() {
             Navigation.findNavController(view).popBackStack()
         }
 
+        binding.btnDetailRetry.setOnClickListener { viewModel.retry() }
+
         gestureHelper = GestureHelper(
             scrollDetail = binding.nestedScrollDetail,
             btnFadedUpArrow = binding.btnFadedUpArrow,
@@ -90,11 +93,20 @@ class ArticleDetailFragment : Fragment() {
     }
 
     private fun render(state: DetailUiState) {
+        // Ba trạng thái của API 3: đang tải, lỗi mạng (có Thử lại), và không tìm thấy bài (404).
+        binding.progressDetail.isVisible = state.isLoading
+        val showMessage = !state.isLoading && (state.hasError || state.notFound)
+        binding.errorDetail.isVisible = showMessage
+        binding.btnDetailRetry.isVisible = state.hasError
+        binding.tvDetailError.setText(
+            if (state.notFound) R.string.detail_article_not_found else R.string.error_load_article,
+        )
+        binding.nestedScrollDetail.isVisible = !state.isLoading && !showMessage
+
         val article = state.article
         if (article == null) {
-            if (!state.isLoading) {
-                binding.tvDetailHeadline.text = getString(R.string.detail_article_not_found)
-            }
+            // Trong lúc chờ hoặc khi lỗi, mũi tên ↑ không có ý nghĩa.
+            binding.btnFadedUpArrow.isVisible = false
             return
         }
 

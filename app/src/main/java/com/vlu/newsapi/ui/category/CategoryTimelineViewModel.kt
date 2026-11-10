@@ -8,10 +8,16 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.vlu.newsapi.NewsApplication
 import com.vlu.newsapi.data.model.Article
+import com.vlu.newsapi.data.model.NewsCategories
 import com.vlu.newsapi.data.repository.NewsRepository
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import java.util.Calendar
 
@@ -25,6 +31,7 @@ data class TimelineUiState(
     val isLoading: Boolean = true,
     val categoryName: String = "",
     val days: List<DaySection> = emptyList(),
+    val hasError: Boolean = false,
 )
 
 /**
@@ -33,25 +40,49 @@ data class TimelineUiState(
  * Đặc tả: hệ thống tải hàng loạt bài báo rồi TỰ CHIA theo ngày đăng, ngày nào ra ngày đó ở phía
  * trên. Việc chia nhóm nằm ở ViewModel để Fragment chỉ còn việc hiển thị.
  */
+@OptIn(ExperimentalCoroutinesApi::class)
 class CategoryTimelineViewModel(
     repository: NewsRepository,
     categoryId: String,
 ) : ViewModel() {
 
-    val uiState: StateFlow<TimelineUiState> = combine(
-        repository.observeCategories(),
-        repository.observeArticlesOf(categoryId),
-    ) { categories, articles ->
-        TimelineUiState(
-            isLoading = false,
-            categoryName = categories.firstOrNull { it.id == categoryId }?.name.orEmpty(),
-            days = articles.groupIntoDays(),
+    /** Tên chuyên mục luôn có sẵn để header không bị trống trong lúc chờ API 2. */
+    private val fallbackCategoryName = NewsCategories.nameOf(categoryId)
+    private val refreshRequests = MutableStateFlow(0)
+
+    val uiState: StateFlow<TimelineUiState> = refreshRequests
+        .flatMapLatest {
+            combine(
+                repository.observeCategories(),
+                repository.observeArticlesOf(categoryId),
+            ) { categories, articles ->
+                TimelineUiState(
+                    isLoading = false,
+                    categoryName = categories.firstOrNull { it.id == categoryId }?.name
+                        ?: fallbackCategoryName,
+                    days = articles.groupIntoDays(),
+                )
+            }
+                .onStart { emit(TimelineUiState(categoryName = fallbackCategoryName)) }
+                .catch {
+                    emit(
+                        TimelineUiState(
+                            isLoading = false,
+                            categoryName = fallbackCategoryName,
+                            hasError = true,
+                        ),
+                    )
+                }
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(STOP_TIMEOUT_MS),
+            initialValue = TimelineUiState(categoryName = fallbackCategoryName),
         )
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(STOP_TIMEOUT_MS),
-        initialValue = TimelineUiState(),
-    )
+
+    fun retry() {
+        refreshRequests.value += 1
+    }
 
     companion object {
         private const val STOP_TIMEOUT_MS = 5_000L

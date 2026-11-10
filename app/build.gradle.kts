@@ -7,19 +7,27 @@ plugins {
 }
 
 android {
-    namespace = "com.example.news"
+    namespace = "com.vlu.newsapi"
     compileSdk {
         version = release(37)
     }
 
     defaultConfig {
-        applicationId = "com.example.news"
+        applicationId = "com.vlu.newsapi"
         minSdk = 24
         targetSdk = 37
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // Dia chi backend cho 4 API tin tuc. Mac dinh la may tinh chu chay emulator
+        // (10.0.2.2 = localhost cua may that). Khi backend da deploy, truyen lai luc build:
+        //   gradlew :app:assembleRelease -PnewsApiBaseUrl=https://<ten-app>.onrender.com/api/v1/
+        val newsApiBaseUrl = providers.gradleProperty("newsApiBaseUrl")
+            .orElse("http://10.0.2.2:5000/api/v1/")
+            .get()
+        buildConfigField("String", "NEWS_API_BASE_URL", "\"$newsApiBaseUrl\"")
     }
 
     buildTypes {
@@ -35,6 +43,8 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        // Can cho BuildConfig.NEWS_API_BASE_URL va BuildConfig.DEBUG (bat/tat log Retrofit).
+        buildConfig = true
     }
 }
 
@@ -69,8 +79,18 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
 
+    // Tai anh bai bao tu URL o trang Chi tiet (Muc 3.1 cua dac ta).
+    implementation(libs.glide)
+
+    // 4 API tin tuc cua backend (main-grids, by-date, detail, search).
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.gson)
+    implementation(libs.okhttp.logging)
+
     testImplementation(libs.junit)
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.2")
+    // MockWebServer: kiem tra lop Retrofit ma khong can backend that.
+    testImplementation(libs.okhttp.mockwebserver)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }

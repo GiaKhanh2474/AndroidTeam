@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Nền tròn cho nút mũi tên mờ ↑ ở trang Chi tiết.
+
+  Nút chỉ có một biểu tượng nên cần nền riêng để nhìn ra được trên nền trắng của bài báo.
+  Màu lấy từ theme (không gõ cứng mã màu), và độ mờ 0.45 do mã đặt lúc hiện nút.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <solid android:color="?attr/colorSurfaceContainerHigh" />
+</shape>

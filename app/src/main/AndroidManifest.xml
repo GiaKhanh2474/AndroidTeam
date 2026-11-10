@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Glide tải ảnh lớn của bài báo từ imageUrl (trang Chi tiết). Không có quyền này thì
+         mọi ảnh đều rơi vào ảnh giữ chỗ. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".NewsApplication"
         android:allowBackup="true"
@@ -25,13 +29,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <!-- Man 3: chi tiet bai bao, tach rieng khoi NavHost. -->
-        <activity
-            android:name=".detail.DetailActivity"
-            android:exported="false"
-            android:theme="@style/Theme.News"
-            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>

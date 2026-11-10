@@ -11,4 +11,20 @@
 
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!--
+      Màu bổ sung cho Base UI của 3 màn cốt lõi (Mục I.2 của đặc tả).
+
+      Không gõ cứng mã màu trong layout: mọi chỗ dùng đều tham chiếu các tên dưới đây.
+    -->
+
+    <!-- Nền ô Grid con ở trang Chính. Xám rất nhạt để chữ đen vẫn đủ tương phản. -->
+    <color name="bg_grid_card">#FFF4F4F7</color>
+
+    <!-- Dòng "Nguồn • Ngày" ở trang Chi tiết. Xám đậm vừa, đọc được cả ở cỡ chữ nhỏ. -->
+    <color name="text_meta_date">#FF62626B</color>
+
+    <!-- Dòng link "Đọc bài gốc trên trang web chính thức". Xanh dương đậm, đủ tương phản
+         trên nền trắng (tỉ lệ tương phản > 4.5:1). -->
+    <color name="text_original_web_link">#FF1565C0</color>
 </resources>

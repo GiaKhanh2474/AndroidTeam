@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Thẻ nằm ngang của một bài báo ở trang Chuyên mục (ViewType 2 của CategoryTimelineAdapter).
+
+  Quy tắc thiết kế BẮT BUỘC của đặc tả: KHÔNG chèn ảnh nhỏ (thumbnail) — thẻ chỉ có chữ để giữ
+  giao diện tối giản.
+    - Phần trên: CHỮ TO  (tv_card_big_title)   — tiêu đề, in đậm, tối đa 2 dòng.
+    - Phần dưới: chữ nhỏ (tv_card_small_summary) — tóm tắt, màu xám đậm, tối đa 3 dòng.
+-->
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/spacing_md"
+    android:layout_marginEnd="@dimen/spacing_md"
+    android:layout_marginBottom="@dimen/spacing_sm"
+    android:clickable="true"
+    android:focusable="true"
+    app:cardBackgroundColor="?attr/colorSurface"
+    app:cardCornerRadius="@dimen/card_corner_radius"
+    app:cardElevation="@dimen/card_elevation"
+    app:strokeColor="?attr/colorOutlineVariant"
+    app:strokeWidth="@dimen/card_stroke_width">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/spacing_md">
+
+        <TextView
+            android:id="@+id/tv_card_big_title"
+            style="@style/NewsText.CardBigTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="2"
+            tools:text="Tăng trưởng quý này vượt dự báo" />
+
+        <TextView
+            android:id="@+id/tv_card_small_summary"
+            style="@style/NewsText.CardSmallSummary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_xs"
+            android:ellipsize="end"
+            android:maxLines="3"
+            tools:text="Mức tăng cao hơn kỳ vọng nhờ sản xuất công nghiệp và xuất khẩu phục hồi rõ nét." />
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

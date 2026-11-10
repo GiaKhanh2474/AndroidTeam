@@ -13,7 +13,7 @@
   thật, nên ngay dưới tên biểu đồ có ghi rõ "Dữ liệu minh hoạ". Các con số không được
   trình bày như số liệu thật.
 -->
-<com.example.news.ui.common.SwipeBackLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.vlu.newsapi.ui.common.SwipeBackLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -83,7 +83,7 @@
                 android:textAppearance="?attr/textAppearanceLabelSmall"
                 android:textColor="?attr/colorOnSurfaceVariant" />
 
-            <com.example.news.ui.market.LineChartView
+            <com.vlu.newsapi.ui.market.LineChartView
                 android:id="@+id/chartFollowed"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/chart_height"
@@ -168,4 +168,4 @@
         </LinearLayout>
     </ScrollView>
 
-</com.example.news.ui.common.SwipeBackLayout>
+</com.vlu.newsapi.ui.common.SwipeBackLayout>

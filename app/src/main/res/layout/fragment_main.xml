@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Màn 1 — Main.
+  Màn 1 — Main (Mục 1 của đặc tả).
 
-  TRẠNG THÁI 1 (mới vào trang): góc trên trái chỉ hiện chữ "Main", cụm [☰][🔍][👤] ẩn.
-  TRẠNG THÁI 2 (lướt xuống > 24dp): chữ "Main" mờ đi, cụm [☰][🔍][👤] hiện ra, các Grid
-  nhỏ lại và xích xuống một chút.
+  HAI TRẠNG THÁI ĐẦU TRANG (Smart Top Bar):
+    Trạng thái 1 — mới vào trang hoặc đang ở đầu trang (scrollY <= 20):
+        chỉ hiện chữ "Main" (tv_main_label); thanh top_smart_bar để GONE.
+    Trạng thái 2 — lướt xuống (scrollY > 20):
+        chữ "Main" GONE; top_smart_bar hiện ra với [☰] - [Search] - [👤];
+        khối container_three_grids thu nhỏ 0.96 và xích xuống 12px (mã chạy hiệu ứng 150ms).
 
-  Bước này mới dựng xong TRẠNG THÁI 1 và bố cục của cả hai trạng thái; phần chuyển đổi
-  theo thao tác cuộn nằm ở bước kế tiếp nên cụm hành động đang để "invisible".
+  MA TRẬN 3×3: ba khối chuyên mục xếp dọc, mỗi khối có tiêu đề và một RecyclerView 3 cột
+  (GridLayoutManager(3)). Mỗi ô Grid con chỉ có chữ tóm tắt, KHÔNG có ảnh — đúng quy tắc
+  thiết kế của đặc tả.
+
+  KHÔNG có Bottom Navigation: điều hướng bằng thanh công cụ này và cử chỉ.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -19,90 +25,76 @@
     tools:context=".ui.main.MainFragment">
 
     <FrameLayout
-        android:id="@+id/headerContainer"
+        android:id="@+id/header_main"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize">
 
+        <!-- Trạng thái 1: chỉ chữ "Main". -->
         <TextView
-            android:id="@+id/tvMainTitle"
+            android:id="@+id/tv_main_label"
+            style="@style/NewsText.MainLogo"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="start|center_vertical"
             android:layout_marginStart="@dimen/spacing_md"
             android:gravity="center_vertical"
-            android:text="@string/title_main"
-            android:textAppearance="@style/TextAppearance.News.MainTitle" />
+            android:text="@string/title_main" />
 
+        <!-- Trạng thái 2: thanh công cụ thông minh 3 thành phần. -->
         <LinearLayout
-            android:id="@+id/groupMainActions"
+            android:id="@+id/top_smart_bar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:alpha="0"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:visibility="invisible"
+            android:paddingStart="@dimen/spacing_sm"
+            android:paddingEnd="@dimen/spacing_sm"
+            android:visibility="gone"
             tools:visibility="visible">
 
             <ImageButton
-                android:id="@+id/btnOpenMarketDrawer"
-                android:layout_width="?attr/actionBarSize"
-                android:layout_height="match_parent"
+                android:id="@+id/btn_menu_drawer"
+                android:layout_width="@dimen/icon_button_size"
+                android:layout_height="@dimen/icon_button_size"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/action_open_market"
                 android:src="@drawable/ic_menu" />
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/searchBox"
+            <EditText
+                android:id="@+id/et_search_bar"
                 android:layout_width="0dp"
-                android:layout_height="40dp"
+                android:layout_height="@dimen/search_bar_height"
                 android:layout_marginStart="@dimen/spacing_xs"
                 android:layout_marginEnd="@dimen/spacing_xs"
                 android:layout_weight="1"
-                android:clickable="true"
-                android:focusable="true"
-                app:cardBackgroundColor="?attr/colorSurfaceVariant"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="0dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingStart="@dimen/spacing_md"
-                    android:paddingEnd="@dimen/spacing_md">
-
-                    <ImageView
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:contentDescription="@null"
-                        android:src="@drawable/ic_search" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/spacing_sm"
-                        android:layout_weight="1"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:text="@string/search_hint"
-                        android:textAppearance="?attr/textAppearanceBodyMedium"
-                        android:textColor="?attr/colorOnSurfaceVariant" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+                android:autofillHints=""
+                android:background="@drawable/bg_search_bar"
+                android:drawableStart="@drawable/ic_search"
+                android:drawablePadding="@dimen/spacing_sm"
+                android:hint="@string/search_hint"
+                android:imeOptions="actionSearch"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:maxLines="1"
+                android:paddingStart="@dimen/spacing_md"
+                android:paddingEnd="@dimen/spacing_md"
+                android:singleLine="true"
+                android:textAppearance="?attr/textAppearanceBodyMedium"
+                android:textColorHint="?attr/colorOnSurfaceVariant" />
 
             <ImageButton
-                android:id="@+id/btnOpenProfile"
-                android:layout_width="?attr/actionBarSize"
-                android:layout_height="match_parent"
+                android:id="@+id/btn_avatar_profile"
+                android:layout_width="@dimen/icon_button_size"
+                android:layout_height="@dimen/icon_button_size"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/action_open_profile"
                 android:src="@drawable/ic_person" />
         </LinearLayout>
     </FrameLayout>
 
+    <!-- Nhãn bắt buộc: dữ liệu hiện tại là minh hoạ, không phải tin thật. -->
     <TextView
-        android:id="@+id/tvMockNotice"
+        android:id="@+id/tv_mock_notice"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorSurfaceVariant"
@@ -114,13 +106,144 @@
         android:textAppearance="?attr/textAppearanceLabelMedium"
         android:textColor="?attr/colorOnSurfaceVariant" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvCategories"
+    <!--
+      Vùng cuộn chính. Đặc tả bắt sự kiện cuộn ở đây để đổi trạng thái 1 <-> 2 theo scrollY.
+      Lớp HeaderAwareNestedScrollView chỉ thêm một việc: khi nội dung ngắn hơn màn hình (không
+      cuộn được) thì vẫn báo quãng kéo của ngón tay, để thao tác "lướt xuống" có tác dụng.
+      `fillViewport` để nội dung ngắn vẫn phủ kín màn hình.
+    -->
+    <!--
+      Vùng nội dung. Bọc thêm FrameLayout để đặt 3 trạng thái chồng lên nhau:
+      progress_main (đang gọi API 1), nội dung 3 lưới, và error_main (lỗi mạng + nút Thử lại).
+    -->
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:clipToPadding="false"
-        android:paddingBottom="@dimen/spacing_lg"
-        tools:listitem="@layout/item_main_category" />
+        android:layout_weight="1">
+
+        <com.vlu.newsapi.ui.common.HeaderAwareNestedScrollView
+            android:id="@+id/nested_scroll_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:fillViewport="true"
+            android:scrollbars="vertical">
+
+        <!-- Khối bọc 3 Grid: mã chạy hiệu ứng thu nhỏ + dịch xuống trên chính view này. -->
+        <LinearLayout
+            android:id="@+id/container_three_grids"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/spacing_md"
+            android:paddingTop="@dimen/spacing_sm"
+            android:paddingEnd="@dimen/spacing_md"
+            android:paddingBottom="@dimen/spacing_xl">
+
+            <!-- Khối 1 — Kinh tế -->
+            <TextView
+                android:id="@+id/tv_header_kinh_te"
+                style="@style/NewsText.SectionHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingTop="@dimen/spacing_sm"
+                android:paddingBottom="@dimen/spacing_sm"
+                android:text="@string/category_economy" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_grid_kinh_te"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                tools:itemCount="3"
+                tools:listitem="@layout/item_main_sub_grid" />
+
+            <!-- Khối 2 — Chính trị -->
+            <TextView
+                android:id="@+id/tv_header_chinh_tri"
+                style="@style/NewsText.SectionHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_md"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingTop="@dimen/spacing_sm"
+                android:paddingBottom="@dimen/spacing_sm"
+                android:text="@string/category_politics" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_grid_chinh_tri"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                tools:itemCount="3"
+                tools:listitem="@layout/item_main_sub_grid" />
+
+            <!-- Khối 3 — Công nghệ -->
+            <TextView
+                android:id="@+id/tv_header_cong_nghe"
+                style="@style/NewsText.SectionHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_md"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingTop="@dimen/spacing_sm"
+                android:paddingBottom="@dimen/spacing_sm"
+                android:text="@string/category_technology" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_grid_cong_nghe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                tools:itemCount="3"
+                tools:listitem="@layout/item_main_sub_grid" />
+        </LinearLayout>
+        </com.vlu.newsapi.ui.common.HeaderAwareNestedScrollView>
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/progress_main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminate="true"
+            app:indicatorColor="?attr/colorPrimary" />
+
+        <LinearLayout
+            android:id="@+id/error_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/spacing_lg"
+            android:paddingEnd="@dimen/spacing_lg"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <TextView
+                android:id="@+id/tv_main_error"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/error_load_news"
+                android:textAppearance="?attr/textAppearanceBodyLarge"
+                android:textColor="?attr/colorOnSurfaceVariant" />
+
+            <Button
+                android:id="@+id/btn_main_retry"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_md"
+                android:text="@string/action_retry" />
+        </LinearLayout>
+    </FrameLayout>
 
 </LinearLayout>

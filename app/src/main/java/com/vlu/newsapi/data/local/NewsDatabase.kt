@@ -19,11 +19,14 @@ import androidx.sqlite.db.SupportSQLiteDatabase
         SavedArticleEntity::class,
         FavouriteChartEntity::class,
         MainFeedArticleEntity::class,
+        TrackedChartEntity::class,
     ],
-    version = 2,
+    version = 3,
     exportSchema = true,
 )
 abstract class NewsDatabase : RoomDatabase() {
+
+    abstract fun newsLocalDao(): NewsLocalDao
 
     abstract fun savedArticleDao(): SavedArticleDao
 
@@ -32,7 +35,7 @@ abstract class NewsDatabase : RoomDatabase() {
     abstract fun mainFeedDao(): MainFeedDao
 
     companion object {
-        private const val DATABASE_NAME = "news.db"
+        private const val DATABASE_NAME = "news_app_local.db"
 
         /**
          * Phiên bản 2 thêm bảng cache cho 9 bài của trang Chính.
@@ -66,10 +69,41 @@ abstract class NewsDatabase : RoomDatabase() {
             }
         }
 
-        fun create(context: Context): NewsDatabase = Room.databaseBuilder(
+        val MIGRATION_2_3 = object : Migration(2, 3) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("""CREATE TABLE saved_articles (
+                    articleId TEXT NOT NULL PRIMARY KEY, categoryId TEXT NOT NULL,
+                    title TEXT NOT NULL, cardSummary TEXT NOT NULL, sourceName TEXT NOT NULL,
+                    publishedAt INTEGER NOT NULL, originalUrl TEXT NOT NULL, imageUrl TEXT,
+                    fullContent TEXT NOT NULL, savedAt INTEGER NOT NULL, dateLabel TEXT NOT NULL)""")
+                db.execSQL("""INSERT INTO saved_articles SELECT id, categoryId, title, summary,
+                    source, publishedAt, sourceUrl, imageUrl, content, savedAt,
+                    'NGÀY ' || strftime('%d/%m/%Y', publishedAt / 1000, 'unixepoch', '+7 hours')
+                    FROM saved_article""")
+                db.execSQL("DROP TABLE saved_article")
+                db.execSQL("""CREATE TABLE tracked_charts (
+                    symbol TEXT NOT NULL PRIMARY KEY, displayName TEXT NOT NULL,
+                    categoryType TEXT NOT NULL, currentValue REAL NOT NULL, changePercent REAL NOT NULL,
+                    isStarredTop INTEGER NOT NULL, isSavedInProfile INTEGER NOT NULL, updatedOrder INTEGER NOT NULL)""")
+                SeedDatabaseCallback.seed(db)
+                db.execSQL("""INSERT OR REPLACE INTO tracked_charts
+                    SELECT seriesId, seriesId, 'COMMODITY', 0.0, 0.0,
+                    CASE WHEN position = (SELECT MIN(position) FROM favourite_chart) THEN 1 ELSE 0 END,
+                    1, -position FROM favourite_chart""")
+            }
+        }
+
+        @Volatile private var instance: NewsDatabase? = null
+
+        fun create(context: Context): NewsDatabase = instance ?: synchronized(this) {
+            instance ?: build(context).also { instance = it }
+        }
+
+        private fun build(context: Context): NewsDatabase = Room.databaseBuilder(
             context.applicationContext,
             NewsDatabase::class.java,
-            DATABASE_NAME,
-        ).addMigrations(MIGRATION_1_2).build()
+            // Retain installed users' DB path; never silently abandon existing saved articles.
+            if (context.getDatabasePath("news.db").exists()) "news.db" else DATABASE_NAME,
+        ).addMigrations(MIGRATION_1_2, MIGRATION_2_3).addCallback(SeedDatabaseCallback()).build()
     }
 }

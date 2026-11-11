@@ -69,12 +69,20 @@ class GestureHelper(
 
     /** Gắn cả ba cử chỉ vào view. Gọi một lần trong `onViewCreated`. */
     fun attach() {
+        attachSwipeBackAndDoubleTap()
+        attachFadedUpArrowBehavior()
+    }
+
+    fun attachSwipeBackAndDoubleTap() {
         scrollDetail.setOnTouchListener { _, event ->
             gestureDetector.onTouchEvent(event)
             // Không tiêu thụ sự kiện: cuộn và bấm bên trong vẫn chạy bình thường.
             false
         }
 
+    }
+
+    fun attachFadedUpArrowBehavior() {
         // Cử chỉ 2 — mũi tên mờ chỉ hiện khi đã đọc sâu VÀ đang lướt ngược lên.
         scrollDetail.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
             updateUpArrow(scrollY = scrollY, oldScrollY = oldScrollY)

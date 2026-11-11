@@ -3,6 +3,8 @@ package com.vlu.newsapi.data.repository
 import com.vlu.newsapi.data.local.MainFeedArticleEntity
 import com.vlu.newsapi.data.local.MainFeedDao
 import com.vlu.newsapi.data.local.toMainFeed
+import com.vlu.newsapi.data.local.toArticle
+import kotlinx.coroutines.CancellationException
 import com.vlu.newsapi.data.model.Article
 import com.vlu.newsapi.data.model.Category
 import com.vlu.newsapi.data.model.CategoryWithArticles
@@ -52,7 +54,14 @@ class CachedNewsRepository(
     override fun observeArticlesOf(categoryId: String): Flow<List<Article>> =
         remote.observeArticlesOf(categoryId)
 
-    override suspend fun getArticle(articleId: String): Article? = remote.getArticle(articleId)
+    override suspend fun getArticle(articleId: String): Article? = try {
+        remote.getArticle(articleId)
+    } catch (cancelled: CancellationException) {
+        throw cancelled
+    } catch (error: Exception) {
+        mainFeedDao.findById(articleId)?.takeIf { it.content.isNotBlank() }?.toArticle()
+            ?: throw error
+    }
 
     override fun searchArticles(query: String): Flow<List<Article>> = remote.searchArticles(query)
 

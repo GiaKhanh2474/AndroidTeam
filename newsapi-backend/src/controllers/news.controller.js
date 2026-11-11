@@ -69,33 +69,14 @@ function parsePositiveInt(value, fallback, max) {
 // ---------------------------------------------------------------------------
 // API 1 — GET /api/v1/news/main-grids
 //
-// Đặc tả sắp xếp theo { is_main_featured, ai_score, published_at }. Nếu chỉ sắp xếp như vậy thì
-// bài cũ điểm cao sẽ chiếm ô lưới 3x3 mãi mãi dù crawler liên tục thêm tin mới. Vì vậy mỗi chuyên mục
-// ưu tiên các bài trong khoảng MAIN_GRID_WINDOW_HOURS giờ gần nhất (mặc định 48 giờ), rồi mới bổ sung
-// bài cũ hơn nếu chưa đủ 3 bài — lưới luôn đầy và luôn ưu tiên tin mới.
-// ---------------------------------------------------------------------------
+// Chỉ bài featured; không lấp ô bằng bài chưa đạt ngưỡng AI.
 const MAIN_GRID_LIMIT = 3;
-const MAIN_GRID_SORT = { is_main_featured: -1, ai_score: -1, published_at: -1 };
-
-function mainGridWindowMs() {
-  const hours = parseInt(process.env.MAIN_GRID_WINDOW_HOURS, 10);
-  return (Number.isFinite(hours) && hours > 0 ? hours : 48) * 60 * 60 * 1000;
-}
 
 async function topArticles(category) {
-  const since = new Date(Date.now() - mainGridWindowMs());
-
-  const fresh = await Article.find({ category, published_at: { $gte: since } }, WITH_CONTENT)
-    .sort(MAIN_GRID_SORT)
+  return Article.find({ category, is_main_featured: true }, WITH_CONTENT)
+    .sort({ ai_score: -1, published_at: -1 })
     .limit(MAIN_GRID_LIMIT)
     .lean();
-  if (fresh.length >= MAIN_GRID_LIMIT) return fresh;
-
-  const older = await Article.find({ category, published_at: { $lt: since } }, WITH_CONTENT)
-    .sort(MAIN_GRID_SORT)
-    .limit(MAIN_GRID_LIMIT - fresh.length)
-    .lean();
-  return fresh.concat(older);
 }
 
 async function getMainGrids(req, res) {

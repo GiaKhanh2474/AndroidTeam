@@ -4,7 +4,7 @@
  *
  *  - USD_VND   : lấy từ API tỷ giá công khai (open.er-api.com)
  *  - OIL_BRENT : lấy từ Yahoo Finance chart API (BZ=F) — API không chính thức, có thể bị chặn
- *  - Còn lại (RON95, E5_RON92, GOLD_SJC): KHÔNG có API công khai ổn định. Khi MARKET_SIMULATE_FALLBACK != "false",
+ *  - Còn lại (RON95, E5_RON92, GOLD_SJC): KHÔNG có API công khai ổn định. Khi MARKET_SIMULATE_FALLBACK == "true",
  *    mỗi ngày giá được mô phỏng dao động nhẹ quanh giá ngày hôm trước — CHỈ để demo, không phải giá thật.
  *
  * Mỗi lần chạy chỉ cập nhật chart ĐÃ CÓ trong DB (chạy `npm run seed` trước).
@@ -95,7 +95,7 @@ function applyPoint(chart, newValue, todayLabel) {
  * @returns {Promise<{updated: string[], skipped: string[], errors: string[]}>}
  */
 async function updateMarketCharts() {
-  const simulate = String(process.env.MARKET_SIMULATE_FALLBACK || "true").toLowerCase() !== "false";
+  const simulate = String(process.env.MARKET_SIMULATE_FALLBACK || "false").toLowerCase() === "true";
   const todayLabel = buildShortDate(new Date());
   const summary = { updated: [], skipped: [], errors: [] };
 

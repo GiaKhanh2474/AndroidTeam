@@ -22,6 +22,8 @@ const USER_AGENT =
  * category_hint chỉ dùng khi Gemini không trả được chuyên mục hợp lệ (hoặc chạy fallback).
  */
 const FEEDS = [
+  { source_name: "CafeF", url: "https://cafef.vn/vi-mo-dau-tu.rss", category_hint: "KINH_TE" },
+  { source_name: "Thanh Niên", url: "https://thanhnien.vn/rss/kinh-te.rss", category_hint: "KINH_TE" },
   // 1. Kinh doanh / Kinh tế
   { source_name: "VnExpress", url: "https://vnexpress.net/rss/kinh-doanh.rss", category_hint: "KINH_TE" },
   { source_name: "Tuổi Trẻ", url: "https://tuoitre.vn/rss/kinh-doanh.rss", category_hint: "KINH_TE" },

@@ -1,6 +1,8 @@
 package com.vlu.newsapi.data.repository
 
 import android.content.Context
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -16,13 +18,28 @@ import kotlinx.coroutines.withContext
  */
 class PreferencesSessionRepository(context: Context) : SessionRepository {
 
-    private val preferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
+    // Migrate the previous local flag once, without changing the auth module's interface.
+    private val preferences = EncryptedSharedPreferences.create(
+        context.applicationContext,
+        "news_session_secure",
+        MasterKey.Builder(context.applicationContext).setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build(),
+        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM,
+    ).also { encrypted ->
+        val legacy = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE)
+        if (legacy.contains(KEY_SIGNED_IN)) {
+            if (encrypted.contains(KEY_SIGNED_IN) || encrypted.edit()
+                    .putBoolean(KEY_SIGNED_IN, legacy.getBoolean(KEY_SIGNED_IN, false)).commit()) {
+                legacy.edit().remove(KEY_SIGNED_IN).commit()
+            }
+        }
+    }
 
     override fun isSignedIn(): Boolean = preferences.getBoolean(KEY_SIGNED_IN, false)
 
     override suspend fun setSignedIn(signedIn: Boolean) {
         withContext(Dispatchers.IO) {
-            preferences.edit().putBoolean(KEY_SIGNED_IN, signedIn).commit()
+            check(preferences.edit().putBoolean(KEY_SIGNED_IN, signedIn).commit()) { "Cannot persist session" }
         }
     }
 

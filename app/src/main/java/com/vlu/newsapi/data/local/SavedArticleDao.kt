@@ -15,10 +15,10 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface SavedArticleDao {
 
-    @Query("SELECT * FROM saved_article ORDER BY savedAt DESC")
+    @Query("SELECT * FROM saved_articles ORDER BY savedAt DESC")
     fun observeAll(): Flow<List<SavedArticleEntity>>
 
-    @Query("SELECT COUNT(*) FROM saved_article")
+    @Query("SELECT COUNT(*) FROM saved_articles")
     fun observeCount(): Flow<Int>
 
     /**
@@ -31,12 +31,12 @@ interface SavedArticleDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveArticleOnDoubleTap(entity: SavedArticleEntity)
 
-    @Query("DELETE FROM saved_article WHERE id = :articleId")
+    @Query("DELETE FROM saved_articles WHERE articleId = :articleId")
     suspend fun deleteById(articleId: String)
 
-    @Query("SELECT * FROM saved_article WHERE id = :articleId")
+    @Query("SELECT * FROM saved_articles WHERE articleId = :articleId")
     suspend fun findById(articleId: String): SavedArticleEntity?
 
-    @Query("DELETE FROM saved_article")
+    @Query("DELETE FROM saved_articles")
     suspend fun deleteAll()
 }

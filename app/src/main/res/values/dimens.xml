@@ -7,8 +7,8 @@
     <dimen name="spacing_lg">24dp</dimen>
     <dimen name="spacing_xl">32dp</dimen>
 
-    <dimen name="card_corner_radius">12dp</dimen>
-    <dimen name="card_elevation">1dp</dimen>
+    <dimen name="card_corner_radius">10dp</dimen>
+    <dimen name="card_elevation">2dp</dimen>
     <!-- Ô phẳng (không đổ bóng) để lưới 3×3 trông như một khối liền. -->
     <dimen name="card_elevation_flat">0dp</dimen>
     <!-- Đường viền mảnh của thẻ bài báo ở trang Chuyên mục. -->
@@ -40,10 +40,10 @@
 
     <!-- Ô Grid con (3×3) ở trang Chính: chiều cao tối thiểu để 3 ô cùng hàng luôn cao bằng
          nhau, chữ dài bị cắt bằng ellipsize thay vì làm lệch hàng. -->
-    <dimen name="grid_sub_item_min_height">120dp</dimen>
+    <dimen name="grid_sub_item_min_height">110dp</dimen>
 
     <!-- Trang Chi tiết: cỡ chữ tiêu đề bài báo và nội dung bài. -->
-    <dimen name="font_detail_headline">24sp</dimen>
+    <dimen name="font_detail_headline">22sp</dimen>
     <dimen name="font_detail_body">16sp</dimen>
 
     <!-- Trang Chi tiết: chiều cao ảnh lớn ở giữa bài (đặc tả ghi 220dp). -->
@@ -51,4 +51,18 @@
 
     <!-- Trang Chi tiết: đường kính nút mũi tên mờ ↑ ở góc dưới bên phải. -->
     <dimen name="detail_up_arrow_size">40dp</dimen>
+    <dimen name="space_xs">4dp</dimen>
+    <dimen name="space_sm">8dp</dimen>
+    <dimen name="space_md">16dp</dimen>
+    <dimen name="space_lg">24dp</dimen>
+    <dimen name="space_xl">32dp</dimen>
+    <dimen name="top_bar_height">56dp</dimen>
+    <dimen name="avatar_size_profile">84dp</dimen>
+    <dimen name="faded_up_arrow_size">40dp</dimen>
+    <dimen name="font_main_logo">28sp</dimen>
+    <dimen name="font_section_header">18sp</dimen>
+    <dimen name="font_card_big_title">16sp</dimen>
+    <dimen name="font_card_small_summary">14sp</dimen>
+    <dimen name="font_grid_sub_summary">12sp</dimen>
+    <dimen name="font_meta_info">12sp</dimen>
 </resources>

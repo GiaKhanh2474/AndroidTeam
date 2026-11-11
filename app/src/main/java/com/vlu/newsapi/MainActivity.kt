@@ -1,6 +1,10 @@
 package com.vlu.newsapi
 
 import android.os.Bundle
+import android.view.View
+import androidx.activity.OnBackPressedCallback
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
@@ -20,12 +24,13 @@ import com.vlu.newsapi.ui.common.applySystemBarAndImeInsets
  * KHÔNG dùng Bottom Navigation theo đặc tả.
  */
 class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
-        val binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         // Đẩy toàn bộ nội dung xuống dưới thanh trạng thái / tai thỏ.
@@ -36,6 +41,25 @@ class MainActivity : AppCompatActivity() {
         // `adjustResize` trong manifest không còn tự thu nhỏ cửa sổ, không xử lý thì bàn phím che
         // mất nút "Đăng nhập". Các màn còn lại không có ô nhập chữ nên không bị ảnh hưởng.
         binding.root.applySystemBarAndImeInsets()
+        binding.root.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+        val drawerHost = supportFragmentManager.findFragmentById(R.id.drawer_market_fragment_container) as NavHostFragment
+        val back = object : OnBackPressedCallback(false) {
+            override fun handleOnBackPressed() {
+                if (!drawerHost.navController.popBackStack()) binding.root.closeDrawer(GravityCompat.START)
+            }
+        }
+        onBackPressedDispatcher.addCallback(this, back)
+        drawerHost.navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id == R.id.mainFragment) binding.root.closeDrawer(GravityCompat.START)
+        }
+        binding.root.addDrawerListener(object : DrawerLayout.SimpleDrawerListener() {
+            override fun onDrawerOpened(drawerView: View) { back.isEnabled = true }
+            override fun onDrawerClosed(drawerView: View) {
+                back.isEnabled = false
+                drawerHost.navController.popBackStack(R.id.mainFragment, false)
+                binding.root.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+            }
+        })
 
         // Chọn màn mở đầu: lần đầu mở (hoặc sau khi đăng xuất) là màn đăng nhập, còn khi máy đã
         // "đăng nhập" thì vào thẳng trang chính. Làm ở đây chứ không đi qua màn đăng nhập rồi lùi
@@ -55,9 +79,23 @@ class MainActivity : AppCompatActivity() {
      * thay vì tự điều hướng, để việc chuyển màn nằm ở một chỗ thay vì rải trong Fragment.
      */
     fun openMarketDrawer() {
-        val navHost = supportFragmentManager.findFragmentById(R.id.navHostFragment)
+        val drawerHost = supportFragmentManager.findFragmentById(R.id.drawer_market_fragment_container)
             as? NavHostFragment ?: return
-        navHost.navController.navigate(R.id.action_mainFragment_to_marketDrawerFragment)
+        if (drawerHost.navController.currentDestination?.id == R.id.mainFragment) {
+            drawerHost.navController.navigate(R.id.marketDrawerFragment)
+        }
+        binding.root.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+        binding.root.openDrawer(GravityCompat.START)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        val drawerHost = supportFragmentManager.findFragmentById(R.id.drawer_market_fragment_container)
+            as? NavHostFragment ?: return
+        if (drawerHost.navController.currentDestination?.id != R.id.mainFragment) {
+            binding.root.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+            binding.root.openDrawer(GravityCompat.START)
+        }
     }
 
     /**
@@ -73,7 +111,7 @@ class MainActivity : AppCompatActivity() {
         // Fragment khai báo trong XML được thêm vào FragmentManager bằng một giao dịch chưa chạy
         // ngay, phải chạy nốt thì mới tìm thấy nó.
         supportFragmentManager.executePendingTransactions()
-        val navHost = supportFragmentManager.findFragmentById(R.id.navHostFragment) as? NavHostFragment
+        val navHost = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as? NavHostFragment
             ?: return
 
         val graph = navHost.navController.navInflater.inflate(R.navigation.nav_graph)

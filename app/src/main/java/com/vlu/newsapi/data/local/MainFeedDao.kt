@@ -23,6 +23,9 @@ interface MainFeedDao {
     @Query("SELECT * FROM main_feed_article ORDER BY categoryPosition ASC, slot ASC")
     suspend fun getAll(): List<MainFeedArticleEntity>
 
+    @Query("SELECT * FROM main_feed_article WHERE id = :articleId")
+    suspend fun findById(articleId: String): MainFeedArticleEntity?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(items: List<MainFeedArticleEntity>)
 

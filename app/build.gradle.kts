@@ -30,8 +30,21 @@ android {
         buildConfigField("String", "NEWS_API_BASE_URL", "\"$newsApiBaseUrl\"")
     }
 
+    // Supply release credentials through environment variables, never source control.
+    val releaseStore = providers.environmentVariable("ANDROID_KEYSTORE_PATH").orNull
+    signingConfigs {
+        if (releaseStore != null) {
+            create("production") {
+                storeFile = file(releaseStore)
+                storePassword = providers.environmentVariable("ANDROID_KEYSTORE_PASSWORD").get()
+                keyAlias = providers.environmentVariable("ANDROID_KEY_ALIAS").get()
+                keyPassword = providers.environmentVariable("ANDROID_KEY_PASSWORD").get()
+            }
+        }
+    }
     buildTypes {
         release {
+            if (releaseStore != null) signingConfig = signingConfigs.getByName("production")
             optimization {
                 enable = false
             }
@@ -46,6 +59,7 @@ android {
         // Can cho BuildConfig.NEWS_API_BASE_URL va BuildConfig.DEBUG (bat/tat log Retrofit).
         buildConfig = true
     }
+    sourceSets.getByName("androidTest").assets.srcDir("$projectDir/schemas")
 }
 
 // Xuất lược đồ cơ sở dữ liệu ra tệp. Bắt buộc phải có nếu muốn viết migration đúng về sau:
@@ -81,6 +95,8 @@ dependencies {
 
     // Tai anh bai bao tu URL o trang Chi tiet (Muc 3.1 cua dac ta).
     implementation(libs.glide)
+    implementation("androidx.security:security-crypto:1.1.0-alpha06")
+    implementation("androidx.drawerlayout:drawerlayout:1.2.0")
 
     // 4 API tin tuc cua backend (main-grids, by-date, detail, search).
     implementation(libs.retrofit)
@@ -93,4 +109,5 @@ dependencies {
     testImplementation(libs.okhttp.mockwebserver)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation("androidx.room:room-testing:2.8.5")
 }

@@ -3,6 +3,12 @@ package com.vlu.newsapi.data.remote
 import com.vlu.newsapi.data.remote.dto.ArticleDto
 import com.vlu.newsapi.data.remote.dto.DateGroupDto
 import com.vlu.newsapi.data.remote.dto.MainGridsDto
+import com.vlu.newsapi.data.remote.dto.MarketAssetChartDto
+import com.vlu.newsapi.data.remote.dto.SyncUserRequest
+import com.vlu.newsapi.data.remote.dto.UserDto
+import retrofit2.http.Body
+import retrofit2.http.Header
+import retrofit2.http.POST
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -37,6 +43,15 @@ interface NewsApiService {
     /** API 4 — tìm kiếm theo từ khoá trong tiêu đề, tóm tắt và tên nguồn. */
     @GET("news/search")
     suspend fun searchArticles(@Query("q") query: String): List<ArticleDto>
+
+    @GET("market/charts")
+    suspend fun getMarketCharts(): List<MarketAssetChartDto>
+
+    @GET("news/sideline")
+    suspend fun getSidelineNews(): List<ArticleDto>
+
+    @POST("users/sync")
+    suspend fun syncUser(@Header("Authorization") bearerToken: String, @Body user: SyncUserRequest): UserDto
 
     companion object {
         /** Backend giới hạn tối đa 100 bài/trang; 50 đủ cho một chuyên mục trong ngày. */

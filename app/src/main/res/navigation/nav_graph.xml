@@ -185,4 +185,10 @@
             app:argType="string" />
     </fragment>
 
+    <action android:id="@+id/action_main_to_categoryTimeline" app:destination="@id/categoryTimelineFragment" />
+    <action android:id="@+id/action_main_to_articleDetail" app:destination="@id/articleDetailFragment" />
+    <action android:id="@+id/action_main_to_marketDrawer" app:destination="@id/marketDrawerFragment" />
+    <action android:id="@+id/action_category_to_articleDetail" app:destination="@id/articleDetailFragment" />
+    <action android:id="@+id/action_market_to_articleDetail" app:destination="@id/articleDetailFragment" />
+    <action android:id="@+id/action_profile_to_articleDetail" app:destination="@id/articleDetailFragment" />
 </navigation>

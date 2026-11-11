@@ -1,6 +1,8 @@
 package com.vlu.newsapi.di
 
 import android.content.Context
+import com.vlu.newsapi.data.local.toArticle
+import com.vlu.newsapi.data.repository.OfflineNewsRepository
 import com.vlu.newsapi.data.local.NewsDatabase
 import com.vlu.newsapi.data.repository.AuthRepository
 import com.vlu.newsapi.data.repository.CachedNewsRepository
@@ -43,10 +45,10 @@ class AppContainer(context: Context) {
      * trang Chính vẫn đọc được khi mất mạng. Base URL lấy từ `BuildConfig.NEWS_API_BASE_URL`.
      */
     val newsRepository: NewsRepository by lazy {
-        CachedNewsRepository(
+        OfflineNewsRepository(CachedNewsRepository(
             remote = RemoteNewsRepository(RetrofitClient.create()),
             mainFeedDao = database.mainFeedDao(),
-        )
+        )) { id -> database.savedArticleDao().findById(id)?.toArticle() }
     }
 
     val marketRepository: MarketRepository by lazy { MockMarketRepository() }

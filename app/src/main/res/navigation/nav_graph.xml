@@ -16,7 +16,7 @@
     -->
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.news.ui.auth.LoginFragment"
+        android:name="com.vlu.newsapi.ui.auth.LoginFragment"
         android:label="@string/login_title"
         tools:layout="@layout/fragment_login">
 
@@ -39,7 +39,7 @@
     -->
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.example.news.ui.auth.RegisterFragment"
+        android:name="com.vlu.newsapi.ui.auth.RegisterFragment"
         android:label="@string/register_title"
         tools:layout="@layout/fragment_register">
 
@@ -53,7 +53,7 @@
     <!-- Man 1: Main. La start destination nen KHONG hien mui ten Up tren toolbar. -->
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.example.news.ui.main.MainFragment"
+        android:name="com.vlu.newsapi.ui.main.MainFragment"
         android:label="@string/title_main"
         tools:layout="@layout/fragment_main">
 
@@ -66,14 +66,48 @@
             app:destination="@id/marketDrawerFragment" />
 
         <action
-            android:id="@+id/action_mainFragment_to_profileFragment"
+            android:id="@+id/action_main_to_profile"
             app:destination="@id/profileFragment" />
+
+        <!-- Thanh tìm kiếm ở trạng thái 2 mở màn kết quả và gọi API 4. -->
+        <action
+            android:id="@+id/action_main_to_search"
+            app:destination="@id/searchFragment" />
+    </fragment>
+
+    <!-- Màn kết quả tìm kiếm (API 4). Mở từ thanh tìm kiếm của màn Main. -->
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.vlu.newsapi.ui.search.SearchFragment"
+        android:label="@string/search_title"
+        tools:layout="@layout/fragment_search">
+
+        <argument
+            android:name="query"
+            app:argType="string" />
+    </fragment>
+
+    <!--
+      Man 3: chi tiet bai bao (Muc 3 cua dac ta).
+
+      La mot Fragment trong NavHost chu khong phai Activity rieng, de nut [<-] va cu chi luot
+      phai deu lui dung mot buoc trong ngan xep.
+    -->
+    <fragment
+        android:id="@+id/articleDetailFragment"
+        android:name="com.vlu.newsapi.ui.detail.ArticleDetailFragment"
+        android:label="@string/title_detail"
+        tools:layout="@layout/fragment_article_detail">
+
+        <argument
+            android:name="articleId"
+            app:argType="string" />
     </fragment>
 
     <!-- Man 2: danh sach bai bao theo chuyen muc, nhom theo ngay dang. -->
     <fragment
         android:id="@+id/categoryTimelineFragment"
-        android:name="com.example.news.ui.timeline.CategoryTimelineFragment"
+        android:name="com.vlu.newsapi.ui.category.CategoryTimelineFragment"
         android:label="@string/title_category_timeline"
         tools:layout="@layout/fragment_category_timeline">
 
@@ -88,7 +122,7 @@
     <!-- Man 4: bang thi truong (bieu do, tin van, bang xep hang). -->
     <fragment
         android:id="@+id/marketDrawerFragment"
-        android:name="com.example.news.ui.market.MarketDrawerFragment"
+        android:name="com.vlu.newsapi.ui.market.MarketDrawerFragment"
         android:label="@string/title_market_drawer"
         tools:layout="@layout/fragment_market_drawer">
 
@@ -107,7 +141,7 @@
     <!-- Man 5: tai khoan + bai da luu + bieu do da luu. -->
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.news.ui.profile.ProfileFragment"
+        android:name="com.vlu.newsapi.ui.profile.ProfileFragment"
         android:label="@string/title_profile"
         tools:layout="@layout/fragment_profile">
 
@@ -142,7 +176,7 @@
     -->
     <fragment
         android:id="@+id/infoPageFragment"
-        android:name="com.example.news.ui.info.InfoPageFragment"
+        android:name="com.vlu.newsapi.ui.info.InfoPageFragment"
         android:label="@string/title_info_page"
         tools:layout="@layout/fragment_info_page">
 
@@ -151,4 +185,10 @@
             app:argType="string" />
     </fragment>
 
+    <action android:id="@+id/action_main_to_categoryTimeline" app:destination="@id/categoryTimelineFragment" />
+    <action android:id="@+id/action_main_to_articleDetail" app:destination="@id/articleDetailFragment" />
+    <action android:id="@+id/action_main_to_marketDrawer" app:destination="@id/marketDrawerFragment" />
+    <action android:id="@+id/action_category_to_articleDetail" app:destination="@id/articleDetailFragment" />
+    <action android:id="@+id/action_market_to_articleDetail" app:destination="@id/articleDetailFragment" />
+    <action android:id="@+id/action_profile_to_articleDetail" app:destination="@id/articleDetailFragment" />
 </navigation>

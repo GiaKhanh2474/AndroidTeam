@@ -13,19 +13,31 @@
     <string name="header_profile">Tài khoản cá nhân</string>
 
     <!-- Màn Main -->
-    <string name="main_view_by_date">[Xem theo ngày]</string>
-    <string name="search_hint">Tìm kiếm các trang báo ngoài…</string>
-    <string name="search_unavailable">Chưa có nguồn dữ liệu để tìm kiếm</string>
+    <string name="search_hint">Tìm kiếm bài báo…</string>
+    <string name="search_title">Tìm kiếm</string>
+    <string name="search_empty_query">Nhập từ khoá để tìm kiếm</string>
+    <string name="search_result_title">Kết quả cho “%1$s”</string>
+    <string name="search_empty">Không tìm thấy bài báo phù hợp</string>
 
-    <!-- Nhãn bắt buộc: toàn bộ nội dung hiện tại là dữ liệu minh hoạ -->
-    <string name="mock_data_notice">Dữ liệu minh hoạ — chưa kết nối nguồn tin thật</string>
+    <!-- Trạng thái tải dữ liệu dùng chung cho cả 3 màn hình chính -->
+    <string name="error_load_news">Không tải được tin tức. Kiểm tra kết nối mạng.</string>
+    <string name="error_load_article">Không tải được bài báo. Kiểm tra kết nối mạng.</string>
+    <string name="empty_articles">Chưa có bài báo nào trong chuyên mục này.</string>
+    <string name="action_retry">Thử lại</string>
+
+    <!-- Tên ba chuyên mục của ma trận 3×3 trên trang Chính. -->
+    <string name="category_economy">Kinh tế</string>
+    <string name="category_politics">Chính trị</string>
+    <string name="category_technology">Công nghệ</string>
+
+    <!-- Nhãn nguồn dữ liệu: nội dung lấy từ backend AndroidTeamNews (seed/crawler RSS). -->
+    <string name="mock_data_notice">Nguồn tin: AndroidTeamNews API</string>
 
     <!-- Hành động trên header -->
     <string name="action_open_market">Mở biểu đồ và danh mục mở rộng</string>
     <string name="action_open_profile">Mở tài khoản</string>
     <string name="action_back">Quay lại</string>
     <string name="action_close">Đóng</string>
-    <string name="action_pick_date">Chọn ngày</string>
     <string name="action_logout">Đăng xuất</string>
 
     <!-- Nội dung tạm của các màn chưa dựng xong -->
@@ -36,16 +48,22 @@
 
     <!-- Định dạng ngày dùng chung cho trang Chuyên mục và trang Chi tiết -->
     <string name="pattern_day_month">dd/MM</string>
+    <!-- Mốc ngày ở trang Chuyên mục hiện đủ năm theo ví dụ của đặc tả: "Ngày 22/10/2026". -->
+    <string name="pattern_full_date">dd/MM/yyyy</string>
+
+    <!-- Tiêu đề đầu trang Chuyên mục, ví dụ "Chuyên mục: Kinh tế". -->
+    <string name="category_title_format">Chuyên mục: %1$s</string>
 
     <!-- Màn Chi tiết bài báo -->
     <string name="article_source_date">%1$s • Ngày %2$s</string>
-    <string name="detail_source_link">🔗 Trang web gốc: %1$s</string>
-    <string name="detail_image_placeholder_note">Ảnh minh hoạ — chỗ giữ chỗ cho ảnh thật của bài báo</string>
+    <!-- Dòng link bài gốc, đúng câu chữ của đặc tả. -->
+    <string name="detail_original_link">🔗 Đọc bài gốc trên trang web chính thức ↗</string>
+    <string name="detail_banner_content_desc">Ảnh minh hoạ của bài báo</string>
     <string name="detail_link_no_app">Không mở được liên kết</string>
     <string name="detail_article_not_found">Không tìm thấy bài báo</string>
-    <string name="detail_save_done">Đã lưu bài báo</string>
-    <string name="detail_save_removed">Đã bỏ lưu bài báo</string>
     <string name="detail_scroll_to_top">Lên đầu bài</string>
+    <!-- Thông báo bắt buộc của đặc tả khi chạm đúp lưu bài. -->
+    <string name="detail_saved_toast">Đã lưu bài báo vào mục Cá nhân!</string>
 
     <!-- Màn Thị trường (menu 3 gạch) -->
     <string name="market_followed_header">Biểu đồ đang theo dõi</string>
@@ -88,6 +106,7 @@
     <string name="profile_saved_articles_empty">Chưa lưu bài báo nào. Mở một bài rồi nhấn đúp vào màn hình để lưu.</string>
     <string name="profile_open_saved_chart">Mở biểu đồ %1$s ở màn Thị trường</string>
     <string name="profile_open_saved_article">Mở bài %1$s</string>
+    <string name="profile_delete_saved_article">Xoá bài đã lưu: %1$s</string>
 
     <!-- Màn dùng chung cho các dòng mở màn khác ở trang Tài khoản -->
     <string name="title_info_page">Thông tin</string>

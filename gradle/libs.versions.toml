@@ -17,6 +17,11 @@ cardview = "1.0.0"
 room = "2.8.5"
 # KSP phai khop dung phien ban Kotlin (2.2.10) ma AGP 9 cung cap san.
 ksp = "2.2.10-2.0.2"
+# Glide: tai anh bai bao tu imageUrl o trang Chi tiet (Muc 3.1 cua dac ta).
+glide = "4.16.0"
+# Retrofit + OkHttp: noi 4 API tin tuc cua backend (main-grids, by-date, detail, search).
+retrofit = "2.11.0"
+okhttp = "4.12.0"
 junit = "4.13.2"
 junitVersion = "1.3.0"
 espressoCore = "3.7.0"
@@ -37,6 +42,11 @@ androidx-cardview = { group = "androidx.cardview", name = "cardview", version.re
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+retrofit-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
+okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
+okhttp-mockwebserver = { group = "com.squareup.okhttp3", name = "mockwebserver", version.ref = "okhttp" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

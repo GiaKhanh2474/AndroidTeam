@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Mốc NGÀY ở trang Chuyên mục (ViewType 1 của CategoryTimelineAdapter).
+
+  Ví dụ nội dung: "NGÀY 22/10/2026". Chữ in hoa bằng style (textAllCaps), không viết hoa sẵn
+  trong strings.xml để chuỗi gốc còn dùng lại được ở chỗ khác.
+-->
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tv_date_header"
+    style="@style/NewsText.SectionHeader"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="@dimen/spacing_md"
+    android:paddingTop="@dimen/spacing_md"
+    android:paddingEnd="@dimen/spacing_md"
+    android:paddingBottom="@dimen/spacing_sm"
+    tools:text="Ngày 22/10/2026" />

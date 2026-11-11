@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Private back stack preserves the existing Market toolbar and swipe behavior. -->
+<navigation xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_graph" app:startDestination="@id/mainFragment">
+    <fragment android:id="@id/mainFragment" android:name="androidx.fragment.app.Fragment" />
+    <fragment android:id="@id/marketDrawerFragment" android:name="com.vlu.newsapi.ui.market.MarketDrawerFragment" />
+    <fragment android:id="@id/articleDetailFragment" android:name="com.vlu.newsapi.ui.detail.ArticleDetailFragment">
+        <argument android:name="articleId" app:argType="string" />
+    </fragment>
+</navigation>

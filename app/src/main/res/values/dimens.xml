@@ -7,20 +7,22 @@
     <dimen name="spacing_lg">24dp</dimen>
     <dimen name="spacing_xl">32dp</dimen>
 
-    <dimen name="card_corner_radius">12dp</dimen>
-    <dimen name="card_elevation">1dp</dimen>
+    <dimen name="card_corner_radius">10dp</dimen>
+    <dimen name="card_elevation">2dp</dimen>
+    <!-- Ô phẳng (không đổ bóng) để lưới 3×3 trông như một khối liền. -->
+    <dimen name="card_elevation_flat">0dp</dimen>
+    <!-- Đường viền mảnh của thẻ bài báo ở trang Chuyên mục. -->
+    <dimen name="card_stroke_width">1dp</dimen>
 
-    <!-- Màn Main: chiều cao cố định cho hàng 3 "Grid Con" để 3 ô luôn cao bằng nhau,
-         chữ dài sẽ bị cắt bằng ellipsize thay vì làm lệch hàng.
-         146dp để chừa đủ chỗ cho tiêu đề 3 dòng + tóm tắt 2 dòng, kể cả khi người dùng
-         tăng cỡ chữ trong cài đặt hệ thống. -->
-    <dimen name="main_grid_card_height">146dp</dimen>
+    <!-- Nút biểu tượng trên header ([☰], [👤], [←]) — vùng chạm tối thiểu 48dp. -->
+    <dimen name="icon_button_size">48dp</dimen>
+
+    <!-- Ô tìm kiếm trên thanh công cụ thông minh của trang Chính. -->
+    <dimen name="search_bar_height">40dp</dimen>
+    <dimen name="search_bar_corner_radius">20dp</dimen>
 
     <!-- Màn Main: quãng kéo tối thiểu để chữ "Main" mờ đi và cụm [☰][🔍][👤] hiện ra. -->
     <dimen name="main_header_scroll_threshold">24dp</dimen>
-
-    <!-- Màn Main: khi thu gọn, các Grid xích xuống một chút cho khớp mô tả. -->
-    <dimen name="main_grid_collapsed_shift">8dp</dimen>
 
     <!-- Màn Thị trường: vùng vẽ biểu đồ và cỡ chữ nhãn trên biểu đồ. -->
     <dimen name="chart_height">180dp</dimen>
@@ -30,6 +32,37 @@
          64dp đủ xa để không trùng với những cú chạm hoặc rung tay khi bấm. -->
     <dimen name="swipe_back_min_distance">64dp</dimen>
 
-    <!-- Màn Chi tiết: cuộn quá quãng này thì nút "lên đầu bài" mới hiện ra. -->
-    <dimen name="detail_scroll_to_top_threshold">200dp</dimen>
+    <!--
+      Kích thước bổ sung cho Base UI của 3 màn cốt lõi (Mục I.2 của đặc tả).
+
+      Không gõ cứng số đo trong layout: mọi chỗ dùng đều tham chiếu các tên dưới đây.
+    -->
+
+    <!-- Ô Grid con (3×3) ở trang Chính: chiều cao tối thiểu để 3 ô cùng hàng luôn cao bằng
+         nhau, chữ dài bị cắt bằng ellipsize thay vì làm lệch hàng. -->
+    <dimen name="grid_sub_item_min_height">110dp</dimen>
+
+    <!-- Trang Chi tiết: cỡ chữ tiêu đề bài báo và nội dung bài. -->
+    <dimen name="font_detail_headline">22sp</dimen>
+    <dimen name="font_detail_body">16sp</dimen>
+
+    <!-- Trang Chi tiết: chiều cao ảnh lớn ở giữa bài (đặc tả ghi 220dp). -->
+    <dimen name="detail_banner_image_height">220dp</dimen>
+
+    <!-- Trang Chi tiết: đường kính nút mũi tên mờ ↑ ở góc dưới bên phải. -->
+    <dimen name="detail_up_arrow_size">40dp</dimen>
+    <dimen name="space_xs">4dp</dimen>
+    <dimen name="space_sm">8dp</dimen>
+    <dimen name="space_md">16dp</dimen>
+    <dimen name="space_lg">24dp</dimen>
+    <dimen name="space_xl">32dp</dimen>
+    <dimen name="top_bar_height">56dp</dimen>
+    <dimen name="avatar_size_profile">84dp</dimen>
+    <dimen name="faded_up_arrow_size">40dp</dimen>
+    <dimen name="font_main_logo">28sp</dimen>
+    <dimen name="font_section_header">18sp</dimen>
+    <dimen name="font_card_big_title">16sp</dimen>
+    <dimen name="font_card_small_summary">14sp</dimen>
+    <dimen name="font_grid_sub_summary">12sp</dimen>
+    <dimen name="font_meta_info">12sp</dimen>
 </resources>

@@ -4,29 +4,11 @@ const cron = require("node-cron");
 const { crawlAllFeeds, isCrawling } = require("../services/rssCrawler.service");
 const { updateMarketCharts } = require("../services/marketCrawler.service");
 
-/**
- * Một chu kỳ đầy đủ: cập nhật biểu đồ thị trường (nhanh) rồi quét RSS + Gemini AI (chậm).
- * Không bao giờ ném lỗi ra ngoài — lỗi từng bước được trả về trong kết quả.
- */
-async function runFullCycle() {
-  const result = { market: null, news: null };
-
-  try {
-    result.market = await updateMarketCharts();
-  } catch (err) {
-    console.error("[Cron] Cập nhật biểu đồ thất bại:", err.message);
-    result.market = { error: err.message };
-  }
-
-  try {
-    result.news = await crawlAllFeeds();
-  } catch (err) {
-    console.error("[Cron] Quét RSS thất bại:", err.message);
-    result.news = { error: err.message };
-  }
-
-  return result;
-}
+const { retryPendingArticles } = require("../services/aiRetry.service");
+const { createCycleRunner } = require("./cycleRunner");
+const { runFullCycle, isCycleRunning } = createCycleRunner({
+  market: updateMarketCharts, retryAi: retryPendingArticles, news: crawlAllFeeds, rssBusy: isCrawling,
+});
 
 /** Lập lịch chạy định kỳ (mặc định mỗi 30 phút, múi giờ Việt Nam). */
 function startCronJobs() {
@@ -43,7 +25,7 @@ function startCronJobs() {
   const task = cron.schedule(
     schedule,
     async () => {
-      if (isCrawling()) {
+      if (isCycleRunning()) {
         console.log("[Cron] Bỏ qua — lượt quét trước vẫn đang chạy.");
         return;
       }
@@ -61,7 +43,7 @@ function startCronJobs() {
   return task;
 }
 
-module.exports = { startCronJobs, runFullCycle };
+module.exports = { startCronJobs, runFullCycle, isCycleRunning };
 
 // Chạy 1 lần từ dòng lệnh: npm run crawl
 if (require.main === module) {

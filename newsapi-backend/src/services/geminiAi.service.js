@@ -250,6 +250,7 @@ async function analyzeArticle(input) {
 
 module.exports = {
   analyzeArticle,
+  canAnalyzeNow: () => require("../config/gemini").isGeminiConfigured() && Date.now() >= state.blockedUntil,
   fallbackAnalyze,
   inferCategoryFromUrl,
   // xuất thêm để dễ kiểm thử

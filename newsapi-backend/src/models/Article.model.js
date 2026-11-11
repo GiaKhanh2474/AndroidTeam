@@ -37,6 +37,10 @@ const ArticleSchema = new Schema(
 
     ai_score: { type: Number, default: 50, min: 1, max: 100 },
 
+    ai_status: { type: String, enum: ["PENDING", "COMPLETED", "FAILED"] },
+    ai_attempts: { type: Number, default: 0, min: 0 },
+    next_retry_at: { type: Date, default: null },
+
     is_main_featured: { type: Boolean, default: false, index: true },
   },
   {
@@ -44,6 +48,8 @@ const ArticleSchema = new Schema(
     versionKey: false,
   }
 );
+
+ArticleSchema.index({ ai_status: 1, next_retry_at: 1 });
 
 // 1. Trang Main (API 1) — khớp đúng thứ tự sort của truy vấn
 ArticleSchema.index({ category: 1, is_main_featured: -1, ai_score: -1, published_at: -1 });

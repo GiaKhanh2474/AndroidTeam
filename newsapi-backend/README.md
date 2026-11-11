@@ -91,6 +91,25 @@ Chạy `npm ci` rồi `npm test`. Các regression test kiểm tra quyền truy c
 
 ## Core update (2026-11-10)
 
+## AI recovery and cycle locking
+
+- New fallback articles have `ai_status=PENDING`, `ai_attempts=0` and a retry time. Each full cycle retries at most five due articles before scanning RSS. Successful AI results update the original document and mark it COMPLETED; no duplicate article is inserted.
+- Failed retries keep existing summaries/content and back off from 10 minutes up to 24 hours. After five retry attempts the article becomes FAILED for operator review. After resolving the cause, reset that article to PENDING, ai_attempts=0 and next_retry_at=null to retry it.
+- Old records without ai_status are re-evaluated once in bounded batches because their AI provenance was not recorded. A score of 50 is not used to identify failures. This can incur Gemini requests for previously successful legacy records too. Missing credentials and quota cooldown do not consume retry attempts.
+- The full market → AI retry → RSS cycle has one synchronous in-process lock, shared by cron, startup and the admin endpoint. A concurrent admin request returns 409. The lock is always released after completion/errors.
+- Run one backend process/instance with this scheduler. This lock is NOT distributed: do not run a separate `npm run crawl` process alongside the server. Multi-instance deployment requires a MongoDB lease or an external singleton scheduler.
+
+### Android HTTPS backend URL
+
+Copy the deployed service's public HTTPS URL from Render, then check `https://YOUR-SERVICE.onrender.com/health`. Build Android from the repository root with:
+
+```powershell
+.\gradlew.bat :app:assembleDebug -PnewsApiBaseUrl=https://YOUR-SERVICE.onrender.com/api/v1/
+.\gradlew.bat :app:assembleRelease -PnewsApiBaseUrl=https://YOUR-SERVICE.onrender.com/api/v1/
+```
+
+Replace YOUR-SERVICE with the actual service name; do not use the Render dashboard URL. The trailing `/api/v1/` is the API base path. Release signing still requires the documented keystore environment variables. Changing Render environment variables alone does not change an APK's compiled base URL: rebuild and reinstall the app.
+
 - Default model: `gemini-3.8-flash`, verified against https://aistudio.google.com/docs/models/gemini-3.8-flash. Override with `GEMINI_MODEL` in the deployment environment. Restart the service after changing it. No API key is committed.
 - Main grids now return up to three featured articles per category, ordered by AI score then publication time. If fewer are eligible, the API returns fewer; it does not label fallback/unfeatured content as featured.
 - RSS includes VnExpress, Tuoi Tre, CafeF and Thanh Nien. Individual feed/network failures remain isolated by the crawler.

@@ -4,6 +4,7 @@
  * → Gemini phân loại/tóm tắt/chấm điểm → lưu MongoDB → ghi crawl_logs.
  */
 const crypto = require("crypto");
+const { retryFields } = require("./aiRetry.service");
 const axios = require("axios");
 const cheerio = require("cheerio");
 const Parser = require("rss-parser");
@@ -192,6 +193,7 @@ async function processFeedItem(item, feed) {
   // 4. Lưu MongoDB
   try {
     await Article.create({
+      ...retryFields(ai, 0),
       article_id: makeArticleId(originalUrl),
       title,
       main_grid_summary: ai.main_grid_summary,

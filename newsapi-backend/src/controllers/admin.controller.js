@@ -1,6 +1,5 @@
 const crypto = require("crypto");
-const { runFullCycle } = require("../jobs/cronJob");
-const { isCrawling } = require("../services/rssCrawler.service");
+const { runFullCycle, isCycleRunning } = require("../jobs/cronJob");
 
 function isAuthorized(req) {
   const expected = (process.env.ADMIN_KEY || "").trim();
@@ -23,7 +22,7 @@ async function triggerCrawl(req, res) {
   if (!isAuthorized(req)) {
     return res.status(401).json({ status: "error", message: "Sai hoặc thiếu header x-admin-key" });
   }
-  if (isCrawling()) {
+  if (isCycleRunning()) {
     return res.status(409).json({ status: "error", message: "Một lượt quét khác đang chạy, thử lại sau" });
   }
 

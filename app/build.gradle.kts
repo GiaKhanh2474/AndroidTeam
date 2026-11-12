@@ -1,9 +1,30 @@
+import java.net.URI
+
 plugins {
     // Kotlin được AGP 9.3.3 hỗ trợ tích hợp sẵn, không cần plugin Kotlin riêng.
     alias(libs.plugins.android.application)
     // KSP sinh mã cho Room. Không dùng kapt vì AGP 9 dùng Kotlin tích hợp sẵn, không áp
     // dụng được plugin kotlin-kapt.
     alias(libs.plugins.ksp)
+}
+
+val configuredBackendUrl = providers.gradleProperty("newsApiBaseUrl")
+val verifyReleaseBackendUrl by tasks.registering {
+    val backendUrl = configuredBackendUrl.orElse("")
+    inputs.property("backendUrl", backendUrl)
+    doLast {
+        val raw = backendUrl.get()
+        val uri = runCatching { URI(raw) }.getOrNull()
+        require(uri != null && uri.scheme == "https" && !uri.host.isNullOrBlank() &&
+            uri.host.lowercase() !in setOf("localhost", "127.0.0.1", "10.0.2.2", "[::1]") &&
+            uri.userInfo == null && uri.query == null && uri.fragment == null &&
+            uri.path.endsWith("/")) {
+            "Release requires -PnewsApiBaseUrl=https://<backend-host>/api/v1/ (HTTPS, no credentials/query/fragment, trailing slash)."
+        }
+    }
+}
+tasks.matching { it.name == "preReleaseBuild" || it.name == "generateReleaseBuildConfig" }.configureEach {
+    dependsOn(verifyReleaseBackendUrl)
 }
 
 android {
@@ -24,7 +45,7 @@ android {
         // Dia chi backend cho 4 API tin tuc. Mac dinh la may tinh chu chay emulator
         // (10.0.2.2 = localhost cua may that). Khi backend da deploy, truyen lai luc build:
         //   gradlew :app:assembleRelease -PnewsApiBaseUrl=https://<ten-app>.onrender.com/api/v1/
-        val newsApiBaseUrl = providers.gradleProperty("newsApiBaseUrl")
+        val newsApiBaseUrl = configuredBackendUrl
             .orElse("http://10.0.2.2:5000/api/v1/")
             .get()
         buildConfigField("String", "NEWS_API_BASE_URL", "\"$newsApiBaseUrl\"")

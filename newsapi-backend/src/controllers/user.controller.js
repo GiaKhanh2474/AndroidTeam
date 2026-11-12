@@ -129,8 +129,15 @@ async function syncUser(req, res) {
     return res.status(403).json({ status: "error", message: "firebase_uid không khớp tài khoản đăng nhập" });
   }
 
-  const { email, phone, error } = parseIdentity(body);
-  if (error) return badRequest(res, error);
+  const requested = parseIdentity(body);
+  if (requested.error) return badRequest(res, requested.error);
+  // Contact identity comes from the authenticated Firebase token, not caller input.
+  const email = normalizeEmail(req.auth.email) || undefined;
+  const phone = normalizePhone(req.auth.phone_number) || undefined;
+  if ((requested.email && requested.email !== email) ||
+      (requested.phone && requested.phone !== phone)) {
+    return res.status(403).json({ status: "error", message: "Email hoặc số điện thoại không khớp Firebase ID token" });
+  }
 
   const alreadyExists = Boolean(await User.exists({ firebase_uid: firebaseUid }));
   if (!alreadyExists && !email && !phone) {
@@ -140,7 +147,7 @@ async function syncUser(req, res) {
   const conflicts = await findConflictFields(firebaseUid, { email, phone });
   if (conflicts.length) return sendConflict(res, conflicts);
 
-  // Chỉ ghi đè các trường Android thực sự gửi lên (không xóa dữ liệu cũ bằng giá trị rỗng)
+  // Sync token contacts; omitted profile fields do not erase existing values.
   const set = {};
   if (email) set.email = email;
   if (phone) set.phone = phone;

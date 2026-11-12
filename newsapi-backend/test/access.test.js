@@ -79,6 +79,33 @@ test("expired or revoked tokens are denied and never reach the controller", asyn
   });
 });
 
+test("sync rejects contacts outside token claims before touching the database", async t => {
+  t.mock.method(User, "exists", async () => assert.fail("unexpected database access"));
+  for (const body of [{ email: "victim@example.com" }, { phone: "+84901234567" }]) {
+    let status;
+    await syncUser({ auth: { uid: "owner", email: "owner@example.com" }, body }, {
+      status: code => { status = code; return { json: () => {} }; },
+    });
+    assert.equal(status, 403);
+  }
+});
+
+test("sync persists normalized token contacts when body omits them", async t => {
+  t.mock.method(User, "exists", async () => false);
+  t.mock.method(User, "find", () => ({ lean: async () => [] }));
+  t.mock.method(User, "findOneAndUpdate", (filter, update) => {
+    assert.deepEqual(filter, { firebase_uid: "owner" });
+    assert.deepEqual(update.$set, { email: "owner@example.com", phone: "+84901234567" });
+    return { lean: async () => ({ firebase_uid: "owner", ...update.$set }) };
+  });
+  let result;
+  await syncUser({ auth: { uid: "owner", email: "Owner@example.com", phone_number: "+84901234567" }, body: {} }, {
+    json: value => { result = value; },
+    status: code => assert.fail(`Unexpected status ${code}`),
+  });
+  assert.equal(result.email, "owner@example.com");
+});
+
 test("public availability check cannot hide a conflict using a supplied UID", async t => {
   t.mock.method(User, "find", filter => {
     assert.equal(filter.firebase_uid, undefined);

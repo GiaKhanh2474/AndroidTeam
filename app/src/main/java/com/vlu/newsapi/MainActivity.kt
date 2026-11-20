@@ -1,6 +1,10 @@
 package com.vlu.newsapi
 
 import android.os.Bundle
+import android.os.Build
+import android.content.pm.PackageManager
+import androidx.activity.result.contract.ActivityResultContracts
+import com.vlu.newsapi.data.remote.isLocalBackend
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.core.view.GravityCompat
@@ -25,11 +29,37 @@ import com.vlu.newsapi.ui.common.applySystemBarAndImeInsets
  */
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private var startupState: Bundle? = null
+    private var deferredRestoreState: Bundle? = null
+    private val localNetworkPermission = registerForActivityResult(
+        ActivityResultContracts.RequestPermission(),
+    ) {
+        // Start the screens after consent, avoiding a first request that times out.
+        // Denial still allows the app to open and use already-saved offline data.
+        showContent(startupState)
+        deferredRestoreState?.let { state ->
+            deferredRestoreState = null
+            onRestoreInstanceState(state)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
+        startupState = savedInstanceState
+        if (BuildConfig.DEBUG && Build.VERSION.SDK_INT >= 37 &&
+            isLocalBackend(BuildConfig.NEWS_API_BASE_URL) &&
+            checkSelfPermission("android.permission.ACCESS_LOCAL_NETWORK") != PackageManager.PERMISSION_GRANTED
+        ) {
+            localNetworkPermission.launch("android.permission.ACCESS_LOCAL_NETWORK")
+        } else {
+            showContent(savedInstanceState)
+        }
+    }
+
+    private fun showContent(savedInstanceState: Bundle?) {
+        if (::binding.isInitialized) return
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -89,6 +119,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        if (!::binding.isInitialized) {
+            deferredRestoreState = savedInstanceState
+            return
+        }
         super.onRestoreInstanceState(savedInstanceState)
         val drawerHost = supportFragmentManager.findFragmentById(R.id.drawer_market_fragment_container)
             as? NavHostFragment ?: return

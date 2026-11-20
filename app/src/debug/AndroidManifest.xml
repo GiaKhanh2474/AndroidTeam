@@ -7,6 +7,9 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- Android 17+ requires runtime consent for the development backend on LAN. -->
+    <uses-permission android:name="android.permission.ACCESS_LOCAL_NETWORK" />
+
     <application android:usesCleartextTraffic="true" />
 
 </manifest>

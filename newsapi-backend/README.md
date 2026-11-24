@@ -1,6 +1,6 @@
 # AndroidTeamNews — Backend & AI Pipeline
 
-Package Android: `com.vlu.newsapi` · Node.js (>= 20.18.1) + Express + MongoDB (Mongoose) + Gemini 3.8 Flash + RSS crawler
+Package Android: `com.vlu.newsapi` · Node.js 24.x + Express + MongoDB (Mongoose) + Gemini 3.8 Flash + RSS crawler
 
 ## 1. Chạy nhanh
 
@@ -87,6 +87,18 @@ curl -X POST "http://localhost:5000/api/v1/admin/trigger-crawl?wait=true"      #
 ## 6. Kiểm thử
 
 Chạy `npm ci` rồi `npm test`. Các regression test kiểm tra quyền truy cập mà không cần MongoDB hoặc Firebase credentials thật. App Android vẫn dùng mock auth; khi nối API thật phải gửi Firebase ID token.
+
+## Triển khai API trên Vercel
+
+- Root Directory: `newsapi-backend`; Framework Preset: **Express**; Node.js: **24.x**; Install Command: `npm ci` (không dùng `--ignore-scripts`).
+- `postinstall` chạy `scripts/patch-jwks-rsa.cjs` để sửa tạm lỗi `ERR_REQUIRE_ESM` của `jwks-rsa@4.1.0` khi tải `jose`. Bản vá giữ jose 6, kiểm tra phiên bản và checksum trước khi sửa, chạy lại an toàn. Theo dõi [lỗi upstream #507](https://github.com/auth0/node-jwks-rsa/issues/507) và [PR #508](https://github.com/auth0/node-jwks-rsa/pull/508); bỏ bản vá/override khi đã kiểm thử bản phát hành chính thức có sửa lỗi.
+- Đặt `MONGODB_URI` thật trong Vercel Environment Variables và cho phép kết nối từ môi trường triển khai trong MongoDB Atlas. Không commit `.env`, mật khẩu hoặc service-account JSON. `GEMINI_API_KEY` cần cho AI; `ADMIN_KEY` cần cho tác vụ quản trị. Tệp `google-services.json` của Android không thay thế thông tin xác thực Firebase Admin phía server.
+- Khi `VERCEL=1`, app kết nối MongoDB ở yêu cầu đầu tiên đến `/health` hoặc `/api/v1`, dùng lại kết nối giữa các yêu cầu trong cùng instance và thử lại sau lỗi. Trang `/` chỉ xác nhận app đã nạp; phải kiểm tra thêm `/health` trả 200 và `/api/v1/news/main-grids` trả JSON dữ liệu.
+- Vercel **không chạy lịch `node-cron` trong app này**. Lịch lấy tin cần một worker/scheduler riêng, bảo đảm chỉ một lượt crawl đang chạy. Route admin mặc định trả 202 rồi chạy nền chưa bảo đảm hoàn tất trong môi trường serverless; không xem deploy API thành công là lịch crawl đã hoạt động.
+- Sau khi bản sửa có trong nhánh Vercel dùng để deploy (hiện tại `main`), redeploy không dùng build cache. Kiểm tra log có dòng `[compat] jwks-rsa 4.1.0` và kiểm tra các URL trên.
+- Khi API thật đã hoạt động, cấu hình Android bằng `-PnewsApiBaseUrl=https://android-team.vercel.app/api/v1/` và build/cài lại app. Dấu `/` cuối là bắt buộc; đổi URL trên Vercel không tự thay URL của APK đã cài.
+
+Kiểm chứng ngày 24/11/2026: bản cài sạch bằng `npm ci` tự áp dụng bản vá; `node --no-experimental-require-module --test` đạt **43/43** kiểm thử. Bản app export chạy cục bộ với `VERCEL=1` kết nối MongoDB thật và trả 200 cho `/health` + `/api/v1/news/main-grids` (chỉ đọc, tắt tạo collection/index trong lượt kiểm tra). Đây chưa phải xác nhận deployment production đã nhận bản sửa, đăng nhập Firebase thật hoặc lịch crawl tự động đã hoạt động.
 
 
 ## Core update (2026-11-10)

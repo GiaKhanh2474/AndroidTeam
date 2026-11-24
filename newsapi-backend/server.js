@@ -21,6 +21,22 @@ app.get("/", (req, res) => {
   res.json({ name: "AndroidTeamNews API", package: "com.vlu.newsapi", base_url: "/api/v1", health: "/health" });
 });
 
+// Vercel imports the Express app instead of calling start(). Connect before any
+// database-backed request; config/db shares the connection within this instance.
+if (process.env.VERCEL === "1") {
+  app.use(["/health", "/api/v1"], async (req, res, next) => {
+    try {
+      await connectDB();
+      next();
+    } catch (_) {
+      res.status(503).json({
+        status: "error",
+        message: "Dịch vụ dữ liệu tạm thời không khả dụng. Vui lòng thử lại sau.",
+      });
+    }
+  });
+}
+
 app.get("/health", (req, res) => {
   const dbReady = mongoose.connection.readyState === 1;
   res.status(dbReady ? 200 : 503).json({
@@ -82,6 +98,7 @@ async function start() {
   process.on("SIGTERM", () => shutdown("SIGTERM"));
 }
 
-if (require.main === module) start();
+// Serverless invocations must not create a listener or an in-process cron timer.
+if (require.main === module && process.env.VERCEL !== "1") start();
 
 module.exports = app;

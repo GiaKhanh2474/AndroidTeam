@@ -2,12 +2,8 @@
 <!--
   Màn 1 — Main (Mục 1 của đặc tả).
 
-  HAI TRẠNG THÁI ĐẦU TRANG (Smart Top Bar):
-    Trạng thái 1 — mới vào trang hoặc đang ở đầu trang (scrollY <= 20):
-        chỉ hiện chữ "Main" (tv_main_label); thanh top_smart_bar để GONE.
-    Trạng thái 2 — lướt xuống (scrollY > 20):
-        chữ "Main" GONE; top_smart_bar hiện ra với [☰] - [Search] - [👤];
-        khối container_three_grids thu nhỏ 0.96 và xích xuống 12px (mã chạy hiệu ứng 150ms).
+  Thanh [☰] - [Search] - [👤] luôn hiện ở đầu trang theo yêu cầu cập nhật.
+  Nằm ngoài vùng cuộn và các trạng thái loading/error để luôn truy cập được.
 
   MA TRẬN 3×3: ba khối chuyên mục xếp dọc, mỗi khối có tiêu đề và một RecyclerView 3 cột
   (GridLayoutManager(3)). Mỗi ô Grid con chỉ có chữ tóm tắt, KHÔNG có ảnh — đúng quy tắc
@@ -29,18 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize">
 
-        <!-- Trạng thái 1: chỉ chữ "Main". -->
-        <TextView
-            android:id="@+id/tv_main_label"
-            style="@style/NewsText.MainLogo"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="start|center_vertical"
-            android:layout_marginStart="@dimen/spacing_md"
-            android:gravity="center_vertical"
-            android:text="@string/title_main" />
-
-        <!-- Trạng thái 2: thanh công cụ thông minh 3 thành phần. -->
+        <!-- Thanh điều hướng cố định, không cần kéo để hiện. -->
         <LinearLayout
             android:id="@+id/top_smart_bar"
             android:layout_width="match_parent"
@@ -49,8 +34,7 @@
             android:orientation="horizontal"
             android:paddingStart="@dimen/spacing_sm"
             android:paddingEnd="@dimen/spacing_sm"
-            android:visibility="gone"
-            tools:visibility="visible">
+            android:visibility="visible">
 
             <ImageButton
                 android:id="@+id/btn_menu_drawer"
@@ -92,7 +76,7 @@
         </LinearLayout>
     </FrameLayout>
 
-    <!-- Nhãn bắt buộc: dữ liệu hiện tại là minh hoạ, không phải tin thật. -->
+    <!-- Nhãn nguồn dữ liệu tin tức. -->
     <TextView
         android:id="@+id/tv_mock_notice"
         android:layout_width="match_parent"
@@ -107,10 +91,8 @@
         android:textColor="?attr/colorOnSurfaceVariant" />
 
     <!--
-      Vùng cuộn chính. Đặc tả bắt sự kiện cuộn ở đây để đổi trạng thái 1 <-> 2 theo scrollY.
-      Lớp HeaderAwareNestedScrollView chỉ thêm một việc: khi nội dung ngắn hơn màn hình (không
-      cuộn được) thì vẫn báo quãng kéo của ngón tay, để thao tác "lướt xuống" có tác dụng.
-      `fillViewport` để nội dung ngắn vẫn phủ kín màn hình.
+      Vùng cuộn nội dung. Thanh công cụ phía trên không cuộn theo.
+      fillViewport để nội dung ngắn vẫn phủ kín màn hình.
     -->
     <!--
       Vùng nội dung. Bọc thêm FrameLayout để đặt 3 trạng thái chồng lên nhau:
@@ -121,7 +103,7 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <com.vlu.newsapi.ui.common.HeaderAwareNestedScrollView
+        <androidx.core.widget.NestedScrollView
             android:id="@+id/nested_scroll_main"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -129,7 +111,7 @@
             android:fillViewport="true"
             android:scrollbars="vertical">
 
-        <!-- Khối bọc 3 Grid: mã chạy hiệu ứng thu nhỏ + dịch xuống trên chính view này. -->
+        <!-- Khối bọc 3 Grid. -->
         <LinearLayout
             android:id="@+id/container_three_grids"
             android:layout_width="match_parent"
@@ -205,7 +187,7 @@
                 tools:itemCount="3"
                 tools:listitem="@layout/item_main_sub_grid" />
         </LinearLayout>
-        </com.vlu.newsapi.ui.common.HeaderAwareNestedScrollView>
+        </androidx.core.widget.NestedScrollView>
 
         <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/progress_main"

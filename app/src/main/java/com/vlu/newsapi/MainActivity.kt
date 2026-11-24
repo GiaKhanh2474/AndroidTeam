@@ -71,23 +71,23 @@ class MainActivity : AppCompatActivity() {
         // `adjustResize` trong manifest không còn tự thu nhỏ cửa sổ, không xử lý thì bàn phím che
         // mất nút "Đăng nhập". Các màn còn lại không có ô nhập chữ nên không bị ảnh hưởng.
         binding.root.applySystemBarAndImeInsets()
-        binding.root.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+        binding.mainDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
         val drawerHost = supportFragmentManager.findFragmentById(R.id.drawer_market_fragment_container) as NavHostFragment
         val back = object : OnBackPressedCallback(false) {
             override fun handleOnBackPressed() {
-                if (!drawerHost.navController.popBackStack()) binding.root.closeDrawer(GravityCompat.START)
+                if (!drawerHost.navController.popBackStack()) binding.mainDrawerLayout.closeDrawer(GravityCompat.START)
             }
         }
         onBackPressedDispatcher.addCallback(this, back)
         drawerHost.navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (destination.id == R.id.mainFragment) binding.root.closeDrawer(GravityCompat.START)
+            if (destination.id == R.id.mainFragment) binding.mainDrawerLayout.closeDrawer(GravityCompat.START)
         }
-        binding.root.addDrawerListener(object : DrawerLayout.SimpleDrawerListener() {
+        binding.mainDrawerLayout.addDrawerListener(object : DrawerLayout.SimpleDrawerListener() {
             override fun onDrawerOpened(drawerView: View) { back.isEnabled = true }
             override fun onDrawerClosed(drawerView: View) {
                 back.isEnabled = false
                 drawerHost.navController.popBackStack(R.id.mainFragment, false)
-                binding.root.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+                binding.mainDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
             }
         })
 
@@ -114,8 +114,8 @@ class MainActivity : AppCompatActivity() {
         if (drawerHost.navController.currentDestination?.id == R.id.mainFragment) {
             drawerHost.navController.navigate(R.id.marketDrawerFragment)
         }
-        binding.root.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-        binding.root.openDrawer(GravityCompat.START)
+        binding.mainDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+        binding.mainDrawerLayout.openDrawer(GravityCompat.START)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -127,8 +127,8 @@ class MainActivity : AppCompatActivity() {
         val drawerHost = supportFragmentManager.findFragmentById(R.id.drawer_market_fragment_container)
             as? NavHostFragment ?: return
         if (drawerHost.navController.currentDestination?.id != R.id.mainFragment) {
-            binding.root.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-            binding.root.openDrawer(GravityCompat.START)
+            binding.mainDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+            binding.mainDrawerLayout.openDrawer(GravityCompat.START)
         }
     }
 

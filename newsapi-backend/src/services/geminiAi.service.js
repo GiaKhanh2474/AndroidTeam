@@ -11,6 +11,7 @@
  */
 const { Type } = require("@google/genai");
 const { getGeminiClient, getModelName } = require("../config/gemini");
+const { decodeArticleText } = require("../utils/articleText");
 
 const CATEGORIES = ["KINH_TE", "CHINH_TRI", "CONG_NGHE", "BEN_LE"];
 
@@ -50,13 +51,9 @@ const state = { blockedUntil: 0 };
 // ---------------------------------------------------------------------------
 // Tiện ích văn bản
 // ---------------------------------------------------------------------------
-const ENTITIES = { "&amp;": "&", "&lt;": "<", "&gt;": ">", "&quot;": '"', "&#39;": "'", "&nbsp;": " " };
-
 function stripHtml(text) {
   if (typeof text !== "string") return "";
-  return text
-    .replace(/<[^>]*>/g, " ")
-    .replace(/&(amp|lt|gt|quot|nbsp|#39);/g, (m) => ENTITIES[m] || " ")
+  return decodeArticleText(text.replace(/<[^>]*>/g, " "))
     .replace(/\s+/g, " ")
     .trim();
 }

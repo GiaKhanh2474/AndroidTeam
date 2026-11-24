@@ -30,10 +30,8 @@ import kotlinx.coroutines.launch
 /**
  * Màn 1 — Main (Mục 1 của đặc tả).
  *
- * Hai trạng thái đầu trang:
- *  - Trạng thái 1 (`scrollY <= 20`): chỉ chữ "Main", thanh công cụ ẩn.
- *  - Trạng thái 2 (`scrollY > 20`): chữ "Main" ẩn, thanh [☰] - [Search] - [👤] hiện, khối
- *    Grid thu nhỏ 0.96 và xích xuống 12px trong 150ms.
+ * Thanh [☰] - [Search] - [👤] luôn hiện theo yêu cầu cập nhật của chủ dự án.
+ * Điều hướng không phụ thuộc độ dài nội dung, thao tác cuộn hay trạng thái tải tin.
  *
  * Ma trận 3×3: ba chuyên mục xếp dọc, mỗi chuyên mục là một `RecyclerView` ba cột
  * ([GridLayoutManager] 3). Mỗi ô chỉ có chữ tóm tắt, không ảnh.
@@ -51,8 +49,6 @@ class MainFragment : Fragment() {
     private val politicsAdapter = MainSubGridAdapter(onArticleClick = ::openArticleDetail)
     private val technologyAdapter = MainSubGridAdapter(onArticleClick = ::openArticleDetail)
 
-    private var isHeaderCollapsed = false
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -64,11 +60,6 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        // Khung nhìn mới luôn dựng ở trạng thái 1. Fragment được giữ lại khi đi sang màn khác rồi
-        // quay về, nên cờ phải đặt lại, nếu không lần cuộn kế tiếp sẽ bị bỏ qua.
-        isHeaderCollapsed = false
-        applyHeaderState(collapsed = false)
 
         bindGrid(binding.rvGridKinhTe, economyAdapter)
         bindGrid(binding.rvGridChinhTri, politicsAdapter)
@@ -101,16 +92,6 @@ class MainFragment : Fragment() {
         }
 
         binding.btnMainRetry.setOnClickListener { viewModel.retry() }
-
-        // Đường chính của đặc tả: đổi trạng thái theo vị trí cuộn của nested_scroll_main.
-        binding.nestedScrollMain.setOnScrollChangeListener { _, _, scrollY, _, _ ->
-            setHeaderCollapsed(scrollY > SCROLL_TOP_THRESHOLD_PX)
-        }
-
-        // Đường dự phòng: khi nội dung ngắn hơn màn hình thì khung không cuộn được, `scrollY`
-        // mãi bằng 0 và trạng thái 2 sẽ không bao giờ hiện. View này báo quãng kéo ngón tay để
-        // thao tác "lướt xuống" vẫn có tác dụng như đặc tả mô tả.
-        binding.nestedScrollMain.onHeaderDrag = { collapsed -> setHeaderCollapsed(collapsed) }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -148,27 +129,6 @@ class MainFragment : Fragment() {
 
     private fun blockOf(blocks: List<CategoryWithArticles>, categoryId: String): List<Article> =
         blocks.firstOrNull { it.category.id == categoryId }?.articles.orEmpty()
-
-    private fun setHeaderCollapsed(collapsed: Boolean) {
-        if (isHeaderCollapsed == collapsed) return
-        isHeaderCollapsed = collapsed
-        applyHeaderState(collapsed)
-    }
-
-    /** Áp trạng thái đầu trang: ẩn/hiện đúng view và chạy hiệu ứng 150ms cho khối Grid. */
-    private fun applyHeaderState(collapsed: Boolean) {
-        binding.nestedScrollMain.syncHeaderState(collapsed)
-        binding.tvMainLabel.visibility = if (collapsed) View.GONE else View.VISIBLE
-        binding.topSmartBar.visibility = if (collapsed) View.VISIBLE else View.GONE
-
-        binding.containerThreeGrids.animate().cancel()
-        binding.containerThreeGrids.animate()
-            .scaleX(if (collapsed) GRID_COLLAPSED_SCALE else 1f)
-            .scaleY(if (collapsed) GRID_COLLAPSED_SCALE else 1f)
-            .translationY(if (collapsed) GRID_COLLAPSED_SHIFT_PX else 0f)
-            .setDuration(HEADER_ANIM_MS)
-            .start()
-    }
 
     /** Mở màn kết quả tìm kiếm (API 4) với từ khoá đang nhập. */
     private fun openSearchResults() {
@@ -210,13 +170,5 @@ class MainFragment : Fragment() {
         /** Đặc tả: mỗi hàng của ma trận có đúng 3 ô Grid con. */
         const val GRID_COLUMNS = 3
 
-        /** Đặc tả: `scrollY > 20` thì chuyển sang trạng thái 2. */
-        const val SCROLL_TOP_THRESHOLD_PX = 20
-
-        const val HEADER_ANIM_MS = 150L
-
-        /** Đặc tả: khối Grid thu nhỏ còn 0.96 và dịch xuống 12px. */
-        const val GRID_COLLAPSED_SCALE = 0.96f
-        const val GRID_COLLAPSED_SHIFT_PX = 12f
     }
 }

@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Article = require("../models/Article.model");
+const { decodeArticleText } = require("../utils/articleText");
 
 const VALID_CATEGORIES = ["KINH_TE", "CHINH_TRI", "CONG_NGHE", "BEN_LE"];
 
@@ -37,13 +38,13 @@ const WITHOUT_CONTENT = projection({ withContent: false });
 function toArticleDto(doc, { includeContent = true } = {}) {
   return {
     article_id: doc.article_id,
-    title: doc.title,
-    main_grid_summary: doc.main_grid_summary,
-    card_summary: doc.card_summary,
-    full_content: includeContent && doc.full_content != null ? doc.full_content : null,
+    title: decodeArticleText(doc.title),
+    main_grid_summary: decodeArticleText(doc.main_grid_summary),
+    card_summary: decodeArticleText(doc.card_summary),
+    full_content: includeContent && doc.full_content != null ? decodeArticleText(doc.full_content) : null,
     image_url: doc.image_url != null ? doc.image_url : null,
     original_url: doc.original_url,
-    source_name: doc.source_name,
+    source_name: decodeArticleText(doc.source_name),
     category: doc.category,
     published_at: doc.published_at,
     date_label: doc.date_label,

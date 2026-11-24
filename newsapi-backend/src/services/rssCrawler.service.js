@@ -14,6 +14,7 @@ const CrawlLog = require("../models/CrawlLog.model");
 const { analyzeArticle } = require("./geminiAi.service");
 const { isGeminiConfigured } = require("../config/gemini");
 const { buildDateLabel } = require("../utils/vnDate");
+const { decodeArticleText } = require("../utils/articleText");
 
 const USER_AGENT =
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36 AndroidTeamNewsBot/1.0";
@@ -157,7 +158,7 @@ async function fetchArticlePage(url) {
  */
 async function processFeedItem(item, feed) {
   const originalUrl = normalizeUrl(item.link);
-  const title = (item.title || "").replace(/\s+/g, " ").trim();
+  const title = decodeArticleText(item.title || "").replace(/\s+/g, " ").trim();
   if (!originalUrl || !title) return "skipped";
 
   // 1. Chống trùng theo original_url
@@ -175,7 +176,7 @@ async function processFeedItem(item, feed) {
     console.warn(`[Crawler] Không tải được trang gốc (${originalUrl}): ${err.message}`);
   }
   if (!content) content = item.contentSnippet || item.content || item.rawDescription || "";
-  content = content.replace(/<[^>]*>/g, " ").replace(/[ \t]+/g, " ").trim();
+  content = decodeArticleText(content.replace(/<[^>]*>/g, " ")).replace(/[ \t\u00a0]+/g, " ").trim();
   if (!content) content = title;
 
   // 3. Gemini AI (hoặc fallback)
@@ -332,5 +333,5 @@ module.exports = {
   crawlAllFeeds,
   isCrawling,
   // xuất thêm để dễ kiểm thử
-  _internal: { extractArticleContent, extractImageFromRssItem, normalizeUrl, makeArticleId },
+  _internal: { extractArticleContent, extractImageFromRssItem, normalizeUrl, makeArticleId, processFeedItem },
 };
